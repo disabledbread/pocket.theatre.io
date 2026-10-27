@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Pocket Theatre</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<meta name="theme-color" content="#00a597">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Pocket Theatre">
+<meta property="og:title" content="Pocket Theatre">
+<!-- Az og:image-nél teljes URL kell, pl. https://FELHASZNALO.github.io/REPO/icon.png -->
+<meta property="og:image" content="icon.png">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--bd:#e5e7eb;--tx:#111827;--mu:#6b7280;--sf:#f3f4f6;--navy:#0f3d63;--nbg:#e8eef4;--teal:#00a597;--tbg:#e0f4f1;--blue:#3b82f6;--red:#ef4444;--r:8px}
@@ -35,12 +45,12 @@ input[type=checkbox]:active{transform:scale(.8)}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:8px}
 .row>*{flex:1;min-width:110px}.row>.a{flex:0 0 auto;min-width:0}
 .cb{display:flex;gap:6px;align-items:center;margin:0 0 10px;color:var(--tx)}
-.btn{background:#fff;border:1.5px solid var(--navy);color:var(--navy);border-radius:999px;padding:8px 16px;font-weight:600;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;justify-content:center;transition:transform .12s}
+.btn{background:#fff;border:1.5px solid var(--navy);color:var(--navy);border-radius:999px;padding:8px 16px;font-weight:600;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;justify-content:center;transition:transform .12s;text-decoration:none}
 .btn:active{transform:scale(.95)}
 .btn.pr{background:var(--teal);border-color:var(--teal);color:#fff}
 .btn.dg{border-color:var(--red);color:var(--red)}
 .btn.sm{padding:4px 12px;font-size:12px}
-.btn.big{width:100%;padding:16px;font-size:18px;margin-top:12px;border-radius:14px}
+.btn.wide{width:100%;padding:12px}
 .chip{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:999px;font-weight:600;font-size:13px;background:var(--tbg);color:var(--teal);border:0;cursor:pointer;margin:0 6px 8px 0;transition:transform .12s,background .2s,color .2s}
 .chip:active{transform:scale(.92)}
 .chip i{font-style:normal;opacity:.6}
@@ -48,20 +58,14 @@ input[type=checkbox]:active{transform:scale(.8)}
 .chip.go{animation:pulse .6s ease-out}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(0,165,151,.55)}100%{box-shadow:0 0 0 16px rgba(0,165,151,0)}}
 iframe{width:100%;height:60vh;border:1px solid var(--bd);border-radius:8px;background:var(--sf);margin-top:10px}
-.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px;margin-top:10px}
-.tile{position:relative;aspect-ratio:1;border:1px solid var(--bd);background:var(--sf);border-radius:12px;display:flex;align-items:center;justify-content:center;text-align:center;padding:6px;font-weight:600;cursor:pointer;transition:transform .2s,opacity .2s,background .2s,box-shadow .2s;user-select:none;word-break:break-word}
-.tile:active{transform:scale(.92);background:var(--tbg)}
-.tile .x{display:none;position:absolute;top:-7px;right:-7px;width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;border:2px solid #fff;font-size:11px;line-height:1;cursor:pointer}
-.edit .tile .x{display:block}
-.edit .tile{animation:wob .5s ease infinite alternate}
-@keyframes wob{from{rotate:-1.2deg}to{rotate:1.2deg}}
-.tile.sel{box-shadow:0 0 0 3px var(--teal);animation:none;transform:scale(1.06)}
-.tile.out{transform:scale(0);opacity:0}
-.dip{display:flex;gap:8px;justify-content:center;margin:18px 0 8px;flex-wrap:wrap}
-.sw{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;user-select:none}
-.sw b{font-size:13px}.sw em{font-size:11px;color:var(--mu);font-style:normal}
-.trk{position:relative;width:34px;height:76px;background:var(--sf);border:1px solid var(--bd);border-radius:8px;overflow:hidden}
-.trk u{position:absolute;left:0;right:0;font-size:9px;font-weight:700;color:#b6bcc7;text-decoration:none;text-align:center}
+/* DIP */
+.dsp{text-align:center;font-size:64px;font-weight:700;line-height:1;color:var(--navy);font-variant-numeric:tabular-nums;background:var(--nbg);border-radius:14px;padding:18px 0 14px;margin:12px 0 4px}
+.dsp small{display:block;font-size:12px;font-weight:500;color:var(--mu);margin-top:8px;line-height:1.3;padding:0 8px}
+.dip{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:4px;margin:14px 0 4px}
+.sw{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;user-select:none;min-width:0}
+.sw b{font-size:13px}.sw em{font-size:10px;color:var(--mu);font-style:normal}
+.trk{position:relative;width:100%;max-width:36px;height:76px;background:var(--sf);border:1px solid var(--bd);border-radius:8px;overflow:hidden}
+.trk u{position:absolute;left:0;right:0;font-size:8px;font-weight:700;color:#b6bcc7;text-decoration:none;text-align:center}
 .up .trk u{top:5px}.down .trk u{bottom:5px}
 .kn{position:absolute;left:3px;right:3px;top:3px;height:32px;border-radius:6px;background:#9ca3af;transition:transform .28s cubic-bezier(.5,1.6,.5,1),background .2s}
 .sw.on .kn{background:var(--teal)}
@@ -87,6 +91,20 @@ iframe{width:100%;height:60vh;border:1px solid var(--bd);border-radius:8px;backg
 .nt{border-radius:10px;padding:10px 12px;margin-bottom:8px;border-left:6px solid;transition:filter .5s,opacity .5s,background .4s}
 .nt.d{filter:grayscale(1);opacity:.55}
 .nt .h{display:flex;align-items:center;gap:8px}.nb{flex:1;white-space:pre-wrap}
+.ims{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.ni{width:72px;height:72px;object-fit:cover;border-radius:8px;cursor:pointer;border:1px solid var(--bd);background:var(--sf)}
+.pvs{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.pvs .p{position:relative}
+.pvs img{width:64px;height:64px;object-fit:cover;border-radius:8px;display:block}
+.pvs button{position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;border:2px solid #fff;background:var(--red);color:#fff;font-size:10px;line-height:1;cursor:pointer;padding:0}
+#lb{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;z-index:30;padding:12px}
+#lb.on{display:flex}
+#lb img{max-width:96vw;max-height:84vh;border-radius:8px;user-select:none}
+#lb button{position:absolute;background:rgba(255,255,255,.18);color:#fff;border:0;width:44px;height:44px;border-radius:50%;font-size:22px;cursor:pointer;line-height:1}
+#lbx{top:max(12px,env(safe-area-inset-top));right:12px}
+#lbp{left:10px;top:50%;margin-top:-22px}
+#lbn{right:10px;top:50%;margin-top:-22px}
+#lbc{position:absolute;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:0;right:0;text-align:center;color:#fff;font-size:13px}
 .sws{display:flex;gap:8px}.sws i{width:26px;height:26px;border-radius:50%;cursor:pointer;border:3px solid #fff;box-shadow:0 0 0 1px var(--bd)}.sws i.on{box-shadow:0 0 0 2px var(--navy)}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:12px}
 .st{border:1px solid var(--bd);border-top:2px solid var(--teal);border-radius:8px;padding:10px 12px}.st b{display:block;font-size:19px}.st span{font-size:12px;color:var(--mu)}
@@ -106,15 +124,14 @@ th{position:sticky;top:0;background:var(--sf);text-align:left;padding:8px 10px;f
 td{padding:7px 10px;border-top:1px solid var(--bd)}
 tr:nth-child(even) td{background:#fafafa}
 tr.g td{background:var(--nbg);color:var(--navy);font-weight:700}
+td.ce{cursor:pointer;white-space:nowrap}
+td.ce:active{background:var(--tbg)}
 .tp{background:var(--tbg);color:var(--teal);border-radius:999px;padding:2px 8px;font-size:11px;font-weight:600;white-space:nowrap}
 .tc{margin-bottom:10px}
-.pd{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--bd);flex-wrap:wrap;transition:background .3s}
-.pd .dt{width:130px;font-size:13px}.pd input[type=text]{flex:1;min-width:140px}
-.pd.tr{background:var(--tbg)}
 .rg{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--bd)}
 .rg .n{width:26px;height:26px;border-radius:50%;background:var(--nbg);color:var(--navy);font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;flex:none}
 .rg .tt{flex:1;cursor:pointer}
-#toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:var(--tx);color:#fff;padding:8px 16px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:20;max-width:90vw;text-align:center}
+#toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:var(--tx);color:#fff;padding:8px 16px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:40;max-width:90vw;text-align:center}
 #toast.on{opacity:1}
 @media(max-width:700px){
 .side{top:auto;right:0;width:auto;flex-direction:row;justify-content:space-around;border-right:0;border-top:1px solid var(--bd);padding:6px 0 calc(6px + env(safe-area-inset-bottom,0px))}
@@ -127,10 +144,10 @@ main{margin-left:0;padding:0 14px 100px}.top{padding-top:calc(14px + env(safe-ar
 </head>
 <body>
 <aside class="side">
- <div class="logo">LT</div>
+ <div class="logo">PT</div>
  <button data-t="v-console" class="on"><svg class="i" viewBox="0 0 24 24"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg><span>Konzol</span></button>
  <button data-t="v-dmx"><svg class="i" viewBox="0 0 24 24"><rect x="1" y="5" width="22" height="14" rx="7" ry="7"/><circle cx="16" cy="12" r="3"/></svg><span>DMX</span></button>
- <button data-t="v-shows"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>Előadások</span></button>
+ <button data-t="v-shows"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>Táj</span></button>
  <button data-t="v-misc"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span>Egyebek</span></button>
 </aside>
 <main>
@@ -140,35 +157,28 @@ main{margin-left:0;padding:0 14px 100px}.top{padding-top:calc(14px + env(safe-ar
 <section class="view on" id="v-console">
  <div class="card">
   <h2>MA2 / MA3 Web Remote</h2>
-  <p class="sub">Koppints egy helyszínre: azonnal megpróbálja betölteni a web remote-ot (a routerhez kell csatlakoznod).</p>
+  <p class="sub">Koppints egy helyszínre: kitölti az IP-t, és azonnal megpróbálja betölteni a web remote-ot (a routerhez kell csatlakoznod).</p>
   <div id="venues"></div>
   <div class="row"><div><label>Név</label><input id="vn" placeholder="pl. Stúdió"></div><div><label>IP cím (porttal is lehet)</label><input id="vi" placeholder="192.168.0.130" inputmode="decimal"></div><button class="btn a" id="vs">Mentés</button></div>
   <div class="row"><div><label>Egyszeri csatlakozás IP-vel</label><input id="ip" placeholder="192.168.0.100"></div><button class="btn pr a" id="cn">Csatlakozás</button><button class="btn a" id="nt">Új lapon</button></div>
   <p class="sub" id="cnote"></p>
   <iframe id="fr" title="Web Remote" style="display:none"></iframe>
  </div>
- <div class="card t">
-  <div style="display:flex;justify-content:space-between;align-items:center"><h2>Makró sablonok</h2><button class="btn sm" id="ed">✎ Szerkesztés</button></div>
-  <p class="sub" id="mhint"></p>
-  <div class="row"><div><label>Név</label><input id="mn" placeholder="Clear All"></div><div><label>Parancs</label><input id="mc" placeholder="ClearAll"></div><button class="btn pr a" id="ma">Hozzáad</button></div>
-  <div class="tiles" id="tiles"></div>
-  <button class="btn pr big" id="pls">Please</button>
- </div>
 </section>
 
 <!-- DMX -->
 <section class="view" id="v-dmx">
  <div class="card">
-  <h2>DIP switch kalkulátor</h2>
-  <p class="sub">9 kapcsoló, cím: 1–511. Koppints a kapcsolókra, vagy írd be a címet.</p>
-  <div class="row"><div><label>DMX cím</label><input id="da" type="number" min="0" max="511" value="1"></div>
+  <h2>DIP Switch Kalkulátor</h2>
+  <p class="sub">9 kapcsoló, cím: 0–511 (legfeljebb 3 számjegy). Koppints a kapcsolókra, vagy írd be a címet.</p>
+  <div class="row"><div><label>DMX cím</label><input id="da" type="text" inputmode="numeric" maxlength="3" autocomplete="off" value="0"></div>
   <div class="a"><label>ON irány</label><div class="seg" id="dir"><button data-d="up">▲ Fel</button><button data-d="down">▼ Le</button></div></div></div>
-  <div class="dip up" id="dip"></div>
-  <div class="meta" style="text-align:center" id="di"></div>
+  <div class="dsp"><span id="dsv">0</span><small id="dss"></small></div>
+  <div class="dip down" id="dip"></div>
  </div>
 </section>
 
-<!-- ELŐADÁSOK -->
+<!-- TÁJ: ELŐADÁSOK -->
 <section class="view" id="v-shows">
  <div class="card b" id="sf" style="display:none">
   <h2>Új előadás</h2><p class="sub">A checklistet a létrehozás után te írod meg. Értesítés: előző nap 18:00-kor és aznap 07:00-kor.</p>
@@ -182,18 +192,17 @@ main{margin-left:0;padding:0 14px 100px}.top{padding-top:calc(14px + env(safe-ar
 <!-- EGYEBEK -->
 <section class="view" id="v-misc">
  <div class="menu">
-  <button class="mi" data-go="v-notes"><svg class="i" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="14 3 14 9 20 9"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="14" y2="17"/></svg><b>Jegyzetek</b><span>Színes jegyzetek, emlékeztetők</span></button>
+  <button class="mi" data-go="v-notes"><svg class="i" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="14 3 14 9 20 9"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="14" y2="17"/></svg><b>Jegyzetek</b><span>Színes jegyzetek, képek, emlékeztetők</span></button>
   <button class="mi" data-go="v-patch"><svg class="i" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg><b>Patch sheet</b><span>Színpadok és MA2 XML fájlok</span></button>
   <button class="mi" data-go="v-calc"><svg class="i" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="11" x2="8.01" y2="11"/><line x1="12" y1="11" x2="12.01" y2="11"/><line x1="16" y1="11" x2="16.01" y2="11"/><line x1="8" y1="16" x2="8.01" y2="16"/><line x1="12" y1="16" x2="12.01" y2="16"/><line x1="16" y1="16" x2="16.01" y2="16"/></svg><b>Patch számoló</b><span>Lámpák címei, universe-váltással</span></button>
   <button class="mi" data-go="v-rig"><svg class="i" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg><b>Színpad</b><span>Előadásonként: mi mire van dugva</span></button>
-  <button class="mi" data-go="v-plan"><svg class="i" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><b>Beosztás</b><span>Két hét napokra bontva, naptár export</span></button>
   <button class="mi" data-go="v-hours"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><b>Bérkalkulátor</b><span>Túlóra és tájak, nettó becslés</span></button>
   <button class="mi" data-go="v-map"><svg class="i" viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg><b>Térkép</b><span>Tervezés alatt</span></button>
  </div>
 </section>
 
 <section class="view" id="v-map">
- <div class="card p"><h2>Térkép: tervezés alatt</h2><p class="sub" style="margin:0">Itt lesz a vizuális térkép a lámpák elhelyezéséről, a földi áramkörökkel és több színpaddal, feltölthető rajzokkal. Ezt egy későbbi körben építjük meg.</p></div>
+ <div class="card p"><h2>Térkép: tervezés alatt</h2><p class="sub" style="margin:0">Itt lesz a vizuális térkép a lámpák elhelyezéséről, a földi áramkörökkel és több színpaddal, feltölthető rajzokkal. Ezt egy későbbi körben, külön fájlként építjük meg.</p></div>
 </section>
 
 <!-- SZÍNPAD (mi mire van dugva, előadásonként) -->
@@ -219,12 +228,12 @@ main{margin-left:0;padding:0 14px 100px}.top{padding-top:calc(14px + env(safe-ar
 <section class="view" id="v-notes">
  <div class="card t">
   <textarea id="nx" placeholder="Jegyzet..." style="min-height:80px"></textarea>
+  <div class="pvs" id="npw"></div>
   <div class="row" style="margin-top:10px"><div class="a"><label>Szín</label><div class="sws" id="sws"></div></div>
   <label class="a cb"><input type="checkbox" id="ni"> Fontos</label>
   <div id="rw2" style="display:none"><label>Emlékeztető ideje</label><input id="nr" type="datetime-local"></div></div>
-  <div class="row"><button class="btn pr a" id="nsv">Mentés</button><button class="btn a" id="nsc"><svg class="i" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>Sorozatszám</button></div>
-  <input type="file" id="nf" accept="image/*" capture="environment" hidden>
-  <p class="sub" id="nst"></p>
+  <div class="row"><button class="btn pr a" id="nsv">Mentés</button><button class="btn a" id="nsc"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Képek feltöltése</button></div>
+  <input type="file" id="nf" accept="image/*" multiple hidden>
  </div>
  <div id="notes"></div>
 </section>
@@ -232,18 +241,10 @@ main{margin-left:0;padding:0 14px 100px}.top{padding-top:calc(14px + env(safe-ar
 <section class="view" id="v-patch">
  <div class="card">
   <div class="row"><div><label>Színpad (ide kerülnek a fájlok)</label><select id="xs"></select></div><button class="btn a" id="xn">＋ Új színpad</button></div>
-  <div class="row"><div><label>MA2 XML fájlok (több is jelölhető)</label><input type="file" id="xf" accept=".xml,text/xml" multiple></div><button class="btn a" id="xd">CSV (mind)</button></div>
-  <p class="sub">A csatornaszámot az azonos típusú lámpák címkülönbségéből számolja (a ~ jel becslést jelöl). A csoportok neve a ✎ gombbal átnevezhető.</p>
+  <div class="row"><div><label>MA2 XML fájlok (több is jelölhető)</label><input type="file" id="xf" accept=".xml,text/xml" multiple></div></div>
+  <p class="sub">Az azonos típusú lámpáknak ugyanannyi a csatornaszáma (az azonos universe-ben lévő szomszédos gépek címkülönbségéből számolva). Koppints a Csatorna cellára a szerkesztéshez. A csoportok neve a ✎ gombbal átnevezhető.</p>
   <input id="pq" placeholder="Keresés az összes fájlban (név, típus, cím...)" style="margin-bottom:12px">
   <div id="px"></div>
- </div>
-</section>
-
-<section class="view" id="v-plan">
- <div class="card t">
-  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h2>Beosztás: következő 14 nap</h2><button class="btn pr sm" id="pe">Export naptárba (.ics)</button></div>
-  <p class="sub">Írd be, hogyan dolgozol. A „Táj” jelölő a napot automatikusan felveszi a Bérkalkulátor tájai közé.</p>
-  <div id="pl"></div>
  </div>
 </section>
 
@@ -268,10 +269,12 @@ main{margin-left:0;padding:0 14px 100px}.top{padding-top:calc(14px + env(safe-ar
   <p class="sub">Táj bruttó = napidíj + órák × órabér. Ha az órabér üres, a beállításokban megadott érték él. Szerkesztéshez koppints a sorra.</p>
   <div id="tl"></div>
  </div>
+ <button class="btn dg wide" id="rz">Nullázás</button>
+ <p class="sub" style="text-align:center;margin-top:8px">Minden túlórát és tájat töröl. Az órabér és az adózási beállítások megmaradnak.</p>
 </section>
 </main>
+<div id="lb"><button id="lbx" aria-label="Bezárás">✕</button><button id="lbp" aria-label="Előző">‹</button><img id="lbi" alt=""><button id="lbn" aria-label="Következő">›</button><div id="lbc"></div></div>
 <div id="toast"></div>
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"></script>
 <script>
 (function(){
 "use strict";
@@ -285,8 +288,22 @@ const uid=()=>Date.now()+Math.floor(Math.random()*100000);
 const BELL='<svg class="i" style="width:14px;height:14px;vertical-align:-2px" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>';
 const CHEV='<svg class="i chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>';
 const KEY="lt-app-v3";
+
+/* ---- képek: IndexedDB (nagyobb hely, mint a localStorage) ---- */
+const DB=new Promise((res,rej)=>{const r=indexedDB.open("pocket-theatre",1);r.onupgradeneeded=()=>r.result.createObjectStore("img");r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});
+const idb=(mode,fn)=>DB.then(db=>new Promise((res,rej)=>{const t=db.transaction("img",mode),q=fn(t.objectStore("img"));t.oncomplete=()=>res(q&&q.result);t.onerror=()=>rej(t.error)}));
+const imgPut=(k,v)=>idb("readwrite",s=>s.put(v,k));
+const imgGet=k=>idb("readonly",s=>s.get(k));
+const imgDel=k=>idb("readwrite",s=>s.delete(k));
+const shrink=f=>new Promise((res,rej)=>{const r=new FileReader();r.onerror=rej;
+ r.onload=()=>{const im=new Image();im.onerror=rej;
+  im.onload=()=>{const k=Math.min(1,1400/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",0.75))};
+  im.src=r.result};
+ r.readAsDataURL(f)});
+
+/* A makrók (S.macros) és a beosztás (S.plan) adatai nem törlődnek: a tárban maradnak, ha később visszahozzuk őket. */
 const D={venues:[{n:"Nagyszínpad",ip:"192.168.0.100"},{n:"Kisfaludy Színpad",ip:"192.168.0.120"}],
- macros:[],dir:"up",shows:[],notes:[],stages:[],rigs:[],plan:{},ot:[],tours:[],set:{wage:0},tax:{e:false,u:false}};
+ dd:"down",shows:[],notes:[],stages:[],rigs:[],chOv:{},ot:[],tours:[],set:{wage:0},tax:{e:false,u:false}};
 let S;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!S||typeof S!=="object")S={};
 /* átállás a korábbi verziókról */
@@ -297,14 +314,22 @@ if(Array.isArray(S.patch)&&S.patch.length&&!S.stages){
 delete S.patch;
 if(Array.isArray(S.rig)&&S.rig.length&&!S.rigs)S.rigs=[{id:uid(),n:"Korábbi lista",items:S.rig}];
 delete S.rig;
-if(Array.isArray(S.macros))S.macros=S.macros.filter(m=>m.id>4);
 Object.keys(D).forEach(k=>{if(S[k]===undefined)S[k]=JSON.parse(JSON.stringify(D[k]))});
 if(typeof S.set.wage!=="number")S.set.wage=+S.set.wage||0;
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast("A tár megtelt")}};
+/* korábbi egyképes jegyzetek átemelése az új, többképes tárolóba */
+S.notes.forEach(n=>{
+ if(n.imgs)return;
+ n.imgs=[];
+ if(n.img){let v=null;try{v=localStorage.getItem("lt-img-"+n.id)}catch(e){}
+  if(v){const k=n.id+"-0";n.imgs=[k];imgPut(k,v).then(()=>{try{localStorage.removeItem("lt-img-"+n.id)}catch(e){}}).catch(()=>{})}}
+ delete n.img;
+});
+save();
 
 /* ---- navigáció ---- */
-const TT={"v-console":"Konzol","v-dmx":"DMX","v-shows":"Előadások","v-misc":"Egyebek","v-notes":"Jegyzetek","v-patch":"Patch sheet","v-calc":"Patch számoló","v-rig":"Színpad","v-plan":"Beosztás","v-hours":"Bérkalkulátor","v-map":"Térkép"};
-const SUB=["v-notes","v-patch","v-calc","v-rig","v-plan","v-hours","v-map"];
+const TT={"v-console":"Konzol","v-dmx":"DMX","v-shows":"Előadások","v-misc":"Egyebek","v-notes":"Jegyzetek","v-patch":"Patch sheet","v-calc":"Patch számoló","v-rig":"Színpad","v-hours":"Bérkalkulátor","v-map":"Térkép"};
+const SUB=["v-notes","v-patch","v-calc","v-rig","v-hours","v-map"];
 function go(id){
  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id===id));
  const root=SUB.includes(id)?"v-misc":id;
@@ -313,7 +338,6 @@ function go(id){
  $("back").style.display=SUB.includes(id)?"":"none";
  $("newShow").style.display=id==="v-shows"?"":"none";
  if(id==="v-hours")renderHours();
- if(id==="v-plan")renderPlan();
  window.scrollTo(0,0);
 }
 document.addEventListener("click",e=>{const t=e.target.closest("[data-t],[data-go]");if(t)go(t.dataset.t||t.dataset.go)});
@@ -333,73 +357,36 @@ $("venues").addEventListener("click",e=>{
  const d=e.target.closest("[data-dv]");
  if(d){e.stopPropagation();S.venues.splice(+d.dataset.dv,1);save();renderVenues();return}
  const b=e.target.closest("[data-v]");
- if(b){const i=b.dataset.v;conn(S.venues[+i].ip);const nb=document.querySelector(`[data-v="${i}"]`);if(nb){nb.classList.add("go");setTimeout(()=>nb.classList.remove("go"),700)}}
+ if(b){const i=b.dataset.v,v=S.venues[+i];$("ip").value=v.ip;conn(v.ip);const nb=document.querySelector(`[data-v="${i}"]`);if(nb){nb.classList.add("go");setTimeout(()=>nb.classList.remove("go"),700)}}
 });
 $("vs").onclick=()=>{const n=$("vn").value.trim(),ip=$("vi").value.trim();if(!n||!ip){toast("Név és IP kell");return}S.venues.push({n,ip});save();renderVenues();$("vn").value=$("vi").value=""};
 $("cn").onclick=()=>conn($("ip").value);
 $("nt").onclick=()=>{const u=url($("ip").value);u?window.open(u,"_blank"):toast("Add meg az IP címet")};
 renderVenues();
 
-/* ---- beírás a remote parancssorába ---- */
-function ins(t,enter){
- let ok=false;
- try{
-  const i=$("fr").contentWindow.document.getElementById("cmdline-input");
-  if(i){
-   i.focus();i.value=(i.value||"")+t;i.dispatchEvent(new Event("input",{bubbles:true}));ok=true;
-   if(enter)setTimeout(()=>{["keydown","keypress","keyup"].forEach(k=>i.dispatchEvent(new KeyboardEvent(k,{key:"Enter",code:"Enter",keyCode:13,which:13,bubbles:true})))},100);
-  }
- }catch(e){}
- if(!ok){copy(t+(enter?"\n":""));toast("A böngésző nem engedi a beírást a remote-ba, vágólapra másoltam")}
- else toast("Beírva: "+t);
-}
-
-/* ---- makrók ---- */
-let edit=false,sel=null;
-function renderTiles(){
- const old={};document.querySelectorAll(".tile").forEach(t=>old[t.dataset.id]=t.getBoundingClientRect());
- $("tiles").classList.toggle("edit",edit);
- $("tiles").innerHTML=S.macros.map(m=>`<div class="tile${sel===m.id?" sel":""}" data-id="${m.id}">${esc(m.n)}<button class="x" data-x="${m.id}">✕</button></div>`).join("");
- document.querySelectorAll(".tile").forEach(t=>{
-  const o=old[t.dataset.id];if(!o)return;const n=t.getBoundingClientRect(),dx=o.left-n.left,dy=o.top-n.top;
-  if(dx||dy)t.animate([{transform:`translate(${dx}px,${dy}px)`},{transform:"none"}],{duration:280,easing:"ease"});
- });
- $("mhint").textContent=!S.macros.length?"Még nincs makró. Adj hozzá egyet fent.":edit?"Szerkesztés: koppints egy kockára, majd arra, ahová előre szeretnéd tenni. ✕ = törlés.":"Koppintásra a parancs beíródik a remote parancssorába.";
- $("ed").style.display=S.macros.length?"":"none";
- $("ed").textContent=edit?"✔ Kész":"✎ Szerkesztés";
-}
-$("ed").onclick=()=>{edit=!edit;sel=null;renderTiles()};
-$("tiles").addEventListener("click",e=>{
- const x=e.target.closest("[data-x]"),t=e.target.closest(".tile");
- if(x){const el=x.parentNode;el.classList.add("out");setTimeout(()=>{S.macros=S.macros.filter(m=>String(m.id)!==x.dataset.x);save();renderTiles()},220);return}
- if(!t)return;
- const id=+t.dataset.id,m=S.macros.find(k=>k.id===id);
- if(!edit){ins(m.c,false);return}
- if(sel===null)sel=id;
- else if(sel===id)sel=null;
- else{const a=S.macros.findIndex(k=>k.id===sel),it=S.macros.splice(a,1)[0],b=S.macros.findIndex(k=>k.id===id);S.macros.splice(b,0,it);sel=null;save()}
- renderTiles();
-});
-$("ma").onclick=()=>{const n=$("mn").value.trim(),c=$("mc").value.trim();if(!n||!c){toast("Név és parancs kell");return}
- S.macros.push({id:uid()+10,n,c});save();$("mn").value=$("mc").value="";renderTiles()};
-$("pls").onclick=()=>ins("Please",true);
-renderTiles();
-
-/* ---- DMX ---- */
-let ad=1;
+/* ---- DMX (0-ról indul, ON irány alapból lefelé, legfeljebb 3 számjegy) ---- */
+let ad=0;
 function renderDip(){
- $("dip").className="dip "+S.dir;
+ const dir=S.dd==="up"?"up":"down";
+ $("dip").className="dip "+dir;
  if(!$("dip").children.length){let h="";for(let i=0;i<9;i++)h+=`<div class="sw" data-b="${i}"><b>${i+1}</b><div class="trk"><u>ON</u><div class="kn"></div></div><em>${1<<i}</em></div>`;$("dip").innerHTML=h}
  [...$("dip").children].forEach((s,i)=>s.classList.toggle("on",!!((ad>>i)&1)));
- document.querySelectorAll("#dir button").forEach(b=>b.classList.toggle("on",b.dataset.d===S.dir));
+ document.querySelectorAll("#dir button").forEach(b=>b.classList.toggle("on",b.dataset.d===dir));
  const on=[];for(let i=0;i<9;i++)if((ad>>i)&1)on.push(i+1);
- $("di").innerHTML=`Cím: <b>${ad}</b> | ON kapcsolók: <b>${on.join(", ")||"nincs"}</b> | ON = ${S.dir==="up"?"fent ▲":"lent ▼"}`;
+ $("dsv").textContent=ad;
+ $("dss").textContent="ON kapcsolók: "+(on.join(", ")||"nincs")+" · ON = "+(dir==="up"?"fent ▲":"lent ▼");
  if(document.activeElement!==$("da"))$("da").value=ad;
 }
 $("dip").addEventListener("click",e=>{const s=e.target.closest(".sw");if(s){ad^=1<<+s.dataset.b;renderDip()}});
-$("da").oninput=()=>{let v=parseInt($("da").value,10);ad=Math.max(0,Math.min(511,isNaN(v)?0:v));renderDip()};
+$("da").oninput=()=>{
+ const s=$("da").value.replace(/\D/g,"").slice(0,3);
+ ad=Math.min(511,s===""?0:parseInt(s,10));
+ $("da").value=s===""?"":(parseInt(s,10)>511?"511":s);
+ renderDip();
+};
+$("da").onfocus=()=>{if($("da").value==="0")$("da").select()};
 $("da").onblur=()=>{$("da").value=ad};
-$("dir").onclick=e=>{const b=e.target.closest("button");if(b){S.dir=b.dataset.d;save();renderDip()}};
+$("dir").onclick=e=>{const b=e.target.closest("button");if(b){S.dd=b.dataset.d;save();renderDip()}};
 renderDip();
 
 /* ---- patch számoló ---- */
@@ -411,7 +398,7 @@ $("pc").onclick=()=>{
  ptxt=L.join("\n");$("po").textContent=ptxt};
 $("pcp").onclick=()=>{if(ptxt){copy(ptxt);toast("Másolva")}else toast("Előbb számolj")};
 
-/* ---- előadások ---- */
+/* ---- táj: előadások ---- */
 const showF=v=>{$("sf").style.display=v?"block":"none";if(v)$("sn").focus()};
 $("newShow").onclick=()=>showF($("sf").style.display==="none");
 $("sc").onclick=()=>showF(false);
@@ -470,34 +457,69 @@ $("rigl").addEventListener("click",e=>{
 $("rigl").addEventListener("keydown",e=>{if(e.key==="Enter"&&(e.target.dataset.rn||e.target.dataset.rw)){const id=e.target.dataset.rn||e.target.dataset.rw;document.querySelector(`[data-ra="${id}"]`).click()}});
 renderRig();
 
-/* ---- jegyzetek ---- */
-const COL=["#00a597","#3b82f6","#8b5cf6","#f59e0b","#ef4444","#6b7280"];let nc=COL[0];
+/* ---- jegyzetek (több képpel, lapozható nézegetővel) ---- */
+const COL=["#00a597","#3b82f6","#8b5cf6","#f59e0b","#ef4444","#6b7280"];let nc=COL[0],pend=[];
 $("sws").innerHTML=COL.map(c=>`<i data-c="${c}" style="background:${c}"></i>`).join("");
 const markC=()=>document.querySelectorAll("#sws i").forEach(i=>i.classList.toggle("on",i.dataset.c===nc));
 $("sws").onclick=e=>{const i=e.target.closest("i");if(i){nc=i.dataset.c;markC()}};markC();
 $("ni").onchange=()=>$("rw2").style.display=$("ni").checked?"":"none";
-$("nsv").onclick=()=>{const t=$("nx").value.trim();if(!t){toast("Üres jegyzet");return}
- const imp=$("ni").checked;
- S.notes.unshift({id:uid(),t,c:nc,i:imp,r:imp?$("nr").value:"",d:false,f:false});save();
+function renderPend(){$("npw").innerHTML=pend.map((p,i)=>`<div class="p"><img src="${p}" alt=""><button data-pp="${i}" type="button">✕</button></div>`).join("")}
+$("npw").addEventListener("click",e=>{const b=e.target.closest("[data-pp]");if(b){pend.splice(+b.dataset.pp,1);renderPend()}});
+$("nsc").onclick=()=>$("nf").click();
+$("nf").onchange=async()=>{
+ const fl=[...$("nf").files];$("nf").value="";
+ let bad=0;
+ for(const f of fl){try{pend.push(await shrink(f))}catch(e){bad++}}
+ renderPend();
+ if(bad)toast(bad+" képet nem sikerült megnyitni");
+};
+$("nsv").onclick=async()=>{
+ const t=$("nx").value.trim();
+ if(!t&&!pend.length){toast("Írj jegyzetet, vagy tölts fel képet");return}
+ const imp=$("ni").checked,id=uid(),keys=pend.map((_,i)=>id+"-"+i);
+ try{await Promise.all(pend.map((p,i)=>imgPut(keys[i],p)))}catch(e){toast("Nincs elég hely a képek mentéséhez");return}
+ S.notes.unshift({id,t:t||"Kép",c:nc,i:imp,r:imp?$("nr").value:"",d:false,f:false,imgs:keys});save();
  if(imp&&$("nr").value&&window.Notification&&Notification.permission==="default")Notification.requestPermission();
- $("nx").value="";$("nr").value="";$("ni").checked=false;$("rw2").style.display="none";renderNotes()};
+ $("nx").value="";$("nr").value="";$("ni").checked=false;$("rw2").style.display="none";pend=[];renderPend();renderNotes();
+};
 function renderNotes(){
- $("notes").innerHTML=S.notes.map(n=>`<div class="nt${n.d?" d":""}" style="border-color:${n.c};background:${n.c}1a"><div class="h"><input type="checkbox" data-nd="${n.id}" ${n.d?"checked":""}><div class="nb">${n.i?BELL+" ":""}<span class="tx">${esc(n.t)}</span>${n.r?`<div class="meta" style="margin:2px 0 0">${esc(n.r.replace("T"," "))}</div>`:""}</div><button class="x2" data-nx="${n.id}">✕</button></div></div>`).join("")||'<p class="meta" style="text-align:center">Még nincs jegyzet.</p>';
+ $("notes").innerHTML=S.notes.map(n=>{const im=n.imgs||[];
+  return `<div class="nt${n.d?" d":""}" style="border-color:${n.c};background:${n.c}1a"><div class="h"><input type="checkbox" data-nd="${n.id}" ${n.d?"checked":""}><div class="nb">${n.i?BELL+" ":""}<span class="tx">${esc(n.t)}</span>${n.r?`<div class="meta" style="margin:2px 0 0">${esc(n.r.replace("T"," "))}</div>`:""}${im.length?`<div class="ims">${im.map((k,i)=>`<img class="ni" data-k="${esc(k)}" data-n="${n.id}" data-i="${i}" alt="Csatolt kép">`).join("")}</div>`:""}</div><button class="x2" data-nx="${n.id}">✕</button></div></div>`}).join("")||'<p class="meta" style="text-align:center">Még nincs jegyzet.</p>';
+ document.querySelectorAll("#notes img[data-k]").forEach(im=>imgGet(im.dataset.k).then(v=>{if(v)im.src=v}).catch(()=>{}));
 }
 $("notes").addEventListener("change",e=>{const c=e.target;if(!c.dataset.nd)return;
  S.notes.find(n=>String(n.id)===c.dataset.nd).d=c.checked;save();
  const b=c.closest(".nt");b.classList.toggle("d",c.checked);b.classList.remove("pop");void b.offsetWidth;b.classList.add("pop")});
-$("notes").addEventListener("click",e=>{const x=e.target.closest("[data-nx]");if(x){S.notes=S.notes.filter(n=>String(n.id)!==x.dataset.nx);save();renderNotes()}});
-$("nsc").onclick=()=>$("nf").click();
-$("nf").onchange=()=>{const f=$("nf").files[0];if(!f)return;
- if(typeof Tesseract==="undefined"){$("nst").textContent="Az OCR nem töltődött be (internet kell).";return}
- $("nst").textContent="Beolvasás...";
- Tesseract.recognize(f,"eng").then(r=>{const t=(r.data.text||"").trim(),c=t.split(/\s+/).filter(w=>w.length>=6&&/\d/.test(w));
-  $("nx").value=($("nx").value?$("nx").value+"\n":"")+(c.length?"S/N: "+c.join(" | ")+"\n":"")+t;$("nst").textContent="Kész, mentés előtt ellenőrizd.";$("nf").value=""}).catch(()=>$("nst").textContent="Sikertelen beolvasás.")};
+$("notes").addEventListener("click",e=>{
+ const x=e.target.closest("[data-nx]"),b=e.target.closest(".ni");
+ if(x){const n=S.notes.find(o=>String(o.id)===x.dataset.nx);(n.imgs||[]).forEach(k=>imgDel(k).catch(()=>{}));S.notes=S.notes.filter(o=>o!==n);save();renderNotes()}
+ else if(b){const n=S.notes.find(o=>String(o.id)===b.dataset.n);openLb(n.imgs,+b.dataset.i)}
+});
+/* nézegető */
+let lbL=[],lbI=0;
+async function openLb(keys,i){
+ try{lbL=(await Promise.all(keys.map(imgGet))).filter(Boolean)}catch(e){lbL=[]}
+ if(!lbL.length){toast("A kép nem található");return}
+ lbI=Math.min(i,lbL.length-1);showLb();$("lb").classList.add("on");
+}
+function showLb(){
+ $("lbi").src=lbL[lbI];$("lbc").textContent=(lbI+1)+" / "+lbL.length;
+ $("lbp").style.display=$("lbn").style.display=lbL.length>1?"":"none";
+}
+const stepLb=d=>{if(lbL.length<2)return;lbI=(lbI+d+lbL.length)%lbL.length;showLb()};
+const closeLb=()=>{$("lb").classList.remove("on");$("lbi").removeAttribute("src")};
+$("lbp").onclick=e=>{e.stopPropagation();stepLb(-1)};
+$("lbn").onclick=e=>{e.stopPropagation();stepLb(1)};
+$("lbx").onclick=e=>{e.stopPropagation();closeLb()};
+$("lb").onclick=e=>{if(e.target===$("lb"))closeLb()};
+let tx0=null;
+$("lb").addEventListener("touchstart",e=>{tx0=e.touches[0].clientX},{passive:true});
+$("lb").addEventListener("touchend",e=>{if(tx0===null)return;const dx=e.changedTouches[0].clientX-tx0;tx0=null;if(Math.abs(dx)>40)stepLb(dx<0?1:-1)});
+document.addEventListener("keydown",e=>{if(!$("lb").classList.contains("on"))return;if(e.key==="Escape")closeLb();if(e.key==="ArrowLeft")stepLb(-1);if(e.key==="ArrowRight")stepLb(1)});
 renderNotes();
 
 /* ---- értesítések (jegyzet + táj), amíg az oldal nyitva van ---- */
-function notify(msg){toast(msg);if(window.Notification&&Notification.permission==="granted")new Notification("Világosító app",{body:msg})}
+function notify(msg){toast(msg);if(window.Notification&&Notification.permission==="granted")new Notification("Pocket Theatre",{body:msg})}
 function checkReminders(){
  let ch=false;const now=Date.now();
  S.notes.forEach(n=>{if(n.i&&!n.d&&!n.f&&n.r&&Date.parse(n.r)<=now){n.f=true;ch=true;notify("Emlékeztető: "+n.t.slice(0,60))}});
@@ -532,19 +554,20 @@ function parseXml(txt){
 const absA=p=>{p=String(p||"");if(/^\d+$/.test(p)&&+p>0)return +p;const m=/^(\d+)\.(\d+)$/.exec(p);return m?(+m[1]-1)*512+ +m[2]:null};
 const fmtA=a=>`${Math.floor((a-1)/512)+1}.${String((a-1)%512+1).padStart(3,"0")}`;
 const fmtP=p=>{const a=absA(p);return a?fmtA(a):(p||"–")};
-/* csatornaszám: az azonos típusú lámpák közti címkülönbségből */
-function chCalc(fx){
- const M=new Map(),g={};
- fx.forEach(x=>{const a=absA(x.p);if(a!=null)(g[x.t||"?"]=g[x.t||"?"]||[]).push({x,a})});
+/* típusonként EGY csatornaszám: az azonos universe-ben lévő, azonos típusú szomszédos gépek leggyakoribb címkülönbsége;
+   a kézzel beállított érték (S.chOv) mindig erősebb */
+function typeCh(fx){
+ const g={},R={},uv=a=>Math.floor((a-1)/512);
+ fx.forEach(x=>{const a=absA(x.p);if(a!=null)(g[x.t||"?"]=g[x.t||"?"]||[]).push(a)});
  Object.keys(g).forEach(k=>{
-  const V=g[k].sort((p,q)=>p.a-q.a),gaps=[];
-  for(let i=0;i<V.length-1;i++){const d=V[i+1].a-V[i].a;if(d>0&&d<=512){V[i].c=d;gaps.push(d)}}
-  const cnt={};gaps.forEach(d=>cnt[d]=(cnt[d]||0)+1);
+  const V=g[k].sort((p,q)=>p-q),cnt={};
+  for(let i=0;i<V.length-1;i++){const d=V[i+1]-V[i];if(d>0&&d<=512&&uv(V[i])===uv(V[i+1]))cnt[d]=(cnt[d]||0)+1}
   let mode=0,best=0;Object.keys(cnt).forEach(d=>{if(cnt[d]>best||(cnt[d]===best&&+d<mode)){best=cnt[d];mode=+d}});
-  V.forEach(v=>{if(v.c)M.set(v.x,{a:v.a,c:v.c,est:false});else if(mode)M.set(v.x,{a:v.a,c:mode,est:true})});
+  if(mode)R[k]=mode;
  });
- return M;
+ return R;
 }
+const chOf=(R,t)=>S.chOv[t]||R[t]||0;
 const PO=new Set();
 function renderStageSel(){
  const v=$("xs").value;
@@ -559,17 +582,17 @@ function renderPatch(){
  S.stages.forEach(st=>{
   let inner="";
   st.files.forEach(f=>{
-   const M=chCalc(f.fx);
+   const R=typeCh(f.fx);
    const L=f.fx.filter(x=>!q||[x.n,x.t,x.l,x.id,x.ch,x.p].join(" ").toLowerCase().includes(q));
    if(q&&!L.length)return;
-   const cnt={};L.forEach(x=>{const k=x.t||"Ismeretlen";cnt[k]=(cnt[k]||0)+1});
-   const chips=Object.keys(cnt).map(k=>{const ex=L.find(x=>(x.t||"Ismeretlen")===k),m=M.get(ex);return `<span class="tp">${esc(k)} ×${cnt[k]}${m?" · "+m.c+" csat.":""}</span>`}).join(" ");
+   const cnt={};L.forEach(x=>{const k=x.t||"?";cnt[k]=(cnt[k]||0)+1});
+   const chips=Object.keys(cnt).map(k=>{const c=chOf(R,k);return `<span class="tp">${esc(k==="?"?"Ismeretlen":k)} ×${cnt[k]}${c?" · "+c+" csat.":""}</span>`}).join(" ");
    let rows="",last=null;
    L.forEach(x=>{if(x.l!==last){last=x.l;rows+=`<tr class="g"><td colspan="6">${esc(x.l||"Layer nélkül")}</td></tr>`}
-    const m=M.get(x);
-    rows+=`<tr><td>${esc(x.id)}</td><td>${esc(x.ch)}</td><td>${esc(x.n)}</td><td><span class="tp">${esc(x.t||"–")}</span></td><td>${m?`${m.est?"~":""}<b>${m.c}</b> <span class="meta" style="margin:0">(${fmtA(m.a)}–${fmtA(m.a+m.c-1)})</span>`:"–"}</td><td title="${esc(x.p)}"><b>${esc(fmtP(x.p))}</b></td></tr>`});
+    const kt=x.t||"?",c=chOf(R,kt),a=absA(x.p);
+    rows+=`<tr><td>${esc(x.id)}</td><td>${esc(x.ch)}</td><td>${esc(x.n)}</td><td><span class="tp">${esc(x.t||"–")}</span></td><td class="ce" data-ct="${esc(kt)}">${c?`<b>${c}</b>${a?` <span class="meta" style="margin:0">(${fmtA(a)}–${fmtA(a+c-1)})</span>`:""}`:"–"}${S.chOv[kt]?" ✎":""}</td><td title="${esc(x.p)}"><b>${esc(fmtP(x.p))}</b></td></tr>`});
    inner+=`<details class="fg" data-f="${f.id}" ${(PO.has("f"+f.id)||q)?"open":""}><summary>${CHEV}<b>${esc(f.n)}</b><span class="tp">${f.fx.length} lámpa</span><span class="gr"></span>
-    <button class="btn sm" data-rf="${f.id}">✎</button><button class="btn sm" data-fd="${f.id}">CSV</button><button class="btn sm dg" data-fx="${f.id}">✕</button></summary>
+    <button class="btn sm" data-rf="${f.id}">✎</button><button class="btn sm dg" data-fx="${f.id}">✕</button></summary>
     <div class="fgb"><div class="tc">${chips}</div><div class="tw"><table><thead><tr><th>ID</th><th>Chan</th><th>Név</th><th>Típus</th><th>Csatorna</th><th>Patch</th></tr></thead><tbody>${rows}</tbody></table></div></div></details>`;
   });
   if(q&&!inner)return;
@@ -582,23 +605,25 @@ function renderPatch(){
 $("px").addEventListener("toggle",e=>{const d=e.target;if(d.dataset&&d.dataset.f&&!$("pq").value.trim()){const k="f"+d.dataset.f;d.open?PO.add(k):PO.delete(k)}},true);
 const findF=id=>{for(const s of S.stages){const f=s.files.find(x=>String(x.id)===String(id));if(f)return {s,f}}return null};
 $("px").addEventListener("click",e=>{
- const t=e.target.closest("[data-rf],[data-fd],[data-fx],[data-rs],[data-ds]");if(!t)return;
+ const ce=e.target.closest("[data-ct]");
+ if(ce){
+  const k=ce.dataset.ct,b=ce.querySelector("b"),v=prompt(`Csatornaszám a(z) „${k==="?"?"Ismeretlen":k}” típushoz (minden ilyen lámpára érvényes). Üresen hagyva: automatikus.`,S.chOv[k]||(b?b.textContent:""));
+  if(v===null)return;
+  const s=v.trim();
+  if(s==="")delete S.chOv[k];
+  else{const n=parseInt(s,10);if(!(n>=1&&n<=512)){toast("1 és 512 közötti szám kell");return}S.chOv[k]=n}
+  save();renderPatch();return;
+ }
+ const t=e.target.closest("[data-rf],[data-fx],[data-rs],[data-ds]");if(!t)return;
  e.preventDefault();
  const d=t.dataset;
  if(d.rf){const r=findF(d.rf),n=prompt("Fájl új neve:",r.f.n);if(n&&n.trim()){r.f.n=n.trim();save();renderPatch()}}
- else if(d.fd){const r=findF(d.fd);dl(r.f.n.replace(/\.xml$/i,"")+".csv",r.f.fx)}
  else if(d.fx){if(confirm("Törlöd ezt a fájlt?")){const r=findF(d.fx);r.s.files=r.s.files.filter(x=>String(x.id)!==d.fx);save();renderPatch()}}
  else if(d.rs){const s=S.stages.find(k=>String(k.id)===d.rs),n=prompt("Színpad új neve:",s.n);if(n&&n.trim()){s.n=n.trim();save();renderPatch()}}
  else if(d.ds){if(confirm("Törlöd a színpadot a benne lévő fájlokkal?")){S.stages=S.stages.filter(k=>String(k.id)!==d.ds);save();renderPatch()}}
 });
 $("pq").oninput=renderPatch;
 $("xn").onclick=()=>{const n=prompt("Az új színpad neve:");if(n&&n.trim()){const s={id:uid(),n:n.trim(),files:[]};S.stages.push(s);save();renderPatch();$("xs").value=s.id}};
-function dl(name,fx){
- const M=chCalc(fx);
- const csv=["ID;Chan;Név;Típus;Csatorna db;Layer;Patch"].concat(fx.map(f=>{const m=M.get(f);return [f.id,f.ch,f.n,f.t,m?m.c:"",f.l,fmtP(f.p)].join(";")})).join("\n");
- const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv"}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
-}
-$("xd").onclick=()=>{const all=[];S.stages.forEach(s=>s.files.forEach(f=>f.fx.forEach(x=>all.push(x))));all.length?dl("patch_sheet_osszes.csv",all):toast("Nincs adat")};
 $("xf").onchange=()=>{
  const files=[...$("xf").files];if(!files.length)return;
  Promise.all(files.map(f=>f.text().then(t=>{try{const r=parseXml(t);return r.length?{id:uid(),n:f.name,fx:r}:null}catch(e){return null}}))).then(res=>{
@@ -625,7 +650,7 @@ function renderHours(){
  const T=S.tours.slice().sort((a,b)=>a.d<b.d?1:-1),tg=T.reduce((a,x)=>a+tGross(x),0);
  $("hst").innerHTML=[[oh.toFixed(2).replace(/\.?0+$/,"")+" h","Túlóra összesen"],[fm(og),"Túlóra pluszjövedelem (bruttó)"],[fm(net(og)),"Túlóra pluszjövedelem (nettó)"],[T.length+" db","Táj összesen"],[fm(tg),"Táj bruttó"],[fm(net(tg)),"Táj nettó"]].map(x=>`<div class="st"><b>${x[0]}</b><span>${x[1]}</span></div>`).join("");
  $("ol").innerHTML=S.ot.map(x=>`<div class="it"><span><b>${x.h} h</b>${x.m>1?" · ünnepnap ×"+x.m:""} → ${fm(otPay(x))} bruttó, <b>${fm(net(otPay(x)))}</b> nettó</span><button class="x2" data-ox="${x.id}">✕</button></div>`).join("")||'<p class="meta">Még nincs túlóra rögzítve.</p>';
- $("tl").innerHTML=T.map(x=>{const w=x.w||S.set.wage;return `<div class="it" style="cursor:pointer"><span data-te="${x.id}"><b>${esc(x.d)}</b> · ${esc(x.n)}${x.auto?" (beosztásból)":""}<br><span class="meta" style="margin:0">napidíj ${fm(x.g||0)}${x.h?" + "+x.h+" h × "+fm(w)+"/h":""} = ${fm(tGross(x))} bruttó</span> → <b>${fm(net(tGross(x)))}</b> nettó</span><button class="x2" data-tx="${x.id}">✕</button></div>`}).join("")||'<p class="meta">Még nincs táj rögzítve.</p>';
+ $("tl").innerHTML=T.map(x=>{const w=x.w||S.set.wage;return `<div class="it" style="cursor:pointer"><span data-te="${x.id}"><b>${esc(x.d)}</b> · ${esc(x.n)}<br><span class="meta" style="margin:0">napidíj ${fm(x.g||0)}${x.h?" + "+x.h+" h × "+fm(w)+"/h":""} = ${fm(tGross(x))} bruttó</span> → <b>${fm(net(tGross(x)))}</b> nettó</span><button class="x2" data-tx="${x.id}">✕</button></div>`}).join("")||'<p class="meta">Még nincs táj rögzítve.</p>';
  $("gn").textContent=S.tax.e?"EKHO: 15% levonás (egyszerűsített számítás).":S.tax.u?"25 év alatt: SZJA-mentes, 18,5% járulék (a mentesség havi átlagkereset-határig jár).":"Általános: 15% SZJA + 18,5% járulék. A számítás tájékoztató jellegű.";
 }
 $("hw").onchange=()=>{S.set.wage=+$("hw").value||0;save();renderHours()};
@@ -649,44 +674,19 @@ $("tl").addEventListener("click",e=>{
   const w=prompt("Órabér (Ft/h, üres = alap):",r.w||"");if(w===null)return;
   r.g=parseFloat(g)||0;r.h=parseFloat(h)||0;r.w=parseFloat(w)||0;save();renderHours()}
 });
-
-/* ---- beosztás + naptár export ---- */
-function syncTour(d,on){
- const has=S.tours.some(t=>t.auto&&t.d===d);
- if(on&&!has)S.tours.push({id:uid(),d,n:"Táj (beosztás)",g:0,h:0,w:0,auto:true});
- if(!on&&has)S.tours=S.tours.filter(t=>!(t.auto&&t.d===d));
-}
-function renderPlan(){
- let h="";
- for(let i=0;i<14;i++){
-  const x=new Date();x.setDate(x.getDate()+i);
-  const d=x.toLocaleDateString("sv-SE"),lab=x.toLocaleDateString("hu-HU",{weekday:"short",month:"short",day:"numeric"}),p=S.plan[d]||{t:"",tour:false};
-  h+=`<div class="pd${p.tour?" tr":""}"><div class="dt"><b>${esc(lab)}</b></div><input type="text" data-pt="${d}" value="${esc(p.t)}" placeholder="pl. 9–17 próba, esti előadás"><label class="cb" style="margin:0"><input type="checkbox" data-pk="${d}" ${p.tour?"checked":""}> Táj</label></div>`;
- }
- $("pl").innerHTML=h;
-}
-$("pl").addEventListener("input",e=>{const d=e.target.dataset.pt;if(!d)return;(S.plan[d]=S.plan[d]||{t:"",tour:false}).t=e.target.value;save()});
-$("pl").addEventListener("change",e=>{const d=e.target.dataset.pk;if(!d)return;
- (S.plan[d]=S.plan[d]||{t:"",tour:false}).tour=e.target.checked;syncTour(d,e.target.checked);save();
- e.target.closest(".pd").classList.toggle("tr",e.target.checked);
- toast(e.target.checked?"Hozzáadva a Bérkalkulátorhoz":"Eltávolítva a Bérkalkulátorból")});
-$("pe").onclick=()=>{
- const ks=Object.keys(S.plan).filter(d=>d>=today()&&(S.plan[d].t||S.plan[d].tour)).sort();
- if(!ks.length){toast("Nincs mit exportálni");return}
- const ic=s=>String(s).replace(/\\/g,"\\\\").replace(/;/g,"\\;").replace(/,/g,"\\,").replace(/\n/g,"\\n");
- const stamp=new Date().toISOString().replace(/[-:]/g,"").replace(/\.\d+/,"");
- const nx=d=>{const x=new Date(d+"T00:00");x.setDate(x.getDate()+1);return x.toLocaleDateString("sv-SE").replace(/-/g,"")};
- const L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Vilagosito App//HU","CALSCALE:GREGORIAN"];
- ks.forEach(d=>{const p=S.plan[d];
-  L.push("BEGIN:VEVENT","UID:"+d+"-"+uid()+"@vilagosito","DTSTAMP:"+stamp,"DTSTART;VALUE=DATE:"+d.replace(/-/g,""),"DTEND;VALUE=DATE:"+nx(d),
-   "SUMMARY:"+ic(p.tour?"TÁJ"+(p.t?": "+p.t:""):p.t),"END:VEVENT")});
- L.push("END:VCALENDAR");
- const a=document.createElement("a");
- a.href=URL.createObjectURL(new Blob([L.join("\r\n")],{type:"text/calendar"}));a.download="beosztas.ics";
- document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),3000);
- toast("Kész: nyisd meg a letöltött fájlt, és add hozzá a Naptárhoz");
+/* teljes nullázás: az órabér és az adózási beállítások megmaradnak */
+$("rz").onclick=()=>{
+ if(!confirm("Biztosan nullázod a bérkalkulátort?\n\nA túlórák és a tájak törlődnek, az órabér megmarad."))return;
+ S.ot=[];S.tours=[];save();
+ ["oh","tn","tg","th","tw"].forEach(i=>$(i).value="");$("om").value="1";$("td").value=today();
+ renderHours();toast("Bérkalkulátor nullázva");
 };
 })();
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+  }
 </script>
 </body>
 </html>
