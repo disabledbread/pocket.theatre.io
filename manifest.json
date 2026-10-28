@@ -1,8 +1,7 @@
 {
   "name": "Pocket Theatre",
   "short_name": "PocketT",
-  "start_url": "/pocket.theatre.io/",
-  "scope": "/pocket.theatre.io/",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
