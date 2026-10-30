@@ -53,7 +53,9 @@ input[type=checkbox]:active{transform:scale(.8)}
 .btn.sm{padding:4px 12px;font-size:12px}
 .btn.lg{padding:12px 20px;font-size:15px;border-width:2px}
 .btn.wide{width:100%;padding:12px}
-.chip{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:999px;font-weight:600;font-size:13px;background:var(--tbg);color:var(--teal);border:0;cursor:pointer;margin:0 6px 8px 0;transition:transform .12s,background .2s,color .2s}
+.chip{display:inline-flex;align-items:center;border-radius:999px;font-weight:600;font-size:13px;background:var(--tbg);color:var(--teal);margin:0 6px 8px 0;transition:transform .12s,background .2s,color .2s}
+.chip button{border:0;background:none;color:inherit;font:inherit;cursor:pointer;padding:7px 4px 7px 14px}
+.chip .cx{padding:7px 12px 7px 8px;opacity:.6}
 .chip:active{transform:scale(.92)}
 .chip i{font-style:normal;opacity:.6}
 .chip.act{background:var(--navy);color:#fff}
@@ -188,7 +190,6 @@ main{margin-left:0;padding:0 14px 100px}.top{padding-top:calc(14px + env(safe-ar
   <div id="venues"></div>
   <div class="row"><div><label>Név</label><input id="vn" placeholder="pl. Stúdió"></div><div><label>IP cím (porttal is lehet)</label><input id="vi" placeholder="192.168.0.130" inputmode="decimal"></div><button class="btn a" id="vs">Mentés</button></div>
   <div class="row"><div><label>Egyszeri csatlakozás IP-vel</label><input id="ip" placeholder="192.168.0.100"></div><button class="btn pr a" id="cn">Csatlakozás</button><button class="btn a" id="nt">Új lapon</button></div>
-  <label class="cb"><input type="checkbox" id="frc"> Beágyazás kényszerítése iPhone-on is (kísérlet)</label>
   <p class="sub" id="cnote"></p>
   <div class="rm" id="rm" style="display:none">
    <div class="rmb"><span class="rmt" id="rmt"></span><button class="btn sm" id="rmf">Teljes képernyő</button><button class="btn cl" id="rmc"><svg class="i" viewBox="0 0 24 24"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg>Összecsukás</button></div>
@@ -433,7 +434,6 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("mp").classList.c
 
 /* ---- konzol + remote ---- */
 const url=v=>{v=v.trim();if(!v)return"";return /^https?:\/\//i.test(v)?v:"http://"+v};
-const isIOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
 const DEMO='<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1"><body style="margin:0;font:16px system-ui;background:#111;color:#eee;display:flex;flex-direction:column;height:100vh"><div style="padding:14px;background:#222;font-weight:700">grandMA2 Web Remote (DEMÓ)</div><div style="flex:1;padding:14px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;align-content:start">'+[1,2,3,4,5,6,7,8].map(n=>'<div style="background:#2d3748;border-radius:8px;padding:18px 0;text-align:center">Exec '+n+'</div>').join("")+'</div><input id="cmdline-input" placeholder="Command line" style="margin:14px;padding:14px;font-size:16px;border-radius:8px;border:0"></body>';
 let cur="";
 const setFull=v=>{$("rm").classList.toggle("full",v);document.body.classList.toggle("noscroll",v)};
@@ -441,25 +441,20 @@ function conn(ip){
  const raw=ip.trim();if(!raw){toast("Add meg az IP címet");return}
  const demo=raw.toLowerCase()==="demo",u=url(raw);
  cur=raw;renderVenues();
- /* iPhone: a Safari az https oldalba ágyazott http (remote) tartalmat blokkolja, ezért új lapon nyitjuk */
- if(!demo&&isIOS&&location.protocol==="https:"&&u.indexOf("http:")===0&&!$("frc").checked){
-  window.open(u,"_blank");
-  $("cnote").textContent="iPhone-on a Safari nem engedi a http-s remote beágyazását egy https oldalba, ezért új lapon nyílt meg. A beágyazást a fenti jelölővel kísérletileg bekapcsolhatod.";
-  return;
- }
  const f=$("fr");
  if(demo){f.removeAttribute("src");f.srcdoc=DEMO}else{f.removeAttribute("srcdoc");f.src=u}
  $("rm").style.display="";$("rmt").textContent=demo?"Demó remote":u;setFull(false);$("rm").scrollIntoView({behavior:"smooth",block:"nearest"});
- $("cnote").textContent="Betöltés: "+(demo?"demó":u)+". Ha üres marad, használd az Új lapon gombot, és ellenőrizd a Wi-Fit.";
+ /* a böngészők az https oldalba ágyazott http tartalmat letilthatják, ilyenkor az Új lapon gomb marad */
+ $("cnote").textContent="Betöltés: "+(demo?"demó":u)+". Ha üres marad, használd az Új lapon gombot, és ellenőrizd a Wi-Fit."+(!demo&&location.protocol==="https:"&&u.indexOf("http:")===0?" A böngésző biztonsági okból letilthatja a http-s remote beágyazását ezen a https oldalon.":"");
 }
 function renderVenues(){
- $("venues").innerHTML=S.venues.map((v,i)=>`<button class="chip${v.ip===cur?" act":""}" data-v="${i}">${esc(v.n)} <i>${esc(v.ip)}</i> <i data-dv="${i}" title="Törlés">✕</i></button>`).join("");
+ $("venues").innerHTML=S.venues.map((v,i)=>`<span class="chip${v.ip===cur?" act":""}"><button data-v="${i}">${esc(v.n)} <i>${esc(v.ip)}</i></button><button class="cx" data-dv="${i}" title="Törlés" aria-label="Törlés">✕</button></span>`).join("");
 }
 $("venues").addEventListener("click",async e=>{
  const d=e.target.closest("[data-dv]");
- if(d){e.stopPropagation();const v=S.venues[+d.dataset.dv];if(!await ask("Biztosan törlöd a(z) „"+v.n+"” mentett remote-ot?","Törlés"))return;S.venues=S.venues.filter(x=>x!==v);save();renderVenues();return}
+ if(d){const v=S.venues[+d.dataset.dv];if(!await ask("Biztosan törlöd a(z) „"+v.n+"” mentett remote-ot?","Törlés"))return;S.venues=S.venues.filter(x=>x!==v);save();renderVenues();return}
  const b=e.target.closest("[data-v]");
- if(b){const i=b.dataset.v,v=S.venues[+i];$("ip").value=v.ip;conn(v.ip);const nb=document.querySelector(`[data-v="${i}"]`);if(nb){nb.classList.add("go");setTimeout(()=>nb.classList.remove("go"),700)}}
+ if(b){const i=b.dataset.v,v=S.venues[+i];$("ip").value=v.ip;conn(v.ip);const nb=document.querySelector(`[data-v="${i}"]`);if(nb){const c=nb.parentNode;c.classList.add("go");setTimeout(()=>c.classList.remove("go"),700)}}
 });
 $("vs").onclick=()=>{const n=$("vn").value.trim(),ip=$("vi").value.trim();if(!n||!ip){toast("Név és IP kell");return}S.venues.push({n,ip});save();renderVenues();$("vn").value=$("vi").value=""};
 $("cn").onclick=()=>conn($("ip").value);
