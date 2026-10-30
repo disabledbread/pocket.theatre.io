@@ -19,6 +19,7 @@
 :root{--bd:#e5e7eb;--tx:#111827;--mu:#6b7280;--sf:#f3f4f6;--navy:#0f3d63;--nbg:#e8eef4;--teal:#00a597;--tbg:#e0f4f1;--blue:#3b82f6;--red:#ef4444;--r:8px}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;background:#fff;color:var(--tx);font:14px "Noto Sans",system-ui,Arial,sans-serif}
+body.noscroll{overflow:hidden}
 svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
 .side{position:fixed;left:0;top:0;bottom:0;width:56px;background:#fff;border-right:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:6px;z-index:5}
 .logo{width:30px;height:30px;border-radius:8px;background:var(--teal);color:#fff;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
@@ -50,6 +51,7 @@ input[type=checkbox]:active{transform:scale(.8)}
 .btn.pr{background:var(--teal);border-color:var(--teal);color:#fff}
 .btn.dg{border-color:var(--red);color:var(--red)}
 .btn.sm{padding:4px 12px;font-size:12px}
+.btn.lg{padding:12px 20px;font-size:15px;border-width:2px}
 .btn.wide{width:100%;padding:12px}
 .chip{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:999px;font-weight:600;font-size:13px;background:var(--tbg);color:var(--teal);border:0;cursor:pointer;margin:0 6px 8px 0;transition:transform .12s,background .2s,color .2s}
 .chip:active{transform:scale(.92)}
@@ -57,7 +59,28 @@ input[type=checkbox]:active{transform:scale(.8)}
 .chip.act{background:var(--navy);color:#fff}
 .chip.go{animation:pulse .6s ease-out}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(0,165,151,.55)}100%{box-shadow:0 0 0 16px rgba(0,165,151,0)}}
-iframe{width:100%;height:60vh;border:1px solid var(--bd);border-radius:8px;background:var(--sf);margin-top:10px}
+/* remote: összecsukott / fókusz mód */
+.rm{margin-top:10px}
+.rmb{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.rmt{flex:1;min-width:0;font-size:12px;color:var(--mu);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rm iframe{display:block;width:100%;height:55vh;border:1px solid var(--bd);border-radius:8px;background:var(--sf)}
+.rm .rmx{width:100%;margin-top:10px;padding:14px;font-size:16px;border-width:2px}
+.rm:not(.full) #rmc{display:none}
+.rm.full #rmf,.rm.full #rmx{display:none}
+.rm.full{position:fixed;inset:0;z-index:25;margin:0;padding:calc(10px + env(safe-area-inset-top,0px)) 10px calc(10px + env(safe-area-inset-bottom,0px));background:rgba(8,12,20,.94);display:flex;flex-direction:column;animation:in .25s ease}
+.rm.full .rmt{color:#cbd5e1}
+.rm.full iframe{flex:1 1 0;height:auto;min-height:0;border:0;border-radius:10px;background:#fff}
+.btn.cl{background:#fff;color:var(--navy);border:0;box-shadow:0 2px 12px rgba(0,0,0,.35);padding:10px 18px;font-size:14px}
+.btn.cl svg{width:16px;height:16px}
+/* párbeszédablak (a natív confirm/prompt helyett) */
+#dlg{position:fixed;inset:0;background:rgba(15,23,42,.55);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+#dlg.on{display:flex;animation:in .2s ease}
+.dbox{background:#fff;border-radius:14px;padding:18px;width:100%;max-width:360px;box-shadow:0 12px 40px rgba(0,0,0,.35)}
+.dbox p{margin:0 0 12px;font-size:15px;line-height:1.4;white-space:pre-line}
+.dbox input{margin-bottom:12px}
+.drow{display:flex;gap:10px}.drow .btn{flex:1;padding:12px}
+.btn.rd{background:var(--red);border-color:var(--red);color:#fff}
+#mf{display:block;width:100%;height:calc(100dvh - 190px);min-height:360px;border:0;border-radius:14px;background:#14141b}
 /* DIP */
 .dsp{text-align:center;font-size:64px;font-weight:700;line-height:1;color:var(--navy);font-variant-numeric:tabular-nums;background:var(--nbg);border-radius:14px;padding:18px 0 14px;margin:12px 0 4px}
 .dsp small{display:block;font-size:12px;font-weight:500;color:var(--mu);margin-top:8px;line-height:1.3;padding:0 8px}
@@ -157,12 +180,17 @@ main{margin-left:0;padding:0 14px 100px}.top{padding-top:calc(14px + env(safe-ar
 <section class="view on" id="v-console">
  <div class="card">
   <h2>MA2 / MA3 Web Remote</h2>
-  <p class="sub">Koppints egy helyszínre: kitölti az IP-t, és azonnal megpróbálja betölteni a web remote-ot (a routerhez kell csatlakoznod).</p>
+  <p class="sub">Koppints egy helyszínre: kitölti az IP-t, és megnyitja a web remote-ot (a routerhez kell csatlakoznod). Tesztelni a „demo” szóval lehet.</p>
   <div id="venues"></div>
   <div class="row"><div><label>Név</label><input id="vn" placeholder="pl. Stúdió"></div><div><label>IP cím (porttal is lehet)</label><input id="vi" placeholder="192.168.0.130" inputmode="decimal"></div><button class="btn a" id="vs">Mentés</button></div>
   <div class="row"><div><label>Egyszeri csatlakozás IP-vel</label><input id="ip" placeholder="192.168.0.100"></div><button class="btn pr a" id="cn">Csatlakozás</button><button class="btn a" id="nt">Új lapon</button></div>
+  <label class="cb"><input type="checkbox" id="frc"> Beágyazás kényszerítése iPhone-on is (kísérlet)</label>
   <p class="sub" id="cnote"></p>
-  <iframe id="fr" title="Web Remote" style="display:none"></iframe>
+  <div class="rm" id="rm" style="display:none">
+   <div class="rmb"><span class="rmt" id="rmt"></span><button class="btn sm" id="rmf">Teljes képernyő</button><button class="btn cl" id="rmc"><svg class="i" viewBox="0 0 24 24"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg>Összecsukás</button></div>
+   <iframe id="fr" title="Web Remote"></iframe>
+   <button class="btn dg rmx" id="rmx">Remote bezárása</button>
+  </div>
  </div>
 </section>
 
@@ -196,13 +224,16 @@ main{margin-left:0;padding:0 14px 100px}.top{padding-top:calc(14px + env(safe-ar
   <button class="mi" data-go="v-patch"><svg class="i" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg><b>Patch sheet</b><span>Színpadok és MA2 XML fájlok</span></button>
   <button class="mi" data-go="v-calc"><svg class="i" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="11" x2="8.01" y2="11"/><line x1="12" y1="11" x2="12.01" y2="11"/><line x1="16" y1="11" x2="16.01" y2="11"/><line x1="8" y1="16" x2="8.01" y2="16"/><line x1="12" y1="16" x2="12.01" y2="16"/><line x1="16" y1="16" x2="16.01" y2="16"/></svg><b>Patch számoló</b><span>Lámpák címei, universe-váltással</span></button>
   <button class="mi" data-go="v-rig"><svg class="i" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg><b>Színpad</b><span>Előadásonként: mi mire van dugva</span></button>
+  <button class="mi" data-go="v-gep"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg><b>Gépállás</b><span>Lámpák, hova néznek, képekkel</span></button>
   <button class="mi" data-go="v-hours"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><b>Bérkalkulátor</b><span>Túlóra és tájak, nettó becslés</span></button>
-  <button class="mi" data-go="v-map"><svg class="i" viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg><b>Térkép</b><span>Tervezés alatt</span></button>
+  <button class="mi" data-go="v-map"><svg class="i" viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg><b>Térkép</b><span>Vizuális térkép a lámpákról</span></button>
+  <button class="mi" data-go="v-set"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.830l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><b>Beállítások</b><span>Adatmentés, Google Drive (fejlesztés alatt)</span></button>
  </div>
 </section>
 
 <section class="view" id="v-map">
- <div class="card p"><h2>Térkép: tervezés alatt</h2><p class="sub" style="margin:0">Itt lesz a vizuális térkép a lámpák elhelyezéséről, a földi áramkörökkel és több színpaddal, feltölthető rajzokkal. Ezt egy későbbi körben, külön fájlként építjük meg.</p></div>
+ <div class="row" style="margin-bottom:8px"><button class="btn sm a" id="mre">↻ Újratöltés</button><a class="btn sm a" href="terkep.html" target="_blank" rel="noopener">Megnyitás új lapon</a></div>
+ <iframe id="mf" title="Térkép"></iframe>
 </section>
 
 <!-- SZÍNPAD (mi mire van dugva, előadásonként) -->
@@ -213,6 +244,27 @@ main{margin-left:0;padding:0 14px 100px}.top{padding-top:calc(14px + env(safe-ar
   <div class="row"><div><label>Előadás neve</label><input id="gn2" placeholder="pl. Hamlet, Nagyszínpad"></div><button class="btn pr a" id="ga">Létrehozás</button></div>
  </div>
  <div id="rigl"></div>
+</section>
+
+<!-- GÉPÁLLÁS -->
+<section class="view" id="v-gep">
+ <div class="card t">
+  <h2>Új előadás</h2>
+  <p class="sub">Hozz létre egy előadást, majd vedd fel a lámpákat: hova néznek, és lámpánként képet is csatolhatsz.</p>
+  <div class="row"><div><label>Előadás neve</label><input id="gp2" placeholder="pl. Hamlet, Nagyszínpad"></div><button class="btn pr a" id="gpa">Létrehozás</button></div>
+ </div>
+ <div id="gepl"></div>
+ <input type="file" id="gf" accept="image/*" multiple hidden>
+</section>
+
+<!-- BEÁLLÍTÁSOK -->
+<section class="view" id="v-set">
+ <div class="card p">
+  <h2>Adatmentés és visszaállítás</h2>
+  <p class="sub">Google Drive integráció: fejlesztés alatt. Itt lesz a felhasználói adatok (jegyzetek, patch sheetek, gépállások, bérkalkulátor, képek) exportja és importja.</p>
+  <button class="btn wide" disabled style="opacity:.5">Csatlakozás a Google Drive-hoz (hamarosan)</button>
+ </div>
+ <div class="card"><h2>Az app</h2><p class="sub" style="margin:0">Pocket Theatre. Az adatok ezen az eszközön, a böngészőben tárolódnak.</p></div>
 </section>
 
 <section class="view" id="v-calc">
@@ -262,431 +314,4 @@ main{margin-left:0;padding:0 14px 100px}.top{padding-top:calc(14px + env(safe-ar
   <div id="ol"></div>
   <button class="btn dg sm" id="or" style="margin-top:10px">Túlóra nullázása</button>
  </div>
- <div class="card b">
-  <h2>Táj rögzítése</h2>
-  <div class="row"><div><label>Dátum</label><input id="td" type="date"></div><div><label>Táj / helyszín</label><input id="tn" placeholder="pl. Hamlet, Győr"></div></div>
-  <div class="row"><div><label>Napidíj, bruttó (Ft)</label><input id="tg" type="number" placeholder="0"></div><div><label>Dolgozott órák</label><input id="th" type="number" step="0.25" placeholder="0"></div><div><label>Órabér (Ft/h)</label><input id="tw" type="number" placeholder="alap"></div><button class="btn pr a" id="ta">Hozzáad</button></div>
-  <p class="sub">Táj bruttó = napidíj + órák × órabér. Ha az órabér üres, a beállításokban megadott érték él. Szerkesztéshez koppints a sorra.</p>
-  <div id="tl"></div>
- </div>
- <button class="btn dg wide" id="rz">Nullázás</button>
- <p class="sub" style="text-align:center;margin-top:8px">Minden túlórát és tájat töröl. Az órabér és az adózási beállítások megmaradnak.</p>
-</section>
-</main>
-<div id="lb"><button id="lbx" aria-label="Bezárás">✕</button><button id="lbp" aria-label="Előző">‹</button><img id="lbi" alt=""><button id="lbn" aria-label="Következő">›</button><div id="lbc"></div></div>
-<div id="toast"></div>
-<script>
-(function(){
-"use strict";
-const $=i=>document.getElementById(i);
-const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const toast=m=>{const t=$("toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("on"),2200)};
-const copy=t=>{const f=()=>{const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();try{document.execCommand("copy")}catch(e){}a.remove()};
- navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(t).catch(f):f()};
-const today=()=>new Date().toLocaleDateString("sv-SE");
-const uid=()=>Date.now()+Math.floor(Math.random()*100000);
-const BELL='<svg class="i" style="width:14px;height:14px;vertical-align:-2px" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>';
-const CHEV='<svg class="i chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>';
-const KEY="lt-app-v3";
-
-/* ---- képek: IndexedDB (nagyobb hely, mint a localStorage) ---- */
-const DB=new Promise((res,rej)=>{const r=indexedDB.open("pocket-theatre",1);r.onupgradeneeded=()=>r.result.createObjectStore("img");r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});
-const idb=(mode,fn)=>DB.then(db=>new Promise((res,rej)=>{const t=db.transaction("img",mode),q=fn(t.objectStore("img"));t.oncomplete=()=>res(q&&q.result);t.onerror=()=>rej(t.error)}));
-const imgPut=(k,v)=>idb("readwrite",s=>s.put(v,k));
-const imgGet=k=>idb("readonly",s=>s.get(k));
-const imgDel=k=>idb("readwrite",s=>s.delete(k));
-const shrink=f=>new Promise((res,rej)=>{const r=new FileReader();r.onerror=rej;
- r.onload=()=>{const im=new Image();im.onerror=rej;
-  im.onload=()=>{const k=Math.min(1,1400/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",0.75))};
-  im.src=r.result};
- r.readAsDataURL(f)});
-
-/* A makrók (S.macros) és a beosztás (S.plan) adatai nem törlődnek: a tárban maradnak, ha később visszahozzuk őket. */
-const D={venues:[{n:"Nagyszínpad",ip:"192.168.0.100"},{n:"Kisfaludy Színpad",ip:"192.168.0.120"}],
- dd:"down",shows:[],notes:[],stages:[],rigs:[],chOv:{},ot:[],tours:[],set:{wage:0},tax:{e:false,u:false}};
-let S;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
-if(!S||typeof S!=="object")S={};
-/* átállás a korábbi verziókról */
-if(Array.isArray(S.patch)&&S.patch.length&&!S.stages){
- const fl=S.patch[0].fx?S.patch:[{id:uid(),name:"Korábbi import",fx:S.patch}];
- S.stages=[{id:uid(),n:"Általános",files:fl.map(f=>({id:f.id,n:f.name,fx:f.fx}))}];
-}
-delete S.patch;
-if(Array.isArray(S.rig)&&S.rig.length&&!S.rigs)S.rigs=[{id:uid(),n:"Korábbi lista",items:S.rig}];
-delete S.rig;
-Object.keys(D).forEach(k=>{if(S[k]===undefined)S[k]=JSON.parse(JSON.stringify(D[k]))});
-if(typeof S.set.wage!=="number")S.set.wage=+S.set.wage||0;
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast("A tár megtelt")}};
-/* korábbi egyképes jegyzetek átemelése az új, többképes tárolóba */
-S.notes.forEach(n=>{
- if(n.imgs)return;
- n.imgs=[];
- if(n.img){let v=null;try{v=localStorage.getItem("lt-img-"+n.id)}catch(e){}
-  if(v){const k=n.id+"-0";n.imgs=[k];imgPut(k,v).then(()=>{try{localStorage.removeItem("lt-img-"+n.id)}catch(e){}}).catch(()=>{})}}
- delete n.img;
-});
-save();
-
-/* ---- navigáció ---- */
-const TT={"v-console":"Konzol","v-dmx":"DMX","v-shows":"Előadások","v-misc":"Egyebek","v-notes":"Jegyzetek","v-patch":"Patch sheet","v-calc":"Patch számoló","v-rig":"Színpad","v-hours":"Bérkalkulátor","v-map":"Térkép"};
-const SUB=["v-notes","v-patch","v-calc","v-rig","v-hours","v-map"];
-function go(id){
- document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id===id));
- const root=SUB.includes(id)?"v-misc":id;
- document.querySelectorAll(".side button").forEach(b=>b.classList.toggle("on",b.dataset.t===root));
- $("ttl").textContent=TT[id];
- $("back").style.display=SUB.includes(id)?"":"none";
- $("newShow").style.display=id==="v-shows"?"":"none";
- if(id==="v-hours")renderHours();
- window.scrollTo(0,0);
-}
-document.addEventListener("click",e=>{const t=e.target.closest("[data-t],[data-go]");if(t)go(t.dataset.t||t.dataset.go)});
-
-/* ---- konzol ---- */
-const url=v=>{v=v.trim();if(!v)return"";return /^https?:\/\//i.test(v)?v:"http://"+v};
-let cur="";
-function conn(ip){
- const u=url(ip);if(!u){toast("Add meg az IP címet");return}
- cur=ip.trim();$("fr").style.display="block";$("fr").src=u;renderVenues();
- $("cnote").textContent="Betöltés: "+u+" (ha üres marad, használd az Új lapon gombot, és ellenőrizd a Wi-Fit).";
-}
-function renderVenues(){
- $("venues").innerHTML=S.venues.map((v,i)=>`<button class="chip${v.ip===cur?" act":""}" data-v="${i}">${esc(v.n)} <i>${esc(v.ip)}</i> <i data-dv="${i}" title="Törlés">✕</i></button>`).join("");
-}
-$("venues").addEventListener("click",e=>{
- const d=e.target.closest("[data-dv]");
- if(d){e.stopPropagation();S.venues.splice(+d.dataset.dv,1);save();renderVenues();return}
- const b=e.target.closest("[data-v]");
- if(b){const i=b.dataset.v,v=S.venues[+i];$("ip").value=v.ip;conn(v.ip);const nb=document.querySelector(`[data-v="${i}"]`);if(nb){nb.classList.add("go");setTimeout(()=>nb.classList.remove("go"),700)}}
-});
-$("vs").onclick=()=>{const n=$("vn").value.trim(),ip=$("vi").value.trim();if(!n||!ip){toast("Név és IP kell");return}S.venues.push({n,ip});save();renderVenues();$("vn").value=$("vi").value=""};
-$("cn").onclick=()=>conn($("ip").value);
-$("nt").onclick=()=>{const u=url($("ip").value);u?window.open(u,"_blank"):toast("Add meg az IP címet")};
-renderVenues();
-
-/* ---- DMX (0-ról indul, ON irány alapból lefelé, legfeljebb 3 számjegy) ---- */
-let ad=0;
-function renderDip(){
- const dir=S.dd==="up"?"up":"down";
- $("dip").className="dip "+dir;
- if(!$("dip").children.length){let h="";for(let i=0;i<9;i++)h+=`<div class="sw" data-b="${i}"><b>${i+1}</b><div class="trk"><u>ON</u><div class="kn"></div></div><em>${1<<i}</em></div>`;$("dip").innerHTML=h}
- [...$("dip").children].forEach((s,i)=>s.classList.toggle("on",!!((ad>>i)&1)));
- document.querySelectorAll("#dir button").forEach(b=>b.classList.toggle("on",b.dataset.d===dir));
- const on=[];for(let i=0;i<9;i++)if((ad>>i)&1)on.push(i+1);
- $("dsv").textContent=ad;
- $("dss").textContent="ON kapcsolók: "+(on.join(", ")||"nincs")+" · ON = "+(dir==="up"?"fent ▲":"lent ▼");
- if(document.activeElement!==$("da"))$("da").value=ad;
-}
-$("dip").addEventListener("click",e=>{const s=e.target.closest(".sw");if(s){ad^=1<<+s.dataset.b;renderDip()}});
-$("da").oninput=()=>{
- const s=$("da").value.replace(/\D/g,"").slice(0,3);
- ad=Math.min(511,s===""?0:parseInt(s,10));
- $("da").value=s===""?"":(parseInt(s,10)>511?"511":s);
- renderDip();
-};
-$("da").onfocus=()=>{if($("da").value==="0")$("da").select()};
-$("da").onblur=()=>{$("da").value=ad};
-$("dir").onclick=e=>{const b=e.target.closest("button");if(b){S.dd=b.dataset.d;save();renderDip()}};
-renderDip();
-
-/* ---- patch számoló ---- */
-let ptxt="";
-$("pc").onclick=()=>{
- const g=(i,a,b)=>Math.min(b,Math.max(a,parseInt($(i).value,10)||a));
- const u=g("pu",1,9999),a=g("pa",1,512),f=g("pf",1,512),n=g("pn",1,500);let c=(u-1)*512+a-1,L=[];
- for(let i=0;i<n;i++){if(c%512+f>512)c=(Math.floor(c/512)+1)*512;L.push(`#${i+1}   ${Math.floor(c/512)+1}.${String(c%512+1).padStart(3,"0")}`);c+=f}
- ptxt=L.join("\n");$("po").textContent=ptxt};
-$("pcp").onclick=()=>{if(ptxt){copy(ptxt);toast("Másolva")}else toast("Előbb számolj")};
-
-/* ---- táj: előadások ---- */
-const showF=v=>{$("sf").style.display=v?"block":"none";if(v)$("sn").focus()};
-$("newShow").onclick=()=>showF($("sf").style.display==="none");
-$("sc").onclick=()=>showF(false);
-$("ss").onclick=()=>{const n=$("sn").value.trim();if(!n){toast("Adj nevet");return}
- S.shows.push({id:uid(),n,v:$("sv").value.trim(),d:$("sd").value,t:$("st").value,it:[],f1:false,f2:false});save();
- if(window.Notification&&Notification.permission==="default")Notification.requestPermission();
- ["sn","sv","sd","st"].forEach(i=>$(i).value="");showF(false);renderShows()};
-const prog=s=>{const dn=s.it.filter(x=>x.d).length;return {dn,p:s.it.length?Math.round(dn/s.it.length*100):0}};
-function renderShows(){
- if(!S.shows.length){$("shows").innerHTML='<div class="card"><p class="meta" style="text-align:center">Még nincs előadás. Kattints a „＋ Új előadás” gombra.</p></div>';return}
- const L=S.shows.slice().sort((a,b)=>(a.d||"9")<(b.d||"9")?-1:1);
- $("shows").innerHTML=L.map(s=>{
-  const pr=prog(s);
-  return `<div class="card t"><div style="display:flex;justify-content:space-between;gap:8px"><div><h2>${esc(s.n)}</h2><div class="meta">${esc([s.v,s.d,s.t?"indulás "+s.t:""].filter(Boolean).join(" · "))}</div></div><button class="btn dg sm" data-sd="${s.id}" style="align-self:flex-start">Törlés</button></div>
-  <div class="bar"><div data-bar="${s.id}" style="width:${pr.p}%"></div></div><div class="meta" data-bt="${s.id}">${pr.dn} / ${s.it.length} kész</div>
-  ${s.it.map((x,i)=>`<label class="it${x.d?" d":""}"><input type="checkbox" data-s="${s.id}" data-i="${i}" ${x.d?"checked":""}><span><span class="tx">${esc(x.t)}</span></span><button class="x2" data-r="${s.id}" data-i="${i}" type="button">✕</button></label>`).join("")}
-  <div class="row" style="margin-top:10px"><input data-in="${s.id}" placeholder="Új checklist pont..."><button class="btn sm a" data-ab="${s.id}">Hozzáad</button></div></div>`}).join("");
-}
-const fs=id=>S.shows.find(s=>String(s.id)===String(id));
-$("shows").addEventListener("change",e=>{
- const c=e.target;if(!c.dataset.s)return;
- const s=fs(c.dataset.s);s.it[+c.dataset.i].d=c.checked;save();
- const lb=c.closest(".it");lb.classList.toggle("d",c.checked);lb.classList.remove("pop");void lb.offsetWidth;lb.classList.add("pop");
- const pr=prog(s);document.querySelector(`[data-bar="${s.id}"]`).style.width=pr.p+"%";
- document.querySelector(`[data-bt="${s.id}"]`).textContent=pr.dn+" / "+s.it.length+" kész";
-});
-$("shows").addEventListener("click",e=>{
- const t=e.target;
- if(t.dataset.sd){if(confirm("Törlöd az előadást?")){S.shows=S.shows.filter(s=>String(s.id)!==t.dataset.sd);save();renderShows()}}
- else if(t.dataset.r){e.preventDefault();fs(t.dataset.r).it.splice(+t.dataset.i,1);save();renderShows()}
- else if(t.dataset.ab){const i=document.querySelector(`[data-in="${t.dataset.ab}"]`),v=i.value.trim();if(v){fs(t.dataset.ab).it.push({t:v,d:false});save();renderShows();document.querySelector(`[data-in="${t.dataset.ab}"]`).focus()}}
-});
-$("shows").addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.dataset.in)document.querySelector(`[data-ab="${e.target.dataset.in}"]`).click()});
-renderShows();
-
-/* ---- színpad: előadásonként mi mire van dugva ---- */
-const RO=new Set();
-function renderRig(){
- $("rigl").innerHTML=S.rigs.map(r=>`<details class="fg" data-rg="${r.id}" ${RO.has(String(r.id))?"open":""}><summary>${CHEV}<b>${esc(r.n)}</b><span class="tp">${r.items.length} tétel</span><span class="gr"></span><button class="btn sm" data-rr="${r.id}">✎</button><button class="btn sm dg" data-rx="${r.id}">✕</button></summary>
-  <div class="fgb">${r.items.map((it,i)=>`<div class="rg"><span class="n">${i+1}</span><div class="tt" data-re="${it.id}" data-of="${r.id}"><b>${esc(it.n)}</b> <span class="meta" style="margin:0">–</span> ${esc(it.w)}</div><button class="x2" data-rd="${it.id}" data-of="${r.id}">✕</button></div>`).join("")||'<p class="meta">Még nincs tétel ebben az előadásban.</p>'}
-  <div class="row" style="margin-top:10px"><input data-rn="${r.id}" placeholder="Eszköz, pl. Fresnel 650 [Szín]"><input data-rw="${r.id}" placeholder="Hova van dugva, pl. Channel 88"><button class="btn pr a" data-ra="${r.id}">Hozzáad</button></div></div></details>`).join("")||'<div class="card"><p class="meta" style="text-align:center">Még nincs mentett előadás.</p></div>';
-}
-const fr=id=>S.rigs.find(r=>String(r.id)===String(id));
-$("ga").onclick=()=>{const n=$("gn2").value.trim();if(!n){toast("Adj nevet");return}const r={id:uid(),n,items:[]};S.rigs.push(r);RO.add(String(r.id));save();$("gn2").value="";renderRig()};
-$("rigl").addEventListener("toggle",e=>{const d=e.target;if(d.dataset&&d.dataset.rg){d.open?RO.add(d.dataset.rg):RO.delete(d.dataset.rg)}},true);
-$("rigl").addEventListener("click",e=>{
- const t=e.target.closest("[data-rr],[data-rx],[data-ra],[data-re],[data-rd]");if(!t)return;
- const d=t.dataset;
- if(d.rr){e.preventDefault();const r=fr(d.rr),n=prompt("Előadás új neve:",r.n);if(n&&n.trim()){r.n=n.trim();save();renderRig()}}
- else if(d.rx){e.preventDefault();if(confirm("Törlöd ezt az előadást a tételeivel?")){S.rigs=S.rigs.filter(r=>String(r.id)!==d.rx);save();renderRig()}}
- else if(d.ra){const a=document.querySelector(`[data-rn="${d.ra}"]`),b=document.querySelector(`[data-rw="${d.ra}"]`),n=a.value.trim();if(!n){toast("Add meg az eszközt");return}
-  fr(d.ra).items.push({id:uid(),n,w:b.value.trim()});save();renderRig();document.querySelector(`[data-rn="${d.ra}"]`).focus()}
- else if(d.rd){const r=fr(d.of);r.items=r.items.filter(i=>String(i.id)!==d.rd);save();renderRig()}
- else if(d.re){const r=fr(d.of),it=r.items.find(i=>String(i.id)===d.re),n=prompt("Eszköz:",it.n);if(n===null)return;const w=prompt("Hova van dugva:",it.w);if(w===null)return;it.n=n.trim()||it.n;it.w=w.trim();save();renderRig()}
-});
-$("rigl").addEventListener("keydown",e=>{if(e.key==="Enter"&&(e.target.dataset.rn||e.target.dataset.rw)){const id=e.target.dataset.rn||e.target.dataset.rw;document.querySelector(`[data-ra="${id}"]`).click()}});
-renderRig();
-
-/* ---- jegyzetek (több képpel, lapozható nézegetővel) ---- */
-const COL=["#00a597","#3b82f6","#8b5cf6","#f59e0b","#ef4444","#6b7280"];let nc=COL[0],pend=[];
-$("sws").innerHTML=COL.map(c=>`<i data-c="${c}" style="background:${c}"></i>`).join("");
-const markC=()=>document.querySelectorAll("#sws i").forEach(i=>i.classList.toggle("on",i.dataset.c===nc));
-$("sws").onclick=e=>{const i=e.target.closest("i");if(i){nc=i.dataset.c;markC()}};markC();
-$("ni").onchange=()=>$("rw2").style.display=$("ni").checked?"":"none";
-function renderPend(){$("npw").innerHTML=pend.map((p,i)=>`<div class="p"><img src="${p}" alt=""><button data-pp="${i}" type="button">✕</button></div>`).join("")}
-$("npw").addEventListener("click",e=>{const b=e.target.closest("[data-pp]");if(b){pend.splice(+b.dataset.pp,1);renderPend()}});
-$("nsc").onclick=()=>$("nf").click();
-$("nf").onchange=async()=>{
- const fl=[...$("nf").files];$("nf").value="";
- let bad=0;
- for(const f of fl){try{pend.push(await shrink(f))}catch(e){bad++}}
- renderPend();
- if(bad)toast(bad+" képet nem sikerült megnyitni");
-};
-$("nsv").onclick=async()=>{
- const t=$("nx").value.trim();
- if(!t&&!pend.length){toast("Írj jegyzetet, vagy tölts fel képet");return}
- const imp=$("ni").checked,id=uid(),keys=pend.map((_,i)=>id+"-"+i);
- try{await Promise.all(pend.map((p,i)=>imgPut(keys[i],p)))}catch(e){toast("Nincs elég hely a képek mentéséhez");return}
- S.notes.unshift({id,t:t||"Kép",c:nc,i:imp,r:imp?$("nr").value:"",d:false,f:false,imgs:keys});save();
- if(imp&&$("nr").value&&window.Notification&&Notification.permission==="default")Notification.requestPermission();
- $("nx").value="";$("nr").value="";$("ni").checked=false;$("rw2").style.display="none";pend=[];renderPend();renderNotes();
-};
-function renderNotes(){
- $("notes").innerHTML=S.notes.map(n=>{const im=n.imgs||[];
-  return `<div class="nt${n.d?" d":""}" style="border-color:${n.c};background:${n.c}1a"><div class="h"><input type="checkbox" data-nd="${n.id}" ${n.d?"checked":""}><div class="nb">${n.i?BELL+" ":""}<span class="tx">${esc(n.t)}</span>${n.r?`<div class="meta" style="margin:2px 0 0">${esc(n.r.replace("T"," "))}</div>`:""}${im.length?`<div class="ims">${im.map((k,i)=>`<img class="ni" data-k="${esc(k)}" data-n="${n.id}" data-i="${i}" alt="Csatolt kép">`).join("")}</div>`:""}</div><button class="x2" data-nx="${n.id}">✕</button></div></div>`}).join("")||'<p class="meta" style="text-align:center">Még nincs jegyzet.</p>';
- document.querySelectorAll("#notes img[data-k]").forEach(im=>imgGet(im.dataset.k).then(v=>{if(v)im.src=v}).catch(()=>{}));
-}
-$("notes").addEventListener("change",e=>{const c=e.target;if(!c.dataset.nd)return;
- S.notes.find(n=>String(n.id)===c.dataset.nd).d=c.checked;save();
- const b=c.closest(".nt");b.classList.toggle("d",c.checked);b.classList.remove("pop");void b.offsetWidth;b.classList.add("pop")});
-$("notes").addEventListener("click",e=>{
- const x=e.target.closest("[data-nx]"),b=e.target.closest(".ni");
- if(x){const n=S.notes.find(o=>String(o.id)===x.dataset.nx);(n.imgs||[]).forEach(k=>imgDel(k).catch(()=>{}));S.notes=S.notes.filter(o=>o!==n);save();renderNotes()}
- else if(b){const n=S.notes.find(o=>String(o.id)===b.dataset.n);openLb(n.imgs,+b.dataset.i)}
-});
-/* nézegető */
-let lbL=[],lbI=0;
-async function openLb(keys,i){
- try{lbL=(await Promise.all(keys.map(imgGet))).filter(Boolean)}catch(e){lbL=[]}
- if(!lbL.length){toast("A kép nem található");return}
- lbI=Math.min(i,lbL.length-1);showLb();$("lb").classList.add("on");
-}
-function showLb(){
- $("lbi").src=lbL[lbI];$("lbc").textContent=(lbI+1)+" / "+lbL.length;
- $("lbp").style.display=$("lbn").style.display=lbL.length>1?"":"none";
-}
-const stepLb=d=>{if(lbL.length<2)return;lbI=(lbI+d+lbL.length)%lbL.length;showLb()};
-const closeLb=()=>{$("lb").classList.remove("on");$("lbi").removeAttribute("src")};
-$("lbp").onclick=e=>{e.stopPropagation();stepLb(-1)};
-$("lbn").onclick=e=>{e.stopPropagation();stepLb(1)};
-$("lbx").onclick=e=>{e.stopPropagation();closeLb()};
-$("lb").onclick=e=>{if(e.target===$("lb"))closeLb()};
-let tx0=null;
-$("lb").addEventListener("touchstart",e=>{tx0=e.touches[0].clientX},{passive:true});
-$("lb").addEventListener("touchend",e=>{if(tx0===null)return;const dx=e.changedTouches[0].clientX-tx0;tx0=null;if(Math.abs(dx)>40)stepLb(dx<0?1:-1)});
-document.addEventListener("keydown",e=>{if(!$("lb").classList.contains("on"))return;if(e.key==="Escape")closeLb();if(e.key==="ArrowLeft")stepLb(-1);if(e.key==="ArrowRight")stepLb(1)});
-renderNotes();
-
-/* ---- értesítések (jegyzet + táj), amíg az oldal nyitva van ---- */
-function notify(msg){toast(msg);if(window.Notification&&Notification.permission==="granted")new Notification("Pocket Theatre",{body:msg})}
-function checkReminders(){
- let ch=false;const now=Date.now();
- S.notes.forEach(n=>{if(n.i&&!n.d&&!n.f&&n.r&&Date.parse(n.r)<=now){n.f=true;ch=true;notify("Emlékeztető: "+n.t.slice(0,60))}});
- S.shows.forEach(s=>{
-  if(!s.d)return;
-  const d0=new Date(s.d+"T00:00"),end=d0.getTime()+864e5;
-  const e1=new Date(d0);e1.setDate(e1.getDate()-1);e1.setHours(18,0,0,0);
-  const e2=new Date(d0);e2.setHours(7,0,0,0);
-  const dep=s.t?" Indulás: "+s.t+".":"";
-  if(!s.f1&&now>=e1.getTime()&&now<end){s.f1=true;ch=true;notify("Holnap táj: "+s.n+(s.v?" ("+s.v+")":"")+"."+dep)}
-  if(!s.f2&&now>=e2.getTime()&&now<end){s.f2=true;ch=true;notify("Ma táj: "+s.n+(s.v?" ("+s.v+")":"")+"."+dep)}
- });
- if(ch)save();
-}
-setInterval(checkReminders,30000);setTimeout(checkReminders,1500);
-
-/* ---- patch sheet: színpadok > fájlok ---- */
-function parseXml(txt){
- const doc=new DOMParser().parseFromString(txt,"text/xml");
- if(doc.querySelector("parsererror"))throw new Error("Hibás XML");
- const out=[],low=n=>n.localName.toLowerCase();
- doc.querySelectorAll("*").forEach(n=>{
-  if(low(n)!=="fixture")return;
-  const a=k=>n.getAttribute(k)||"";
-  let ly="",p=n.parentNode;while(p&&p.nodeType===1){if(low(p)==="layer"){ly=p.getAttribute("name")||"";break}p=p.parentNode}
-  let ty="",pt="";
-  n.querySelectorAll("*").forEach(c=>{const l=low(c);if(!ty&&l==="fixturetype")ty=c.getAttribute("name")||"";if(!pt&&l==="patch")pt=(c.textContent||"").trim()});
-  out.push({l:ly,id:a("fixture_id")||a("id")||a("index"),ch:a("channel_id")||a("channel"),n:a("name"),t:ty,p:pt});
- });
- return out;
-}
-const absA=p=>{p=String(p||"");if(/^\d+$/.test(p)&&+p>0)return +p;const m=/^(\d+)\.(\d+)$/.exec(p);return m?(+m[1]-1)*512+ +m[2]:null};
-const fmtA=a=>`${Math.floor((a-1)/512)+1}.${String((a-1)%512+1).padStart(3,"0")}`;
-const fmtP=p=>{const a=absA(p);return a?fmtA(a):(p||"–")};
-/* típusonként EGY csatornaszám: az azonos universe-ben lévő, azonos típusú szomszédos gépek leggyakoribb címkülönbsége;
-   a kézzel beállított érték (S.chOv) mindig erősebb */
-function typeCh(fx){
- const g={},R={},uv=a=>Math.floor((a-1)/512);
- fx.forEach(x=>{const a=absA(x.p);if(a!=null)(g[x.t||"?"]=g[x.t||"?"]||[]).push(a)});
- Object.keys(g).forEach(k=>{
-  const V=g[k].sort((p,q)=>p-q),cnt={};
-  for(let i=0;i<V.length-1;i++){const d=V[i+1]-V[i];if(d>0&&d<=512&&uv(V[i])===uv(V[i+1]))cnt[d]=(cnt[d]||0)+1}
-  let mode=0,best=0;Object.keys(cnt).forEach(d=>{if(cnt[d]>best||(cnt[d]===best&&+d<mode)){best=cnt[d];mode=+d}});
-  if(mode)R[k]=mode;
- });
- return R;
-}
-const chOf=(R,t)=>S.chOv[t]||R[t]||0;
-const PO=new Set();
-function renderStageSel(){
- const v=$("xs").value;
- $("xs").innerHTML=S.stages.map(s=>`<option value="${s.id}">${esc(s.n)}</option>`).join("")||'<option value="">(automatikus: Általános)</option>';
- if(v&&S.stages.some(s=>String(s.id)===v))$("xs").value=v;
-}
-function renderPatch(){
- renderStageSel();
- const q=$("pq").value.trim().toLowerCase();
- if(!S.stages.length){$("px").innerHTML='<p class="meta" style="text-align:center;padding:20px">Hozz létre egy színpadot, vagy tölts fel XML fájlokat.</p>';return}
- let html="";
- S.stages.forEach(st=>{
-  let inner="";
-  st.files.forEach(f=>{
-   const R=typeCh(f.fx);
-   const L=f.fx.filter(x=>!q||[x.n,x.t,x.l,x.id,x.ch,x.p].join(" ").toLowerCase().includes(q));
-   if(q&&!L.length)return;
-   const cnt={};L.forEach(x=>{const k=x.t||"?";cnt[k]=(cnt[k]||0)+1});
-   const chips=Object.keys(cnt).map(k=>{const c=chOf(R,k);return `<span class="tp">${esc(k==="?"?"Ismeretlen":k)} ×${cnt[k]}${c?" · "+c+" csat.":""}</span>`}).join(" ");
-   let rows="",last=null;
-   L.forEach(x=>{if(x.l!==last){last=x.l;rows+=`<tr class="g"><td colspan="6">${esc(x.l||"Layer nélkül")}</td></tr>`}
-    const kt=x.t||"?",c=chOf(R,kt),a=absA(x.p);
-    rows+=`<tr><td>${esc(x.id)}</td><td>${esc(x.ch)}</td><td>${esc(x.n)}</td><td><span class="tp">${esc(x.t||"–")}</span></td><td class="ce" data-ct="${esc(kt)}">${c?`<b>${c}</b>${a?` <span class="meta" style="margin:0">(${fmtA(a)}–${fmtA(a+c-1)})</span>`:""}`:"–"}${S.chOv[kt]?" ✎":""}</td><td title="${esc(x.p)}"><b>${esc(fmtP(x.p))}</b></td></tr>`});
-   inner+=`<details class="fg" data-f="${f.id}" ${(PO.has("f"+f.id)||q)?"open":""}><summary>${CHEV}<b>${esc(f.n)}</b><span class="tp">${f.fx.length} lámpa</span><span class="gr"></span>
-    <button class="btn sm" data-rf="${f.id}">✎</button><button class="btn sm dg" data-fx="${f.id}">✕</button></summary>
-    <div class="fgb"><div class="tc">${chips}</div><div class="tw"><table><thead><tr><th>ID</th><th>Chan</th><th>Név</th><th>Típus</th><th>Csatorna</th><th>Patch</th></tr></thead><tbody>${rows}</tbody></table></div></div></details>`;
-  });
-  if(q&&!inner)return;
-  html+=`<details class="fg stg" data-f="s${st.id}" ${(PO.has("fs"+st.id)||q)?"open":""}><summary>${CHEV}<b>${esc(st.n)}</b><span class="tp">${st.files.length} fájl</span><span class="gr"></span>
-   <button class="btn sm" data-rs="${st.id}">✎</button><button class="btn sm dg" data-ds="${st.id}">✕</button></summary>
-   <div class="fgb">${inner||'<p class="meta">Ebben a színpadban még nincs fájl.</p>'}</div></details>`;
- });
- $("px").innerHTML=html||'<p class="meta" style="text-align:center;padding:20px">Nincs találat.</p>';
-}
-$("px").addEventListener("toggle",e=>{const d=e.target;if(d.dataset&&d.dataset.f&&!$("pq").value.trim()){const k="f"+d.dataset.f;d.open?PO.add(k):PO.delete(k)}},true);
-const findF=id=>{for(const s of S.stages){const f=s.files.find(x=>String(x.id)===String(id));if(f)return {s,f}}return null};
-$("px").addEventListener("click",e=>{
- const ce=e.target.closest("[data-ct]");
- if(ce){
-  const k=ce.dataset.ct,b=ce.querySelector("b"),v=prompt(`Csatornaszám a(z) „${k==="?"?"Ismeretlen":k}” típushoz (minden ilyen lámpára érvényes). Üresen hagyva: automatikus.`,S.chOv[k]||(b?b.textContent:""));
-  if(v===null)return;
-  const s=v.trim();
-  if(s==="")delete S.chOv[k];
-  else{const n=parseInt(s,10);if(!(n>=1&&n<=512)){toast("1 és 512 közötti szám kell");return}S.chOv[k]=n}
-  save();renderPatch();return;
- }
- const t=e.target.closest("[data-rf],[data-fx],[data-rs],[data-ds]");if(!t)return;
- e.preventDefault();
- const d=t.dataset;
- if(d.rf){const r=findF(d.rf),n=prompt("Fájl új neve:",r.f.n);if(n&&n.trim()){r.f.n=n.trim();save();renderPatch()}}
- else if(d.fx){if(confirm("Törlöd ezt a fájlt?")){const r=findF(d.fx);r.s.files=r.s.files.filter(x=>String(x.id)!==d.fx);save();renderPatch()}}
- else if(d.rs){const s=S.stages.find(k=>String(k.id)===d.rs),n=prompt("Színpad új neve:",s.n);if(n&&n.trim()){s.n=n.trim();save();renderPatch()}}
- else if(d.ds){if(confirm("Törlöd a színpadot a benne lévő fájlokkal?")){S.stages=S.stages.filter(k=>String(k.id)!==d.ds);save();renderPatch()}}
-});
-$("pq").oninput=renderPatch;
-$("xn").onclick=()=>{const n=prompt("Az új színpad neve:");if(n&&n.trim()){const s={id:uid(),n:n.trim(),files:[]};S.stages.push(s);save();renderPatch();$("xs").value=s.id}};
-$("xf").onchange=()=>{
- const files=[...$("xf").files];if(!files.length)return;
- Promise.all(files.map(f=>f.text().then(t=>{try{const r=parseXml(t);return r.length?{id:uid(),n:f.name,fx:r}:null}catch(e){return null}}))).then(res=>{
-  const ok=res.filter(Boolean);
-  if(!ok.length){toast("Nem találtam lámpát a fájlokban");return}
-  let st=S.stages.find(s=>String(s.id)===$("xs").value);
-  if(!st){st={id:uid(),n:"Általános",files:[]};S.stages.push(st)}
-  ok.forEach(g=>{st.files.push(g);PO.add("f"+g.id)});PO.add("fs"+st.id);
-  save();renderPatch();$("xs").value=st.id;toast(ok.length+" fájl betöltve"+(ok.length<files.length?" ("+(files.length-ok.length)+" kihagyva)":""));
- });
- $("xf").value="";
-};
-renderPatch();
-
-/* ---- bérkalkulátor ---- */
-const fm=n=>Math.round(n).toLocaleString("hu-HU")+" Ft";
-function net(g){return S.tax.e?g*0.85:S.tax.u?g*(1-0.185):g*(1-0.15-0.185)}
-const otPay=x=>x.h*x.m*S.set.wage;
-const tGross=x=>(x.g||0)+(x.h||0)*(x.w||S.set.wage);
-function renderHours(){
- $("hw").value=S.set.wage||"";$("te").checked=S.tax.e;$("tu").checked=S.tax.u;
- $("tw").placeholder=S.set.wage?String(S.set.wage):"alap";
- const oh=S.ot.reduce((a,x)=>a+x.h,0),og=S.ot.reduce((a,x)=>a+otPay(x),0);
- const T=S.tours.slice().sort((a,b)=>a.d<b.d?1:-1),tg=T.reduce((a,x)=>a+tGross(x),0);
- $("hst").innerHTML=[[oh.toFixed(2).replace(/\.?0+$/,"")+" h","Túlóra összesen"],[fm(og),"Túlóra pluszjövedelem (bruttó)"],[fm(net(og)),"Túlóra pluszjövedelem (nettó)"],[T.length+" db","Táj összesen"],[fm(tg),"Táj bruttó"],[fm(net(tg)),"Táj nettó"]].map(x=>`<div class="st"><b>${x[0]}</b><span>${x[1]}</span></div>`).join("");
- $("ol").innerHTML=S.ot.map(x=>`<div class="it"><span><b>${x.h} h</b>${x.m>1?" · ünnepnap ×"+x.m:""} → ${fm(otPay(x))} bruttó, <b>${fm(net(otPay(x)))}</b> nettó</span><button class="x2" data-ox="${x.id}">✕</button></div>`).join("")||'<p class="meta">Még nincs túlóra rögzítve.</p>';
- $("tl").innerHTML=T.map(x=>{const w=x.w||S.set.wage;return `<div class="it" style="cursor:pointer"><span data-te="${x.id}"><b>${esc(x.d)}</b> · ${esc(x.n)}<br><span class="meta" style="margin:0">napidíj ${fm(x.g||0)}${x.h?" + "+x.h+" h × "+fm(w)+"/h":""} = ${fm(tGross(x))} bruttó</span> → <b>${fm(net(tGross(x)))}</b> nettó</span><button class="x2" data-tx="${x.id}">✕</button></div>`}).join("")||'<p class="meta">Még nincs táj rögzítve.</p>';
- $("gn").textContent=S.tax.e?"EKHO: 15% levonás (egyszerűsített számítás).":S.tax.u?"25 év alatt: SZJA-mentes, 18,5% járulék (a mentesség havi átlagkereset-határig jár).":"Általános: 15% SZJA + 18,5% járulék. A számítás tájékoztató jellegű.";
-}
-$("hw").onchange=()=>{S.set.wage=+$("hw").value||0;save();renderHours()};
-$("te").onchange=()=>{S.tax.e=$("te").checked;save();renderHours()};
-$("tu").onchange=()=>{S.tax.u=$("tu").checked;save();renderHours()};
-$("td").value=today();
-$("oa").onclick=()=>{const h=parseFloat($("oh").value);if(!h||h<=0){toast("Add meg az órák számát");return}
- S.ot.push({id:uid(),h,m:+$("om").value});save();$("oh").value="";renderHours()};
-$("or").onclick=()=>{if(S.ot.length&&confirm("Nullázod a túlórákat?")){S.ot=[];save();renderHours()}};
-$("ta").onclick=()=>{if(!$("td").value){toast("Dátum kell");return}
- const g=parseFloat($("tg").value),h=parseFloat($("th").value),w=parseFloat($("tw").value);
- S.tours.push({id:uid(),d:$("td").value,n:$("tn").value.trim()||"Táj",g:isNaN(g)?0:g,h:isNaN(h)?0:h,w:isNaN(w)?0:w});save();
- ["tn","tg","th","tw"].forEach(i=>$(i).value="");renderHours()};
-$("ol").addEventListener("click",e=>{const x=e.target.closest("[data-ox]");if(x){S.ot=S.ot.filter(o=>String(o.id)!==x.dataset.ox);save();renderHours()}});
-$("tl").addEventListener("click",e=>{
- const x=e.target.closest("[data-tx]"),t=e.target.closest("[data-te]");
- if(x){S.tours=S.tours.filter(o=>String(o.id)!==x.dataset.tx);save();renderHours();return}
- if(t){const r=S.tours.find(o=>String(o.id)===t.dataset.te);
-  const g=prompt("Napidíj, bruttó (Ft):",r.g||0);if(g===null)return;
-  const h=prompt("Dolgozott órák:",r.h||0);if(h===null)return;
-  const w=prompt("Órabér (Ft/h, üres = alap):",r.w||"");if(w===null)return;
-  r.g=parseFloat(g)||0;r.h=parseFloat(h)||0;r.w=parseFloat(w)||0;save();renderHours()}
-});
-/* teljes nullázás: az órabér és az adózási beállítások megmaradnak */
-$("rz").onclick=()=>{
- if(!confirm("Biztosan nullázod a bérkalkulátort?\n\nA túlórák és a tájak törlődnek, az órabér megmarad."))return;
- S.ot=[];S.tours=[];save();
- ["oh","tn","tg","th","tw"].forEach(i=>$(i).value="");$("om").value="1";$("td").value=today();
- renderHours();toast("Bérkalkulátor nullázva");
-};
-})();
-</script>
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
-  }
-</script>
-</body>
-</html>
+ <div
