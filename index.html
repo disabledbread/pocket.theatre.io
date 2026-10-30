@@ -81,8 +81,12 @@ input[type=checkbox]:active{transform:scale(.8)}
 .drow{display:flex;gap:10px}.drow .btn{flex:1;padding:12px}
 .btn.rd{background:var(--red);border-color:var(--red);color:#fff}
 #mf{display:block;width:100%;height:calc(100dvh - 190px);min-height:360px;border:0;border-radius:14px;background:#14141b}
+#mp{margin-top:0}
+#mp:not(.full) #mfc,#mp.full #mff,#mp.full #mre{display:none}
+#mp.full #mf{height:auto;min-height:0;border-radius:10px}
 /* DIP */
 .dsp{text-align:center;font-size:64px;font-weight:700;line-height:1;color:var(--navy);font-variant-numeric:tabular-nums;background:var(--nbg);border-radius:14px;padding:18px 0 14px;margin:12px 0 4px}
+.dsp input,.dsp input:focus{display:block;width:100%;border:0;border-radius:0;background:none;padding:0;font:inherit;color:inherit;text-align:center;box-shadow:none;cursor:pointer}
 .dsp small{display:block;font-size:12px;font-weight:500;color:var(--mu);margin-top:8px;line-height:1.3;padding:0 8px}
 .dip{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:4px;margin:14px 0 4px}
 .sw{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;user-select:none;min-width:0}
@@ -201,7 +205,7 @@ main{margin-left:0;padding:0 14px 100px}.top{padding-top:calc(14px + env(safe-ar
   <p class="sub">9 kapcsoló, cím: 0–511 (legfeljebb 3 számjegy). Koppints a kapcsolókra, vagy írd be a címet.</p>
   <div class="row"><div><label>DMX cím</label><input id="da" type="text" inputmode="numeric" maxlength="3" autocomplete="off" value="0"></div>
   <div class="a"><label>ON irány</label><div class="seg" id="dir"><button data-d="up">▲ Fel</button><button data-d="down">▼ Le</button></div></div></div>
-  <div class="dsp"><span id="dsv">0</span><small id="dss"></small></div>
+  <div class="dsp"><input id="dsv" type="text" inputmode="numeric" maxlength="3" autocomplete="off" value="0" aria-label="DMX cím"><small id="dss"></small></div>
   <div class="dip down" id="dip"></div>
  </div>
 </section>
@@ -232,8 +236,10 @@ main{margin-left:0;padding:0 14px 100px}.top{padding-top:calc(14px + env(safe-ar
 </section>
 
 <section class="view" id="v-map">
- <div class="row" style="margin-bottom:8px"><button class="btn sm a" id="mre">↻ Újratöltés</button><a class="btn sm a" href="terkep.html" target="_blank" rel="noopener">Megnyitás új lapon</a></div>
- <iframe id="mf" title="Térkép"></iframe>
+ <div class="rm" id="mp">
+  <div class="rmb"><span class="rmt"></span><button class="btn sm" id="mre">↻ Újratöltés</button><button class="btn sm" id="mff">Teljes képernyő</button><button class="btn cl" id="mfc"><svg class="i" viewBox="0 0 24 24"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg>Összecsukás</button></div>
+  <iframe id="mf" title="Térkép"></iframe>
+ </div>
 </section>
 
 <!-- SZÍNPAD (mi mire van dugva, előadásonként) -->
@@ -264,7 +270,7 @@ main{margin-left:0;padding:0 14px 100px}.top{padding-top:calc(14px + env(safe-ar
   <p class="sub">Google Drive integráció: fejlesztés alatt. Itt lesz a felhasználói adatok (jegyzetek, patch sheetek, gépállások, bérkalkulátor, képek) exportja és importja.</p>
   <button class="btn wide" disabled style="opacity:.5">Csatlakozás a Google Drive-hoz (hamarosan)</button>
  </div>
- <div class="card"><h2>Az app</h2><p class="sub" style="margin:0">Pocket Theatre. Az adatok ezen az eszközön, a böngészőben tárolódnak.</p></div>
+ <div class="card"><h2>Az app</h2><p class="sub" style="margin:0">Pocket Theatre. Az adatok ezen az eszközön, a böngészőben tárolódnak.</p><p class="sub" id="sto" style="margin:6px 0 0"></p></div>
 </section>
 
 <section class="view" id="v-calc">
@@ -392,6 +398,8 @@ S.notes.forEach(n=>{
  delete n.img;
 });
 save();
+/* tartós tárhely kérése, hogy a böngésző helyhiány esetén se törölje az adatokat (a döntés a böngészőé, ezért indításonként újra próbáljuk) */
+if(navigator.storage&&navigator.storage.persist)navigator.storage.persisted().then(p=>p||navigator.storage.persist()).then(p=>{$("sto").textContent=p?"Tartós tárhely: bekapcsolva.":"Tartós tárhely: a böngésző még nem engedélyezte, a következő indításkor újra kérjük."}).catch(()=>{});
 
 /* ---- navigáció ---- */
 const TT={"v-console":"Konzol","v-dmx":"DMX","v-shows":"Előadások","v-misc":"Egyebek","v-notes":"Jegyzetek","v-patch":"Patch sheet","v-calc":"Patch számoló","v-rig":"Színpad","v-gep":"Gépállás","v-set":"Beállítások","v-hours":"Bérkalkulátor","v-map":"Térkép"};
@@ -418,6 +426,10 @@ $("mf").addEventListener("load",()=>{
  }catch(e){}
 });
 $("mre").onclick=()=>{try{$("mf").contentWindow.location.reload()}catch(e){$("mf").src="terkep.html"}};
+const setMapFull=v=>{$("mp").classList.toggle("full",v);document.body.classList.toggle("noscroll",v)};
+$("mff").onclick=()=>setMapFull(true);
+$("mfc").onclick=()=>setMapFull(false);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("mp").classList.contains("full"))setMapFull(false)});
 
 /* ---- konzol + remote ---- */
 const url=v=>{v=v.trim();if(!v)return"";return /^https?:\/\//i.test(v)?v:"http://"+v};
@@ -475,19 +487,21 @@ function renderDip(){
  [...$("dip").children].forEach((s,i)=>s.classList.toggle("on",!!((ad>>i)&1)));
  document.querySelectorAll("#dir button").forEach(b=>b.classList.toggle("on",b.dataset.d===dir));
  const on=[];for(let i=0;i<9;i++)if((ad>>i)&1)on.push(i+1);
- $("dsv").textContent=ad;
  $("dss").textContent="ON kapcsolók: "+(on.join(", ")||"nincs")+" · ON = "+(dir==="up"?"fent ▲":"lent ▼");
- if(document.activeElement!==$("da"))$("da").value=ad;
+ ["da","dsv"].forEach(i=>{if(document.activeElement!==$(i))$(i).value=ad});
 }
 $("dip").addEventListener("click",e=>{const s=e.target.closest(".sw");if(s){ad^=1<<+s.dataset.b;renderDip()}});
-$("da").oninput=()=>{
- const s=$("da").value.replace(/\D/g,"").slice(0,3);
- ad=Math.min(511,s===""?0:parseInt(s,10));
- $("da").value=s===""?"":(parseInt(s,10)>511?"511":s);
- renderDip();
-};
-$("da").onfocus=()=>{if($("da").value==="0")$("da").select()};
-$("da").onblur=()=>{$("da").value=ad};
+/* a cím a mezőben és a nagy számra koppintva is beírható */
+["da","dsv"].forEach(i=>{const el=$(i);
+ el.oninput=()=>{
+  const s=el.value.replace(/\D/g,"").slice(0,3);
+  ad=Math.min(511,s===""?0:parseInt(s,10));
+  el.value=s===""?"":(parseInt(s,10)>511?"511":s);
+  renderDip();
+ };
+ el.onfocus=()=>{if(i==="dsv"||el.value==="0")el.select()};
+ el.onblur=()=>{el.value=ad};
+});
 $("dir").onclick=e=>{const b=e.target.closest("button");if(b){S.dd=b.dataset.d;save();renderDip()}};
 renderDip();
 
@@ -654,7 +668,14 @@ document.addEventListener("keydown",e=>{if(!$("lb").classList.contains("on"))ret
 renderNotes();
 
 /* ---- értesítések (jegyzet + táj), amíg az oldal nyitva van ---- */
-function notify(msg){toast(msg);if(window.Notification&&Notification.permission==="granted")new Notification("Pocket Theatre",{body:msg})}
+/* telefonon a new Notification hibát dob, ott csak a service workeren át lehet értesíteni */
+function notify(msg){
+ toast(msg);
+ if(!window.Notification||Notification.permission!=="granted")return;
+ const opt={body:msg,icon:"icon.png"},direct=()=>{try{new Notification("Pocket Theatre",opt)}catch(e){}};
+ if(!navigator.serviceWorker){direct();return}
+ navigator.serviceWorker.getRegistration().then(r=>r?r.showNotification("Pocket Theatre",opt):direct()).catch(direct);
+}
 function checkReminders(){
  let ch=false;const now=Date.now();
  S.notes.forEach(n=>{if(n.i&&!n.d&&!n.f&&n.r&&Date.parse(n.r)<=now){n.f=true;ch=true;notify("Emlékeztető: "+n.t.slice(0,60))}});
@@ -664,7 +685,7 @@ function checkReminders(){
   const e1=new Date(d0);e1.setDate(e1.getDate()-1);e1.setHours(18,0,0,0);
   const e2=new Date(d0);e2.setHours(7,0,0,0);
   const dep=s.t?" Indulás: "+s.t+".":"";
-  if(!s.f1&&now>=e1.getTime()&&now<end){s.f1=true;ch=true;notify("Holnap táj: "+s.n+(s.v?" ("+s.v+")":"")+"."+dep)}
+  if(!s.f1&&now>=e1.getTime()&&now<d0.getTime()){s.f1=true;ch=true;notify("Holnap táj: "+s.n+(s.v?" ("+s.v+")":"")+"."+dep)}
   if(!s.f2&&now>=e2.getTime()&&now<end){s.f2=true;ch=true;notify("Ma táj: "+s.n+(s.v?" ("+s.v+")":"")+"."+dep)}
  });
  if(ch)save();
