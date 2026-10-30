@@ -4,6 +4,7 @@ const urlsToCache = [
   './index.html',
   './manifest.json',
   './icon.png'
+  './terkep.html'
 ];
 
 self.addEventListener('install', event => {
