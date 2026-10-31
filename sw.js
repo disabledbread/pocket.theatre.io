@@ -1,6 +1,6 @@
 // Pocket Theatre – service worker
 // Új kiadásnál elég a VERSION-t átírni (pl. 'v0.7').
-const VERSION = 'v0.8';
+const VERSION = 'v0.8.1';
 const CACHE = 'pocket-theatre-' + VERSION;
 const RUNTIME = 'pocket-theatre-cdn';
 
@@ -8,6 +8,7 @@ const CORE = [
   './',
   './index.html',
   './terkep.html',
+  './nagyszinpad.json',
   './manifest.json',
   './icon.png',
   './icon-192.png'
