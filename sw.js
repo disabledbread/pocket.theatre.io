@@ -1,6 +1,6 @@
 // Pocket Theatre – service worker
 // Új kiadásnál elég a VERSION-t átírni (pl. 'v0.7').
-const VERSION = 'v0.7';
+const VERSION = 'v0.8';
 const CACHE = 'pocket-theatre-' + VERSION;
 const RUNTIME = 'pocket-theatre-cdn';
 
