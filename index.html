@@ -159,7 +159,13 @@ tr.g td{background:var(--nbg);color:var(--navy);font-weight:700}
 td.ce{cursor:pointer;white-space:nowrap}
 td.ce:active{background:var(--tbg)}
 .tp{background:var(--tbg);color:var(--teal);border-radius:999px;padding:2px 8px;font-size:11px;font-weight:600;white-space:nowrap}
-.tc{margin-bottom:10px}
+.tc{margin:6px 0 0}
+.tcd{margin-top:10px}
+.fg .tcd>summary{background:none;padding:4px 0;font-size:13px;font-weight:600;gap:6px}
+.tcd[open]>summary .chev{transform:rotate(90deg)}
+tr.g{cursor:pointer}
+tr.g .chev{width:14px;height:14px;vertical-align:-2px;margin-right:6px}
+tr.g.op .chev{transform:rotate(90deg)}
 .rg{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--bd)}
 .rg .n{width:26px;height:26px;border-radius:50%;background:var(--nbg);color:var(--navy);font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;flex:none}
 .rg .tt{flex:1;cursor:pointer}
@@ -278,7 +284,7 @@ main{margin-left:0;padding:0 14px 100px}.top{padding-top:calc(14px + env(safe-ar
   <button class="btn wide" disabled style="opacity:.5">Csatlakozás a Google Drive-hoz (hamarosan)</button>
  </div>
  <div class="card"><h2>Az app</h2><p class="sub" style="margin:0">Pocket Theatre. Az adatok ezen az eszközön, a böngészőben tárolódnak.</p><p class="sub" id="sto" style="margin:6px 0 0"></p></div>
- <p class="sub" style="text-align:center">Verzió: v0.8</p>
+ <p class="sub" style="text-align:center">Verzió: v0.8.1</p>
 </section>
 
 <section class="view" id="v-calc">
@@ -396,6 +402,7 @@ if(Array.isArray(S.rig)&&S.rig.length&&!S.rigs)S.rigs=[{id:uid(),n:"Korábbi lis
 delete S.rig;
 Object.keys(D).forEach(k=>{if(S[k]===undefined)S[k]=JSON.parse(JSON.stringify(D[k]))});
 if(typeof S.set.wage!=="number")S.set.wage=+S.set.wage||0;
+S.stages.forEach(s=>s.files.forEach(f=>{f.n=String(f.n).replace(/\.xml$/i,"")}));
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast("A tár megtelt")}};
 /* korábbi egyképes jegyzetek átemelése az új, többképes tárolóba */
 S.notes.forEach(n=>{
@@ -752,7 +759,7 @@ function parseXml(txt){
   let ly="",p=n.parentNode;while(p&&p.nodeType===1){if(low(p)==="layer"){ly=p.getAttribute("name")||"";break}p=p.parentNode}
   let ty="",pt="";
   n.querySelectorAll("*").forEach(c=>{const l=low(c);if(!ty&&l==="fixturetype")ty=c.getAttribute("name")||"";if(!pt&&l==="patch")pt=(c.textContent||"").trim()});
-  out.push({l:ly,id:a("fixture_id")||a("id")||a("index"),ch:a("channel_id")||a("channel"),n:a("name"),t:ty,p:pt});
+  out.push({l:ly,id:a("fixture_id")||a("id")||(a("channel_id")||a("channel")?"":a("index")),ch:a("channel_id")||a("channel"),n:a("name"),t:ty,p:pt});
  });
  return out;
 }
@@ -782,6 +789,8 @@ function renderStageSel(){
 function renderPatch(){
  renderStageSel();
  const q=$("pq").value.trim().toLowerCase();
+ /* újrarajzolás után a táblázat maradjon ott, ahol szerkesztettél */
+ const tws=[...document.querySelectorAll("#px .tw")].map(w=>[w.closest("details").dataset.f,w.scrollTop,w.scrollLeft]);
  if(!S.stages.length){$("px").innerHTML='<p class="meta" style="text-align:center;padding:20px">Hozz létre egy színpadot, vagy tölts fel XML fájlokat.</p>';return}
  let html="";
  S.stages.forEach(st=>{
@@ -792,13 +801,15 @@ function renderPatch(){
    if(q&&!L.length)return;
    const cnt={};L.forEach(x=>{const k=x.t||"?";cnt[k]=(cnt[k]||0)+1});
    const chips=Object.keys(cnt).map(k=>{const c=chOf(R,k);return `<span class="tp">${esc(k==="?"?"Ismeretlen":k)} ×${cnt[k]}${c?" · "+c+" csat.":""}</span>`}).join(" ");
-   let rows="",last=null;
-   L.forEach(x=>{if(x.l!==last){last=x.l;rows+=`<tr class="g"><td colspan="6">${esc(x.l||"Layer nélkül")}</td></tr>`}
+   const lc={};L.forEach(x=>{lc[x.l]=(lc[x.l]||0)+1});
+   let rows="",last=null,lo=false;
+   L.forEach(x=>{if(x.l!==last){last=x.l;lo=!!q||PO.has("l"+f.id+"|"+x.l);rows+=`<tr class="g${lo?" op":""}" data-lg="${esc(x.l)}" data-of="${f.id}"><td colspan="6">${CHEV}${esc(x.l||"Layer nélkül")} <span class="tp">${lc[x.l]}</span></td></tr>`}
+    if(!lo)return;
     const kt=x.t||"?",c=chOf(R,kt),a=absA(x.p);
-    rows+=`<tr><td>${esc(x.id)}</td><td>${esc(x.ch)}</td><td>${esc(x.n)}</td><td><span class="tp">${esc(x.t||"–")}</span></td><td class="ce" data-ct="${esc(kt)}">${c?`<b>${c}</b>${a?` <span class="meta" style="margin:0">(${fmtA(a)}–${fmtA(a+c-1)})</span>`:""}`:"–"}${S.chOv[kt]?" ✎":""}</td><td title="${esc(x.p)}"><b>${esc(fmtP(x.p))}</b></td></tr>`});
+    rows+=`<tr><td>${esc(x.id)}</td><td>${esc(x.ch)}</td><td>${esc(x.n)}</td><td><span class="tp">${esc(x.t||"–")}</span></td><td class="ce" data-ct="${esc(kt)}">${c?`<b>${c}</b>${a?` <span class="meta" style="margin:0">(${fmtA(a)}–${fmtA(a+c-1)})</span>`:""}`:"–"}${S.chOv[kt]?" ✎":""}</td><td class="ce" data-pt="${f.fx.indexOf(x)}" data-of="${f.id}" title="${esc(x.p)}"><b>${esc(fmtP(x.p))}</b>${x.po!==undefined?" ✎":""}</td></tr>`});
    inner+=`<details class="fg" data-f="${f.id}" ${(PO.has("f"+f.id)||q)?"open":""}><summary>${CHEV}<b>${esc(f.n)}</b><span class="tp">${f.fx.length} lámpa</span><span class="gr"></span>
     <button class="btn sm" data-rf="${f.id}">✎</button><button class="btn sm dg" data-fx="${f.id}">✕</button></summary>
-    <div class="fgb"><div class="tc">${chips}</div><div class="tw"><table><thead><tr><th>ID</th><th>Chan</th><th>Név</th><th>Típus</th><th>Csatorna</th><th>Patch</th></tr></thead><tbody>${rows}</tbody></table></div></div></details>`;
+    <div class="fgb"><div class="tw"><table><thead><tr><th>ID</th><th>Chan</th><th>Név</th><th>Típus</th><th>Csatorna</th><th>Patch</th></tr></thead><tbody>${rows}</tbody></table></div><details class="tcd" data-f="t${f.id}" ${(PO.has("ft"+f.id)||q)?"open":""}><summary>${CHEV}Géptípusok (${Object.keys(cnt).length})</summary><div class="tc">${chips}</div></details></div></details>`;
   });
   if(q&&!inner)return;
   html+=`<details class="fg stg" data-f="s${st.id}" ${(PO.has("fs"+st.id)||q)?"open":""}><summary>${CHEV}<b>${esc(st.n)}</b><span class="tp">${st.files.length} fájl</span><span class="gr"></span>
@@ -806,10 +817,27 @@ function renderPatch(){
    <div class="fgb">${inner||'<p class="meta">Ebben a színpadban még nincs fájl.</p>'}</div></details>`;
  });
  $("px").innerHTML=html||'<p class="meta" style="text-align:center;padding:20px">Nincs találat.</p>';
+ tws.forEach(([k,t,l])=>{const w=document.querySelector(`#px details[data-f="${k}"] .tw`);if(w){w.scrollTop=t;w.scrollLeft=l}});
 }
 $("px").addEventListener("toggle",e=>{const d=e.target;if(d.dataset&&d.dataset.f&&!$("pq").value.trim()){const k="f"+d.dataset.f;d.open?PO.add(k):PO.delete(k)}},true);
 const findF=id=>{for(const s of S.stages){const f=s.files.find(x=>String(x.id)===String(id));if(f)return {s,f}}return null};
 $("px").addEventListener("click",async e=>{
+ const lg=e.target.closest("[data-lg]");
+ if(lg){if(!$("pq").value.trim()){const k="l"+lg.dataset.of+"|"+lg.dataset.lg;PO.has(k)?PO.delete(k):PO.add(k);renderPatch()}return}
+ const pc=e.target.closest("[data-pt]");
+ if(pc){
+  const x=findF(pc.dataset.of).f.fx[+pc.dataset.pt],v=await askText("Patch cím (pl. 1.001). Üresen hagyva: az eredeti, a fájlból jövő cím.",fmtP(x.p)==="–"?"":fmtP(x.p));
+  if(v===null)return;
+  const s=v.trim();
+  if(s===""){if(x.po!==undefined){x.p=x.po;delete x.po}}
+  else{
+   const m=/^(\d+)\.(\d+)$/.exec(s);
+   if(!m||+m[1]<1||+m[2]<1||+m[2]>512){toast("Formátum: univerzum.cím, pl. 1.001 (a cím 1 és 512 között)");return}
+   if(x.po===undefined)x.po=x.p;
+   x.p=`${+m[1]}.${String(+m[2]).padStart(3,"0")}`;
+  }
+  save();renderPatch();return;
+ }
  const ce=e.target.closest("[data-ct]");
  if(ce){
   const k=ce.dataset.ct,b=ce.querySelector("b"),v=await askText(`Csatornaszám a(z) „${k==="?"?"Ismeretlen":k}” típushoz (minden ilyen lámpára érvényes). Üresen hagyva: automatikus.`,S.chOv[k]||(b?b.textContent:""));
@@ -831,7 +859,7 @@ $("pq").oninput=renderPatch;
 $("xn").onclick=async()=>{const n=await askText("Az új színpad neve:");if(n&&n.trim()){const s={id:uid(),n:n.trim(),files:[]};S.stages.push(s);save();renderPatch();$("xs").value=s.id}};
 $("xf").onchange=()=>{
  const files=[...$("xf").files];if(!files.length)return;
- Promise.all(files.map(f=>f.text().then(t=>{try{const r=parseXml(t);return r.length?{id:uid(),n:f.name,fx:r}:null}catch(e){return null}}))).then(res=>{
+ Promise.all(files.map(f=>f.text().then(t=>{try{const r=parseXml(t);return r.length?{id:uid(),n:f.name.replace(/\.xml$/i,""),fx:r}:null}catch(e){return null}}))).then(res=>{
   const ok=res.filter(Boolean);
   if(!ok.length){toast("Nem találtam lámpát a fájlokban");return}
   let st=S.stages.find(s=>String(s.id)===$("xs").value);
@@ -842,6 +870,11 @@ $("xf").onchange=()=>{
  $("xf").value="";
 };
 renderPatch();
+/* beépített alap patch: csak egyszer töltődik be, így a törlése és a kézi javítások megmaradnak */
+if(!S.nszSeed)fetch("nagyszinpad.json").then(r=>r.ok?r.json():null).then(fx=>{
+ if(!fx)return;
+ S.nszSeed=true;S.stages.push({id:uid(),n:"Győri Nemzeti Színház",files:[{id:uid(),n:"Nagyszínpad",fx}]});save();renderPatch();
+}).catch(()=>{});
 
 /* ---- bérkalkulátor ---- */
 const fm=n=>Math.round(n).toLocaleString("hu-HU")+" Ft";
