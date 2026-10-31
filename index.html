@@ -86,6 +86,9 @@ input[type=checkbox]:active{transform:scale(.8)}
 #mp{margin-top:0}
 #mp:not(.full) #mfc,#mp.full #mff,#mp.full #mre{display:none}
 #mp.full #mf{height:auto;min-height:0;border-radius:10px}
+#mp.full{touch-action:none}
+.fg.past>summary{opacity:.55}
+.fg.past .fgb{opacity:.75}
 /* DIP */
 .dsp{text-align:center;font-size:64px;font-weight:700;line-height:1;color:var(--navy);font-variant-numeric:tabular-nums;background:var(--nbg);border-radius:14px;padding:18px 0 14px;margin:12px 0 4px}
 .dsp input,.dsp input:focus{display:block;width:100%;border:0;border-radius:0;background:none;padding:0;font:inherit;color:inherit;text-align:center;box-shadow:none;cursor:pointer}
@@ -232,7 +235,7 @@ main{margin-left:0;padding:0 14px 100px}.top{padding-top:calc(14px + env(safe-ar
   <button class="mi" data-go="v-gep"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg><b>Gépállás</b><span>Lámpák, hova néznek, képekkel</span></button>
   <button class="mi" data-go="v-hours"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><b>Bérkalkulátor</b><span>Túlóra és tájak, nettó becslés</span></button>
   <button class="mi" data-go="v-map"><svg class="i" viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg><b>Térkép</b><span>Vizuális térkép a lámpákról</span></button>
-  <button class="mi" data-go="v-set"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.830l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><b>Beállítások</b><span>Adatmentés, Google Drive (fejlesztés alatt)</span></button>
+  <button class="mi" data-go="v-set"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.830l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><b>Beállítások</b><span>Adatmentés fájlba, Google Drive (fejlesztés alatt)</span></button>
  </div>
 </section>
 
@@ -268,10 +271,14 @@ main{margin-left:0;padding:0 14px 100px}.top{padding-top:calc(14px + env(safe-ar
 <section class="view" id="v-set">
  <div class="card p">
   <h2>Adatmentés és visszaállítás</h2>
-  <p class="sub">Google Drive integráció: fejlesztés alatt. Itt lesz a felhasználói adatok (jegyzetek, patch sheetek, gépállások, bérkalkulátor, képek) exportja és importja.</p>
+  <p class="sub">Egy fájlba menti az összes adatot (előadások, jegyzetek, patch sheetek, gépállások, bérkalkulátor, képek). Visszatöltéskor a mostani adatok helyére a fájl tartalma kerül.</p>
+  <div class="row"><button class="btn pr a" id="bks">Mentés fájlba</button><button class="btn a" id="bkl">Visszatöltés fájlból</button></div>
+  <input type="file" id="bkf" accept=".json,application/json" style="display:none">
+  <p class="sub" style="margin-top:10px">Google Drive integráció: fejlesztés alatt.</p>
   <button class="btn wide" disabled style="opacity:.5">Csatlakozás a Google Drive-hoz (hamarosan)</button>
  </div>
  <div class="card"><h2>Az app</h2><p class="sub" style="margin:0">Pocket Theatre. Az adatok ezen az eszközön, a böngészőben tárolódnak.</p><p class="sub" id="sto" style="margin:6px 0 0"></p></div>
+ <p class="sub" style="text-align:center">Verzió: v0.8</p>
 </section>
 
 <section class="view" id="v-calc">
@@ -364,7 +371,7 @@ const askText=(msg,def)=>dialog({msg,input:true,def,ok:"Mentés"});
 
 /* ---- képek: IndexedDB (nagyobb hely, mint a localStorage) ---- */
 const DB=new Promise((res,rej)=>{const r=indexedDB.open("pocket-theatre",1);r.onupgradeneeded=()=>r.result.createObjectStore("img");r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});
-const idb=(mode,fn)=>DB.then(db=>new Promise((res,rej)=>{const t=db.transaction("img",mode),q=fn(t.objectStore("img"));t.oncomplete=()=>res(q&&q.result);t.onerror=()=>rej(t.error)}));
+const idb=(mode,fn)=>DB.then(db=>new Promise((res,rej)=>{const t=db.transaction("img",mode),q=fn(t.objectStore("img"));t.oncomplete=()=>res(q&&q.result);t.onerror=t.onabort=()=>rej(t.error)}));
 const imgPut=(k,v)=>idb("readwrite",s=>s.put(v,k));
 const imgGet=k=>idb("readonly",s=>s.get(k));
 const imgDel=k=>idb("readwrite",s=>s.delete(k));
@@ -402,6 +409,40 @@ save();
 /* tartós tárhely kérése, hogy a böngésző helyhiány esetén se törölje az adatokat (a döntés a böngészőé, ezért indításonként újra próbáljuk) */
 if(navigator.storage&&navigator.storage.persist)navigator.storage.persisted().then(p=>p||navigator.storage.persist()).then(p=>{$("sto").textContent=p?"Tartós tárhely: bekapcsolva.":"Tartós tárhely: a böngésző még nem engedélyezte, a következő indításkor újra kérjük."}).catch(()=>{});
 
+/* ---- mentés fájlba / visszatöltés ---- */
+$("bks").onclick=async()=>{
+ try{
+  const keys=await idb("readonly",s=>s.getAllKeys()),vals=await idb("readonly",s=>s.getAll()),imgs={};
+  keys.forEach((k,i)=>imgs[k]=vals[i]);
+  const name="pocket-theatre-mentes-"+today()+".json",blob=new Blob([JSON.stringify({app:"pocket-theatre",v:1,at:new Date().toISOString(),state:S,imgs})],{type:"application/json"});
+  const f=new File([blob],name,{type:"application/json"});
+  /* telefonon a megosztás menü a megbízható út, különösen a kezdőképernyős iPhone-appban */
+  if(matchMedia("(pointer:coarse)").matches&&navigator.canShare&&navigator.canShare({files:[f]})){
+   try{await navigator.share({files:[f]})}catch(e){if(e.name!=="AbortError")toast("A mentés nem sikerült")}
+   return}
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),10000);toast("Mentés kész");
+ }catch(e){toast("A mentés nem sikerült")}
+};
+$("bkl").onclick=()=>$("bkf").click();
+$("bkf").onchange=async()=>{
+ const f=$("bkf").files[0];$("bkf").value="";if(!f)return;
+ let b;try{b=JSON.parse(await f.text())}catch(e){}
+ const imgs=b&&b.imgs;
+ if(!b||b.app!=="pocket-theatre"||!b.state||typeof b.state!=="object"||Array.isArray(b.state)||!imgs||typeof imgs!=="object"||Object.values(imgs).some(v=>typeof v!=="string"||!v.startsWith("data:image/"))){toast("Ez nem Pocket Theatre mentés");return}
+ if(!await ask("Visszatöltöd a mentést ("+String(b.at||"").slice(0,10)+")?\n\nA mostani adatok helyére a fájl tartalma kerül.","Visszatöltés"))return;
+ /* előbb az adatok, utána a képek (egy tranzakcióban): ha bármelyik hibázik, a régi állapot marad */
+ const old=localStorage.getItem(KEY);
+ try{
+  localStorage.setItem(KEY,JSON.stringify(b.state));
+  await idb("readwrite",s=>{s.clear();Object.keys(imgs).forEach(k=>s.put(imgs[k],k))});
+  location.reload();
+ }catch(e){
+  try{localStorage.setItem(KEY,old)}catch(e2){}
+  toast("A visszatöltés nem sikerült, a régi adatok maradtak");
+ }
+};
+
 /* ---- navigáció ---- */
 const TT={"v-console":"Konzol","v-dmx":"DMX","v-shows":"Előadások","v-misc":"Egyebek","v-notes":"Jegyzetek","v-patch":"Patch sheet","v-calc":"Patch számoló","v-rig":"Színpad","v-gep":"Gépállás","v-set":"Beállítások","v-hours":"Bérkalkulátor","v-map":"Térkép"};
 const SUB=["v-notes","v-patch","v-calc","v-rig","v-gep","v-hours","v-map","v-set"];
@@ -417,6 +458,13 @@ function go(id){
  window.scrollTo(0,0);
 }
 document.addEventListener("click",e=>{const t=e.target.closest("[data-t],[data-go]");if(t)go(t.dataset.t||t.dataset.go)});
+/* teljes képernyős térképnél a csípés ne az oldalt nagyítsa (a térkép saját nagyítása a saját kezelőjén át továbbra is működik) */
+function noPageZoom(d){
+ const stop=e=>{if($("mp").classList.contains("full")&&(e.type==="gesturestart"||e.touches.length>1))e.preventDefault()};
+ d.addEventListener("gesturestart",stop);
+ d.addEventListener("touchmove",stop,{passive:false});
+}
+noPageZoom(document);
 /* a térkép ugyanarról a címről jön, ezért betöltés után kitöltjük vele a keretet (a térkép a saját méretfigyelőjével igazodik) */
 $("mf").addEventListener("load",()=>{
  try{
@@ -424,10 +472,12 @@ $("mf").addEventListener("load",()=>{
   const s=d.createElement("style");s.id="pt-fit";
   s.textContent="html,body{margin:0!important;height:100%!important;overflow:hidden!important;background:#14141b!important}#vis-container{height:100%!important}#ns{height:100%!important;border-radius:0!important}";
   d.head.appendChild(s);
+  noPageZoom(d);
  }catch(e){}
 });
 $("mre").onclick=()=>{try{$("mf").contentWindow.location.reload()}catch(e){$("mf").src="terkep.html"}};
-const setMapFull=v=>{$("mp").classList.toggle("full",v);document.body.classList.toggle("noscroll",v)};
+const VP=document.querySelector('meta[name="viewport"]'),VP0=VP.content;
+const setMapFull=v=>{$("mp").classList.toggle("full",v);document.body.classList.toggle("noscroll",v);VP.content=v?VP0+", maximum-scale=1, user-scalable=no":VP0};
 $("mff").onclick=()=>setMapFull(true);
 $("mfc").onclick=()=>setMapFull(false);
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("mp").classList.contains("full"))setMapFull(false)});
@@ -518,16 +568,20 @@ $("ss").onclick=()=>{const n=$("sn").value.trim();if(!n){toast("Adj nevet");retu
  if(window.Notification&&Notification.permission==="default")Notification.requestPermission();
  ["sn","sv","sd","st"].forEach(i=>$(i).value="");showF(false);renderShows()};
 const prog=s=>{const dn=s.it.filter(x=>x.d).length;return {dn,p:s.it.length?Math.round(dn/s.it.length*100):0}};
+const SO=new Set();
 function renderShows(){
  if(!S.shows.length){$("shows").innerHTML='<div class="card"><p class="meta" style="text-align:center">Még nincs előadás. Kattints a „＋ Új előadás” gombra.</p></div>';return}
- const L=S.shows.slice().sort((a,b)=>(a.d||"9")<(b.d||"9")?-1:1);
- $("shows").innerHTML=L.map(s=>{
-  const pr=prog(s);
-  return `<div class="card t"><div style="display:flex;justify-content:space-between;gap:8px"><div><h2>${esc(s.n)}</h2><div class="meta">${esc([s.v,s.d,s.t?"indulás "+s.t:""].filter(Boolean).join(" · "))}</div></div><button class="btn dg sm" data-sd="${s.id}" style="align-self:flex-start">Törlés</button></div>
-  <div class="bar"><div data-bar="${s.id}" style="width:${pr.p}%"></div></div><div class="meta" data-bt="${s.id}">${pr.dn} / ${s.it.length} kész</div>
+ /* elöl a legutóbb létrehozott (az id időbélyeg alapú), a dátum szerint elmúltak összecsukva a lista végén, a legfrissebb elöl */
+ const td=today(),isPast=s=>s.d&&s.d<td;
+ const L=S.shows.filter(s=>!isPast(s)).sort((a,b)=>b.id-a.id),P=S.shows.filter(isPast).sort((a,b)=>a.d<b.d?1:-1);
+ const meta=s=>esc([s.v,s.d,s.t?"indulás "+s.t:""].filter(Boolean).join(" · "));
+ const body=s=>{const pr=prog(s);return `<div class="bar"><div data-bar="${s.id}" style="width:${pr.p}%"></div></div><div class="meta" data-bt="${s.id}">${pr.dn} / ${s.it.length} kész</div>
   ${s.it.map((x,i)=>`<label class="it${x.d?" d":""}"><input type="checkbox" data-s="${s.id}" data-i="${i}" ${x.d?"checked":""}><span><span class="tx">${esc(x.t)}</span></span><button class="x2" data-r="${s.id}" data-i="${i}" type="button">✕</button></label>`).join("")}
-  <div class="row" style="margin-top:10px"><input data-in="${s.id}" placeholder="Új checklist pont..."><button class="btn sm a" data-ab="${s.id}">Hozzáad</button></div></div>`}).join("");
+  <div class="row" style="margin-top:10px"><input data-in="${s.id}" placeholder="Új checklist pont..."><button class="btn sm a" data-ab="${s.id}">Hozzáad</button></div>`};
+ $("shows").innerHTML=L.map(s=>`<div class="card t"><div style="display:flex;justify-content:space-between;gap:8px"><div><h2>${esc(s.n)}</h2><div class="meta">${meta(s)}</div></div><button class="btn dg sm" data-sd="${s.id}" style="align-self:flex-start">Törlés</button></div>
+  ${body(s)}</div>`).join("")+P.map(s=>`<details class="fg past" data-ps="${s.id}" ${SO.has(String(s.id))?"open":""}><summary>${CHEV}<b>${esc(s.n)}</b><span class="tp">${meta(s)}</span><span class="gr"></span></summary><div class="fgb"><button class="btn dg sm" data-sd="${s.id}" style="margin-bottom:10px">Törlés</button>${body(s)}</div></details>`).join("");
 }
+$("shows").addEventListener("toggle",e=>{const id=e.target.dataset&&e.target.dataset.ps;if(id){if(e.target.open)SO.add(id);else SO.delete(id)}},true);
 const fs=id=>S.shows.find(s=>String(s.id)===String(id));
 $("shows").addEventListener("change",e=>{
  const c=e.target;if(!c.dataset.s)return;
