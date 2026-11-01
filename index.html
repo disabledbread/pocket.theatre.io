@@ -266,6 +266,7 @@ main{margin-left:0;padding:0 14px 100px}.top{padding-top:calc(14px + env(safe-ar
 </section>
 
 <section class="view" id="v-map">
+ <div class="card t" id="mlk"><div data-tlock="map"></div></div>
  <div class="rm" id="mp">
   <div class="rmb"><span class="rmt"></span><button class="btn sm" id="mre">↻ Újratöltés</button><button class="btn sm" id="mff">Teljes képernyő</button><button class="btn cl" id="mfc"><svg class="i" viewBox="0 0 24 24"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg>Összecsukás</button></div>
   <iframe id="mf" title="Térkép"></iframe>
@@ -313,7 +314,7 @@ main{margin-left:0;padding:0 14px 100px}.top{padding-top:calc(14px + env(safe-ar
   <button class="btn wide" disabled style="opacity:.5">Csatlakozás a Google Drive-hoz (hamarosan)</button>
  </div>
  <div class="card"><h2>Az app</h2><p class="sub" style="margin:0">Pocket Theatre. Az adatok ezen az eszközön, a böngészőben tárolódnak.</p><p class="sub" id="sto" style="margin:6px 0 0"></p></div>
- <p class="sub" style="text-align:center">Verzió: v0.9</p>
+ <p class="sub" style="text-align:center">Verzió: v0.9.1</p>
 </section>
 
 <section class="view" id="v-calc">
@@ -341,6 +342,7 @@ main{margin-left:0;padding:0 14px 100px}.top{padding-top:calc(14px + env(safe-ar
 
 <section class="view" id="v-patch">
  <div class="card">
+  <div data-tlock="patch"></div>
   <div class="row"><div><label>Színház</label><select id="xt"></select></div><button class="btn a" id="xh">＋ Új színház</button></div>
   <div class="row"><div><label>Színpad (ide kerülnek a fájlok)</label><select id="xs"></select></div><button class="btn a" id="xn">＋ Új színpad</button></div>
   <div class="row"><div><label>MA2 XML fájlok (több is jelölhető)</label><input type="file" id="xf" accept=".xml,text/xml" multiple></div></div>
@@ -503,7 +505,7 @@ function go(id){
  $("newShow").style.display=id==="v-shows"?"":"none";
  if(id==="v-hours")renderHours();
  if(id==="v-tiri")$("tq").value="",renderTiri();
- if(id==="v-map"&&!$("mf").getAttribute("src"))$("mf").src="terkep.html";
+ if(id==="v-map")renderMap();
  window.scrollTo(0,0);
 }
 document.addEventListener("click",e=>{const t=e.target.closest("[data-t],[data-go]");if(t)go(t.dataset.t||t.dataset.go)});
@@ -514,7 +516,7 @@ function noPageZoom(d){
  d.addEventListener("touchmove",stop,{passive:false});
 }
 noPageZoom(document);
-/* a térkép ugyanarról a címről jön, ezért betöltés után kitöltjük vele a keretet (a térkép a saját méretfigyelőjével igazodik) */
+/* a térkép kibontva, ugyanezen az oldalon belül töltődik be, ezért betöltés után kitöltjük vele a keretet (a térkép a saját méretfigyelőjével igazodik) */
 $("mf").addEventListener("load",()=>{
  try{
   const d=$("mf").contentDocument;if(!d||!d.getElementById("ns")||d.getElementById("pt-fit"))return;
@@ -524,7 +526,7 @@ $("mf").addEventListener("load",()=>{
   noPageZoom(d);
  }catch(e){}
 });
-$("mre").onclick=()=>{try{$("mf").contentWindow.location.reload()}catch(e){$("mf").src="terkep.html"}};
+$("mre").onclick=()=>{if(MAP)$("mf").srcdoc=MAP.html};
 const VP=document.querySelector('meta[name="viewport"]'),VP0=VP.content;
 const setMapFull=v=>{$("mp").classList.toggle("full",v);document.body.classList.toggle("noscroll",v);VP.content=v?VP0+", maximum-scale=1, user-scalable=no":VP0};
 $("mff").onclick=()=>setMapFull(true);
@@ -933,26 +935,32 @@ $("xf").onchange=()=>{
  $("xf").value="";
 };
 renderPatch();
-/* beépített alap patch: csak egyszer töltődik be, így a törlése és a kézi javítások megmaradnak */
-if(!S.nszSeed)fetch("nagyszinpad.json").then(r=>r.ok?r.json():null).then(fx=>{
- if(!fx)return;
- S.nszSeed=true;S.theatres.push({id:uid(),n:"Győri Nemzeti Színház",b:true,stages:[{id:uid(),n:"Nagyszínpad",b:true,files:[{id:uid(),n:"Nagyszínpad",b:true,fx}]}]});save();renderPatch();
-}).catch(()=>{});
 
-/* ---- tirisztor: a kiosztás jelszóval titkosítva van a nyilvános repóban; megnyitás után csak ezen az eszközön marad, a mentésfájlba nem kerül ---- */
-const TK="lt-tiri";
+/* ---- védett adatok (tirisztor, térkép, beépített patch): jelszóval titkosítva vannak a nyilvános repóban; megnyitás után csak ezen az eszközön maradnak ---- */
+const TK="lt-tiri",MK="lt-map";
 let TI=null;try{TI=JSON.parse(localStorage.getItem(TK))}catch(e){}
+let MAP=null;try{MAP=JSON.parse(localStorage.getItem(MK))}catch(e){}
 const unb64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
-const tiriHead=()=>fetch("tiri.enc.json").then(r=>{if(!r.ok)throw new Error("nincs");return r.json()});
-async function tiriOpen(pw){
- const h=await tiriHead();
+const encHead=f=>fetch(f).then(r=>{if(!r.ok)throw new Error("nincs");return r.json()});
+async function encOpen(f,pw){
+ const h=await encHead(f);
  const key=await crypto.subtle.deriveKey({name:"PBKDF2",salt:unb64(h.salt),iterations:h.iter,hash:"SHA-256"},await crypto.subtle.importKey("raw",new TextEncoder().encode(pw),"PBKDF2",false,["deriveKey"]),{name:"AES-GCM",length:256},false,["decrypt"]);
- return new TextDecoder().decode(await crypto.subtle.decrypt({name:"AES-GCM",iv:unb64(h.iv)},key,unb64(h.ct)));
+ return {v:h.v,txt:new TextDecoder().decode(await crypto.subtle.decrypt({name:"AES-GCM",iv:unb64(h.iv)},key,unb64(h.ct)))};
 }
+/* beépített alap patch: csak egyszer töltődik be, így a törlése és a kézi javítások megmaradnak */
+function seedPatch(fx){
+ S.nszSeed=true;S.theatres.push({id:uid(),n:"Győri Nemzeti Színház",b:true,stages:[{id:uid(),n:"Nagyszínpad",b:true,files:[{id:uid(),n:"Nagyszínpad",b:true,fx}]}]});save();renderPatch();
+}
+function renderMap(){
+ $("mlk").style.display=MAP?"none":"";$("mp").style.display=MAP?"":"none";
+ if(!MAP)$("mf").removeAttribute("srcdoc");
+ else if($("v-map").classList.contains("on")&&!$("mf").hasAttribute("srcdoc"))$("mf").srcdoc=MAP.html;
+}
+const LOCK={"":()=>!TI,map:()=>!MAP,patch:()=>!S.nszSeed};
 const rowCells=r=>r.c.flat();
 function tiriFind(n){for(const t of TI.tiris)for(const r of t.rows)if(rowCells(r).includes(n))return {t,r,kw:r.c.some(c=>Array.isArray(c)&&c.includes(n))?2:5};return null}
 function renderTiri(){
- document.querySelectorAll("[data-tlock]").forEach(el=>{el.innerHTML=TI?"":`<p class="sub">Ez a rész jelszóval védett, eszközönként egyszer kell megadni.</p><div class="row"><div><input type="password" data-tpw autocomplete="current-password" placeholder="Jelszó"></div><button class="btn pr a" data-tun>Megnyitás</button></div>`});
+ document.querySelectorAll("[data-tlock]").forEach(el=>{el.innerHTML=!LOCK[el.dataset.tlock]()?"":`<p class="sub">${el.dataset.tlock==="patch"?"A beépített patch":"Ez a rész"} jelszóval védett, eszközönként egyszer kell megadni.</p><div class="row"><div><input type="password" data-tpw autocomplete="current-password" placeholder="Jelszó"></div><button class="btn pr a" data-tun>Megnyitás</button></div>`});
  document.querySelectorAll("[data-tbody]").forEach(el=>{el.style.display=TI?"":"none"});
  if(!TI){$("tig").innerHTML="";return}
  const n=parseInt($("tq").value,10),m=n?tiriFind(n):null;
@@ -976,7 +984,13 @@ $("tq").oninput=renderTiri;
 async function tiriUnlock(btn){
  const pw=btn.closest("[data-tlock]").querySelector("[data-tpw]").value;if(!pw)return;
  btn.disabled=true;
- try{const txt=await tiriOpen(pw);TI=JSON.parse(txt);localStorage.setItem(TK,txt);renderTiri();renderHk()}
+ try{
+  const [t,m,p]=await Promise.all(["tiri.enc.json","terkep.enc.json","nagyszinpad.enc.json"].map(f=>encOpen(f,pw)));
+  TI=JSON.parse(t.txt);localStorage.setItem(TK,t.txt);
+  MAP={v:m.v,html:m.txt};localStorage.setItem(MK,JSON.stringify(MAP));
+  if(!S.nszSeed)seedPatch(JSON.parse(p.txt));
+  renderTiri();renderHk();renderMap();
+ }
  catch(e){
   toast(e.name==="OperationError"?"Hibás jelszó":location.protocol==="file:"?"Fájlból megnyitva nem működik, a localhost címen próbáld":!(window.crypto&&crypto.subtle)?"Ezen a címen nem nyitható meg, csak https vagy localhost alatt":e instanceof TypeError&&!navigator.onLine?"Nincs internet, ellenőrizd a kapcsolatot":"Nem sikerült megnyitni: "+e.message);
   btn.disabled=false;
@@ -985,8 +999,9 @@ async function tiriUnlock(btn){
 document.addEventListener("click",e=>{const b=e.target.closest("[data-tun]");if(b)tiriUnlock(b)});
 document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.dataset&&e.target.dataset.tpw!==undefined)tiriUnlock(e.target.closest("[data-tlock]").querySelector("[data-tun]"))});
 renderTiri();
-/* ha új kiosztás jelent meg (például az alsó tiri), a jelszót újra kérjük */
-if(TI)tiriHead().then(h=>{if(h.v!==TI.v){TI=null;localStorage.removeItem(TK);renderTiri();renderHk()}}).catch(()=>{});
+/* ha új kiosztás vagy térkép jelent meg, a jelszót újra kérjük */
+if(TI)encHead("tiri.enc.json").then(h=>{if(h.v!==TI.v){TI=null;localStorage.removeItem(TK);renderTiri();renderHk()}}).catch(()=>{});
+if(MAP)encHead("terkep.enc.json").then(h=>{if(h.v!==MAP.v){MAP=null;localStorage.removeItem(MK);renderTiri();renderMap()}}).catch(()=>{});
 
 /* ---- bérkalkulátor ---- */
 const fm=n=>Math.round(n).toLocaleString("hu-HU")+" Ft";
