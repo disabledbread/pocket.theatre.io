@@ -1,12 +1,14 @@
 // Pocket Theatre – service worker
 // Új kiadásnál elég a VERSION-t átírni (pl. 'v0.7').
-const VERSION = 'v0.9.1';
+const VERSION = 'v0.9.5';
 const CACHE = 'pocket-theatre-' + VERSION;
 const RUNTIME = 'pocket-theatre-cdn';
 
 const CORE = [
   './',
   './index.html',
+  './style.css',
+  './app.js',
   './terkep.enc.json',
   './nagyszinpad.enc.json',
   './tiri.enc.json',
@@ -62,7 +64,9 @@ self.addEventListener('fetch', event => {
     const isPage =
       req.mode === 'navigate' ||
       url.pathname.endsWith('/') ||
-      url.pathname.endsWith('.html');
+      url.pathname.endsWith('.html') ||
+      url.pathname.endsWith('/style.css') ||
+      url.pathname.endsWith('/app.js');
 
     if (isPage) {
       event.respondWith(networkFirst(req, url));
@@ -81,7 +85,7 @@ self.addEventListener('fetch', event => {
   // Minden más (pl. MA Web Remote IP-n) – nem nyúlunk hozzá
 });
 
-// HTML: először hálózat, offline esetén a tárolt példány
+// HTML, CSS, JS: először hálózat, offline esetén a tárolt példány, így ezek mindig együtt frissülnek
 async function networkFirst(req, url) {
   const cache = await caches.open(CACHE);
   const key = url.origin + url.pathname; // ?v=2 és hasonlók nélkül
