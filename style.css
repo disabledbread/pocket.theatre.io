@@ -206,7 +206,7 @@ tr.g.op .chev{transform:rotate(90deg)}
 @media(max-width:700px){
 .side{top:auto;right:0;width:auto;flex-direction:row;justify-content:space-around;border-right:0;border-top:1px solid var(--bd);padding:6px 0 calc(6px + env(safe-area-inset-bottom,0px))}
 .logo{display:none}
-.side button{width:auto;height:auto;flex:1;flex-direction:column;gap:2px;padding:6px 0;border-radius:0}
+.side button{width:auto;height:auto;flex:1;flex-direction:column;gap:2px;padding:6px 0;border-radius:12px;margin:0 3px}
 .side button span{display:block;font-size:11px}
 .side button.on::before{display:none}
 main{margin-left:0;padding:0 14px 100px}.top{padding-top:calc(14px + env(safe-area-inset-top,0px))}#toast{bottom:90px}}
