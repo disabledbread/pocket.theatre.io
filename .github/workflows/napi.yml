@@ -1,0 +1,37 @@
+name: Napi műsorfrissítés
+
+# Naponta egyszer: a színház műsoroldalának PDF-jeiből musorlista.json a repó gyökerébe. Csak változáskor ment.
+# Hiba esetén (pl. elérhetetlen oldal, nulla előadás) a régi fájl marad, és a futás pirosra vált.
+on:
+  schedule:
+    - cron: '17 4 * * *'
+  workflow_dispatch:
+  # A feldolgozó módosításakor is lefut, hogy azonnal látszódjon az eredmény
+  push:
+    paths: ['musor/**', '.github/workflows/napi.yml']
+
+permissions:
+  contents: write
+
+concurrency: napi
+
+jobs:
+  frissit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r musor/requirements.txt
+      - name: Frissítés
+        run: python -I musor/frissit.py musorlista.json
+      - name: Mentés, ha változott
+        run: |
+          git add musorlista.json
+          if git diff --cached --quiet; then echo 'Nincs mit menteni.'; exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Műsorlista frissítése'
+          git pull --rebase
+          git push

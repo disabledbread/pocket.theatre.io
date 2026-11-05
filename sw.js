@@ -1,6 +1,6 @@
 // Pocket Theatre – service worker
 // Új kiadásnál elég a VERSION-t átírni (pl. 'v0.7').
-const VERSION = 'v0.9.5';
+const VERSION = 'v1.0';
 const CACHE = 'pocket-theatre-' + VERSION;
 const RUNTIME = 'pocket-theatre-cdn';
 
@@ -66,13 +66,20 @@ self.addEventListener('fetch', event => {
       url.pathname.endsWith('/') ||
       url.pathname.endsWith('.html') ||
       url.pathname.endsWith('/style.css') ||
-      url.pathname.endsWith('/app.js');
+      url.pathname.endsWith('/app.js') ||
+      url.pathname.endsWith('.enc.json');
 
     if (isPage) {
       event.respondWith(networkFirst(req, url));
     } else {
       event.respondWith(staleWhileRevalidate(event, req, CACHE));
     }
+    return;
+  }
+
+  // Műsorlista (külön repóból): mindig a friss, offline az utoljára letöltött
+  if (url.hostname === 'raw.githubusercontent.com' && url.pathname.endsWith('/musorlista.json')) {
+    event.respondWith(networkFirst(req, url));
     return;
   }
 
@@ -85,7 +92,7 @@ self.addEventListener('fetch', event => {
   // Minden más (pl. MA Web Remote IP-n) – nem nyúlunk hozzá
 });
 
-// HTML, CSS, JS: először hálózat, offline esetén a tárolt példány, így ezek mindig együtt frissülnek
+// HTML, CSS, JS és a titkosított adatok: először hálózat, offline esetén a tárolt példány, így ezek mindig együtt frissülnek
 async function networkFirst(req, url) {
   const cache = await caches.open(CACHE);
   const key = url.origin + url.pathname; // ?v=2 és hasonlók nélkül
