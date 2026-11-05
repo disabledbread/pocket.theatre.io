@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adatkezelési tájékoztató – Pocket Theatre</title>
+<link rel="icon" type="image/png" href="icon.png">
+<style>
+:root{--bg:#fff;--tx:#111827;--mu:#6b7280;--bd:#e5e7eb;--ac:#00a597;color-scheme:light}
+@media(prefers-color-scheme:dark){:root{--bg:#151413;--tx:#ece9e3;--mu:#9c978e;--bd:#34312d;--ac:#e2604a;color-scheme:dark}}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.55 "Noto Sans",system-ui,Arial,sans-serif}
+main{max-width:720px;margin:0 auto;padding:24px 16px 48px}
+h1{font-size:24px;margin:0 0 4px}h2{font-size:17px;margin:28px 0 6px}
+p,li{margin:0 0 8px}ul{padding-left:20px}
+.mu{color:var(--mu);font-size:13px}a{color:var(--ac)}
+hr{border:0;border-top:1px solid var(--bd);margin:28px 0}
+</style>
+</head>
+<body>
+<main>
+<h1>Adatkezelési tájékoztató</h1>
+<p class="mu">Pocket Theatre · hatályos: 2026. november 5.</p>
+
+<p>A Pocket Theatre egy színházi világosítóknak készült webes alkalmazás. Ez a tájékoztató leírja, milyen adatokat kezel az app, hol tárolja őket, és mit csinál a Google Drive-hozzáféréssel.</p>
+
+<h2>Röviden</h2>
+<ul>
+<li>Az app nem kér regisztrációt, nincs saját szervere, és nem gyűjt statisztikát vagy hirdetési adatot.</li>
+<li>Minden, amit beírsz (jegyzetek, előadások, patch sheetek, gépállások, bérkalkulátor, képek), a saját készülékeden, a böngésző tárhelyén marad.</li>
+<li>A Google Drive-mentés nem kötelező. Ha bekapcsolod, a mentések a <strong>saját</strong> Drive-odra kerülnek, a fejlesztő nem fér hozzájuk.</li>
+</ul>
+
+<h2>Az eszközön tárolt adatok</h2>
+<p>Az app a böngésző helyi tárhelyét (localStorage és IndexedDB) használja. Ezek az adatok nem hagyják el a készüléket, kivéve, ha te magad mented őket fájlba vagy a Google Drive-ra. A böngésző adatainak törlésével vagy az app eltávolításával ezek is törlődnek.</p>
+<p>A jelszóval védett részek (Tirisztor, térkép, beépített patch) titkosítva érkeznek. A jelszót az app nem tárolja és nem küldi el sehova, csak a kibontott adatot tartja meg a készüléken.</p>
+
+<h2>Google Drive-mentés</h2>
+<p>Ha a Beállításokban csatlakozol a Google Drive-hoz, a Google bejelentkező ablakában adsz engedélyt az appnak. Az app ezt kéri:</p>
+<ul>
+<li><strong>Csak a saját fájljaihoz fér hozzá</strong> (<code>drive.file</code> engedély). A Drive-od többi fájlját nem látja, nem olvassa és nem módosítja.</li>
+<li>A mentéseket egy „Pocket Theatre” nevű mappába teszi, eszközönként naponta egy fájlt. Eszközönként a legutóbbi 2 mentés marad meg, a régebbieket a Drive kukájába teszi, ahonnan a Google általában 30 nap után törli őket.</li>
+<li>A mentés tartalma ugyanaz, mint a „Mentés fájlba” funkcióé: az appba beírt adataid és képeid. A jelszóval védett részek kibontott adata nem kerül bele.</li>
+<li>A Google rövid ideig (kb. 1 óráig) érvényes hozzáférési kulcsot ad, amelyet az app csak a te készülékeden tárol. A jelszavadat az app nem látja.</li>
+<li>A Drive-ból kapott adatokat az app kizárólag a mentés és a visszatöltés céljára használja. Nem továbbítja harmadik félnek, nem használja hirdetésre, és senki nem olvassa el.</li>
+</ul>
+<p>A Pocket Theatre a Google API-kból kapott adatok használatánál betartja a <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener">Google API Services User Data Policy</a> előírásait, beleértve a Limited Use követelményeket.</p>
+<p class="mu">Pocket Theatre's use and transfer of information received from Google APIs adheres to the Google API Services User Data Policy, including the Limited Use requirements.</p>
+<p><strong>Leválasztás:</strong> a Beállításokban a „Leválasztás” linkkel bármikor megszüntetheted a kapcsolatot. Ekkor az app visszavonja az engedélyt, és ha kéred, a mentéseket a Drive kukájába teszi. A hozzáférést a Google-fiókod biztonsági beállításainál is visszavonhatod.</p>
+
+<h2>Külső szolgáltatások</h2>
+<ul>
+<li><strong>GitHub Pages</strong> tárolja az alkalmazást, és a <strong>GitHub</strong> szolgálja ki a Győri Nemzeti Színház nyilvános műsorából készült műsorlistát. Mint minden weboldalnál, a szerver a kéréshez látja az IP-címedet.</li>
+<li>Betűtípusok és programkönyvtárak: Google Fonts, jsDelivr, cdnjs.</li>
+<li>A „Naptárba” gomb Androidon a Google Naptárt nyitja meg kitöltve; a mentésről ott te döntesz.</li>
+<li>Az MA web remote a helyi hálózaton, a megadott IP-címen fut, az app ehhez semmit nem küld máshova.</li>
+</ul>
+
+<h2>Kapcsolat</h2>
+<p>Kérdés vagy kérés esetén a projekt GitHub-oldalán lehet jelezni: <a href="https://github.com/disabledbread/pocket.theatre.io" target="_blank" rel="noopener">github.com/disabledbread/pocket.theatre.io</a>.</p>
+
+<hr>
+<p class="mu">Ha a tájékoztató változik, a fenti dátum is frissül. <a href="./">Vissza az apphoz</a></p>
+</main>
+</body>
+</html>
