@@ -308,6 +308,7 @@ function go(id){
  $("newShow").style.display=id==="v-shows"?"":"none";
  /* a Beállítások az Egyebek fejlécében, fogaskerékként érhető el; a kettő közötti váltás animált */
  $("gear").style.display=id==="v-misc"?"":"none";
+ $("scan").style.display=id==="v-rig"?"":"none";
  const anim=(el,c)=>{el.classList.remove(c);void el.offsetWidth;el.classList.add(c)};
  if(prev==="v-misc"&&id==="v-set")anim($("back"),"pop");
  if(prev==="v-set"&&id==="v-misc")anim($("gear"),"in");
@@ -323,7 +324,7 @@ function go(id){
 /* telefonos vissza (Android gesztus és gomb): az appon belül lép vissza, és csak a Konzolról lép ki.
    Ehhez egy őrző előzmény-bejegyzés kell, amíg nem a sima Konzolon vagyunk. */
 const navCur=()=>{const v=document.querySelector(".view.on");return v?v.id:"v-console"};
-const navOverlay=()=>$("dlg").classList.contains("on")||$("lb").classList.contains("on")||$("rm").classList.contains("full")||$("mp").classList.contains("full");
+const navOverlay=()=>$("dlg").classList.contains("on")||$("shr").classList.contains("on")||$("scn").classList.contains("on")||$("lb").classList.contains("on")||$("rm").classList.contains("full")||$("mp").classList.contains("full");
 function navSync(){
  const need=navCur()!=="v-console"||navOverlay(),has=!!(history.state&&history.state.pt);
  if(need&&!has)history.pushState({pt:1},"");
@@ -332,6 +333,8 @@ function navSync(){
 window.addEventListener("popstate",()=>{
  if(navSync.skip){navSync.skip=false;return}
  if($("dlg").classList.contains("on"))$("dno").click();
+ else if($("scn").classList.contains("on"))scanClose();
+ else if($("shr").classList.contains("on"))shrClose();
  else if($("lb").classList.contains("on"))closeLb();
  else if($("rm").classList.contains("full"))setFull(false);
  else if($("mp").classList.contains("full"))setMapFull(false);
@@ -583,10 +586,11 @@ function msMai(){if(!MU)return [];const td=today(),o=[];Object.keys(MU.szinpadok
 
 /* ---- színpad: előadásonként mi mire van dugva ---- */
 const RO=new Set();
+const SH_ICON='<svg class="i" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>';
 function renderRig(){
  /* a mai előadással egyező mentett előadás kerül legfelülre, kiemelve */
  const mai=msMai(),L=S.rigs.map(r=>({r,h:mai.find(t=>msEgyezik(r.n,t.cim))}));
- $("rigl").innerHTML=L.filter(x=>x.h).concat(L.filter(x=>!x.h)).map(({r,h})=>`<details class="fg${h?" msrig":""}" data-rg="${r.id}" ${RO.has(String(r.id))?"open":""}><summary>${CHEV}<b>${esc(r.n)}</b>${h?`<span class="tp msma">MA ${esc(h.kezdes?h.kezdes+" · ":"")}${esc(h.sz)}</span>`:""}<span class="tp">${r.items.length} tétel</span><span class="gr"></span><button class="btn sm" data-rr="${r.id}">✎</button><button class="btn sm dg" data-rx="${r.id}">✕</button></summary>
+ $("rigl").innerHTML=L.filter(x=>x.h).concat(L.filter(x=>!x.h)).map(({r,h})=>`<details class="fg${h?" msrig":""}" data-rg="${r.id}" ${RO.has(String(r.id))?"open":""}><summary>${CHEV}<b>${esc(r.n)}</b>${h?`<span class="tp msma">MA ${esc(h.kezdes?h.kezdes+" · ":"")}${esc(h.sz)}</span>`:""}<span class="tp">${r.items.length} tétel</span><span class="gr"></span><button class="btn sm" data-rsh="${r.id}" aria-label="Megosztás" title="Megosztás">${SH_ICON}</button><button class="btn sm" data-rr="${r.id}">✎</button><button class="btn sm dg" data-rx="${r.id}">✕</button></summary>
   <div class="fgb">${r.items.map((it,i)=>`<div class="rg"><span class="n">${i+1}</span><div class="tt" data-re="${it.id}" data-of="${r.id}"><b>${esc(it.n)}</b> <span class="meta" style="margin:0">–</span> ${esc(it.w)}</div><button class="x2" data-rd="${it.id}" data-of="${r.id}">✕</button></div>`).join("")||'<p class="meta">Még nincs tétel ebben az előadásban.</p>'}
   <div class="row" style="margin-top:10px"><input data-rn="${r.id}" placeholder="Eszköz, pl. Fresnel 650 [Szín]"><input data-rw="${r.id}" placeholder="Hova van dugva, pl. Channel 88"><button class="btn pr a" data-ra="${r.id}">Hozzáad</button></div></div></details>`).join("")||'<div class="card"><p class="meta" style="text-align:center">Még nincs mentett előadás.</p></div>';
 }
@@ -594,8 +598,9 @@ const fr=id=>S.rigs.find(r=>String(r.id)===String(id));
 $("ga").onclick=()=>{const n=$("gn2").value.trim();if(!n){toast("Adj nevet");return}const r={id:uid(),n,items:[]};S.rigs.push(r);RO.add(String(r.id));save();$("gn2").value="";renderRig()};
 $("rigl").addEventListener("toggle",e=>{const d=e.target;if(d.dataset&&d.dataset.rg){d.open?RO.add(d.dataset.rg):RO.delete(d.dataset.rg)}},true);
 $("rigl").addEventListener("click",async e=>{
- const t=e.target.closest("[data-rr],[data-rx],[data-ra],[data-re],[data-rd]");if(!t)return;
+ const t=e.target.closest("[data-rr],[data-rx],[data-ra],[data-re],[data-rd],[data-rsh]");if(!t)return;
  const d=t.dataset;
+ if(d.rsh){e.preventDefault();rigShare(fr(d.rsh));return}
  if(d.rr){e.preventDefault();const r=fr(d.rr),n=await askText("Előadás új neve:",r.n);if(n&&n.trim()){r.n=n.trim();save();renderRig()}}
  else if(d.rx){e.preventDefault();if(await ask("Törlöd ezt az előadást a tételeivel?")){S.rigs=S.rigs.filter(r=>String(r.id)!==d.rx);save();renderRig()}}
  else if(d.ra){const a=document.querySelector(`[data-rn="${d.ra}"]`),b=document.querySelector(`[data-rw="${d.ra}"]`),n=a.value.trim();if(!n){toast("Add meg az eszközt");return}
@@ -605,6 +610,93 @@ $("rigl").addEventListener("click",async e=>{
 });
 $("rigl").addEventListener("keydown",e=>{if(e.key==="Enter"&&(e.target.dataset.rn||e.target.dataset.rw)){const id=e.target.dataset.rn||e.target.dataset.rw;document.querySelector(`[data-ra="${id}"]`).click()}});
 renderRig();
+
+/* ---- színpad-megosztás: szerver nélkül, az előadás tömörítve egy linkben vagy QR-kódban utazik; a fogadó a Színpad fejlécében olvassa be ---- */
+const QR_LIB="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js",SCAN_LIB="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js";
+function libLoad(src){
+ libLoad.c=libLoad.c||{};
+ return libLoad.c[src]=libLoad.c[src]||new Promise((res,rej)=>{const s=document.createElement("script");s.src=src;s.onload=res;s.onerror=()=>{delete libLoad.c[src];rej(new Error("offline"))};document.head.appendChild(s)});
+}
+const b64u=b=>{let s="";for(let i=0;i<b.length;i+=32768)s+=String.fromCharCode(...b.subarray(i,i+32768));return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")};
+const unb64u=s=>Uint8Array.from(atob(s.replace(/-/g,"+").replace(/_/g,"/")),c=>c.charCodeAt(0));
+async function rigPack(r){
+ const j=JSON.stringify({v:1,n:r.n,i:r.items.map(x=>[x.n,x.w||""])});
+ return b64u(new Uint8Array(await new Response(new Blob([j]).stream().pipeThrough(new CompressionStream("deflate-raw"))).arrayBuffer()));
+}
+async function rigUnpack(code){
+ const d=JSON.parse(await new Response(new Blob([unb64u(code)]).stream().pipeThrough(new DecompressionStream("deflate-raw"))).text());
+ const ok=d&&d.v===1&&typeof d.n==="string"&&d.n.length<=120&&Array.isArray(d.i)&&d.i.length<=1000&&d.i.every(x=>Array.isArray(x)&&x.length===2&&x.every(s=>typeof s==="string"&&s.length<=300));
+ if(!ok)throw new Error("rossz adat");
+ return {n:d.n.trim()||"Megosztott előadás",items:d.i};
+}
+const rigLink=code=>location.href.split("#")[0]+"#rig="+code;
+const rigCode=t=>{const m=String(t||"").match(/#rig=([A-Za-z0-9_-]+)/);return m?m[1]:null};
+/* ha már van ilyen nevű előadás, a megosztott egy (2), (3)… végződést kap, így semmi nem íródik felül */
+function rigUniqueName(n){if(!S.rigs.some(r=>r.n===n))return n;let i=2;while(S.rigs.some(r=>r.n===`${n} (${i})`))i++;return `${n} (${i})`}
+async function rigReceive(code){
+ let d;try{d=await rigUnpack(code)}catch(e){toast("Ez nem érvényes Pocket Theatre megosztás");return}
+ if(!await ask(`Hozzáadod a Színpadhoz?\n\n${d.n} (${d.items.length} tétel)`,"Hozzáadás",false))return;
+ const n=rigUniqueName(d.n),r={id:uid(),n,items:d.items.map(([a,b])=>({id:uid(),n:a,w:b}))};
+ S.rigs.push(r);RO.add(String(r.id));save();go("v-rig");renderRig();
+ toast(n===d.n?"Hozzáadva":`Hozzáadva „${n}” néven`);
+}
+let shrLink="",shrName="";
+async function rigShare(r){
+ shrName=r.n;shrLink=rigLink(await rigPack(r));
+ $("shrt").textContent=r.n;$("shrq").innerHTML='<p class="meta" style="margin:20px 0">QR-kód betöltése…</p>';$("shr").classList.add("on");
+ /* egy QR-kódba kb. 2,3 ezer karakter fér kényelmesen beolvasható sűrűséggel; a nagyobbat linkként kell küldeni */
+ if(shrLink.length>2300){$("shrq").innerHTML='<p class="meta" style="margin:20px 0;color:#6b7280">Ez az előadás túl nagy a QR-kódhoz, küldd linkként.</p>';return}
+ try{await libLoad(QR_LIB);const q=qrcode(0,"L");q.addData(shrLink);q.make();$("shrq").innerHTML=q.createSvgTag({cellSize:4,margin:4,scalable:true})}
+ catch(e){$("shrq").innerHTML='<p class="meta" style="margin:20px 0;color:#6b7280">A QR-kódhoz egyszer internet kell, linkként viszont most is elküldheted.</p>'}
+}
+const shrClose=()=>$("shr").classList.remove("on");
+$("shrx").onclick=shrClose;
+$("shr").onclick=e=>{if(e.target===$("shr"))shrClose()};
+$("shrs").onclick=async()=>{
+ if(navigator.share){try{await navigator.share({title:"Pocket Theatre – "+shrName,text:shrName+" (Színpad-mentés a Pocket Theatre-ből)",url:shrLink})}catch(e){if(e.name!=="AbortError"){copy(shrLink);toast("Link másolva")}}}
+ else{copy(shrLink);toast("Link másolva, illeszd be az üzenetbe")}
+};
+/* beolvasás a kamerával (az iPhone böngészője magától nem ismeri fel a QR-kódot, ezért kell hozzá a jsQR) */
+let scStream=null,scRun=false;
+async function scanOpen(){
+ $("scn").classList.add("on");$("scnm").textContent="Kamera indítása…";
+ try{
+  await libLoad(SCAN_LIB);
+  scStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"},audio:false});
+  const v=$("scnv");v.srcObject=scStream;await v.play();
+  $("scnm").textContent="Irányítsd a kamerát a másik telefon QR-kódjára.";scRun=true;scanLoop();
+ }catch(e){$("scnm").textContent=e.message==="offline"?"Az első beolvasáshoz internet kell.":"Nem sikerült elindítani a kamerát. Engedélyezd a kamerát az appnak, vagy illeszd be a kapott linket."}
+}
+function scanClose(){scRun=false;if(scStream)scStream.getTracks().forEach(t=>t.stop());scStream=null;$("scnv").srcObject=null;$("scn").classList.remove("on")}
+function scanLoop(){
+ if(!scRun)return;
+ const v=$("scnv");
+ if(v.readyState>=2&&v.videoWidth){
+  const c=scanLoop.c||(scanLoop.c=document.createElement("canvas")),w=c.width=Math.min(640,v.videoWidth),h=c.height=Math.round(v.videoHeight*w/v.videoWidth),x=c.getContext("2d",{willReadFrequently:true});
+  x.drawImage(v,0,0,w,h);
+  const q=jsQR(x.getImageData(0,0,w,h).data,w,h,{inversionAttempts:"dontInvert"});
+  if(q){const code=rigCode(q.data);if(code){scanClose();rigReceive(code);return}$("scnm").textContent="Ez nem Pocket Theatre QR-kód."}
+ }
+ setTimeout(()=>requestAnimationFrame(scanLoop),120);
+}
+$("scan").onclick=scanOpen;
+$("scnx").onclick=scanClose;
+$("scnp").onclick=async()=>{scanClose();const t=await askText("Illeszd be a kapott linket:","");if(t===null)return;const code=rigCode(t);if(code)rigReceive(code);else toast("Ebben nincs Pocket Theatre megosztás")};
+/* megosztott link megnyitása: iPhone-on a link a böngészőben nyílik, nem a kezdőképernyős appban, és a kettő külön tárol */
+/* betöltéskor és akkor is, ha a link a már nyitott appban nyílik meg (ilyenkor csak a link vége változik) */
+function rigFromHash(){
+ const code=rigCode(location.hash);if(!code)return;
+ history.replaceState(history.state,"",location.pathname+location.search);
+ const iOS=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1),app=matchMedia("(display-mode: standalone)").matches||navigator.standalone;
+ if(iOS&&!app){
+  ask("Ez a megosztott előadás a böngészőben nyílt meg, nem az appban, és iPhone-on a kettő külön tárolja az adatokat.\n\nHa az appba szeretnéd, másold ki a linket, és az appban a Színpad fejlécében a beolvasás ikon → „Link beillesztése”.","Link másolása",false)
+   .then(ok=>{if(ok){copy(rigLink(code));toast("Link másolva")}else rigReceive(code)});
+  return;
+ }
+ rigReceive(code);
+}
+rigFromHash();
+window.addEventListener("hashchange",rigFromHash);
 musorLoad();
 
 /* ---- gépállás: előadás > lámpák (hova néz, képek) ---- */
@@ -1032,7 +1124,13 @@ function renderVil(){
  }
  $("vpan").innerHTML=h;
 }
+/* színpadválasztó: egyelőre csak a Nagyszínpad rendszere van meg, a Kisfaludy és a Pódium később kerül be */
+let sysStage="nagy";
+$("vstage").onchange=()=>{sysStage=$("vstage").value;renderSys()};
 function renderSys(){
+ const van=sysStage==="nagy";
+ $("sysempty").style.display=van?"none":"";$("sysseg").style.display=van?"":"none";
+ if(!van){$("sys-vez").style.display=$("sys-tiri").style.display="none";return}
  document.querySelectorAll("#sysseg button").forEach(b=>b.classList.toggle("on",b.dataset.sys===sysTab));
  $("sys-vez").style.display=sysTab==="vez"?"":"none";$("sys-tiri").style.display=sysTab==="tiri"?"":"none";
  if(sysTab==="tiri"){$("tq").value="";renderTiri()}else renderVil();
