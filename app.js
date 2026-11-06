@@ -896,7 +896,21 @@ const LOCK={"":()=>!TI,map:()=>!MAP,patch:()=>!S.nszSeed,vil:()=>!VIL};
 const VK="lt-vil";
 let VIL=null;try{VIL=JSON.parse(localStorage.getItem(VK))}catch(e){}
 let sysTab="vez",vTab="kep",vLine="01",vDev=null;
-const V_ICON={konzol:"🎛️",halozat:"🌐",node:"🗣️",splitter:"🔀",dimmer:"🎚️",direkt:"⚡",panel:"🔘",patch:"🧩",atvezeto:"📦",ado:"📡",lampa:"💡",vegpont:"🔌"};
+/* vonalas ikonok (az app többi ikonjával azonos stílusban) a készüléktípusokhoz */
+const V_PATH={konzol:'<line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/>',
+ halozat:'<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+ node:'<rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/>',
+ splitter:'<circle cx="4" cy="12" r="2"/><path d="M6 12h4M10 12l5-6h6M10 12h11M10 12l5 6h6"/>',
+ dimmer:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+ direkt:'<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+ panel:'<rect x="1" y="5" width="22" height="14" rx="7"/><circle cx="16" cy="12" r="3"/>',
+ patch:'<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>',
+ atvezeto:'<path d="M21 16V8a2 2 0 0 0-1-1.7l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.7l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.3 7 12 12 20.7 7"/><line x1="12" y1="22" x2="12" y2="12"/>',
+ ado:'<circle cx="12" cy="12" r="2"/><path d="M16.2 7.8a6 6 0 0 1 0 8.5M7.8 16.2a6 6 0 0 1 0-8.5M19.1 4.9a10 10 0 0 1 0 14.1M4.9 19.1a10 10 0 0 1 0-14.1"/>',
+ lampa:'<path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/>',
+ vegpont:'<path d="M9 2v6M15 2v6M6 8h12v4a6 6 0 0 1-12 0z"/><line x1="12" y1="18" x2="12" y2="22"/>',
+ figy:'<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>'};
+const vIco=(t,c)=>V_PATH[t]?`<svg class="i ${c||"vi"}" viewBox="0 0 24 24">${V_PATH[t]}</svg>`:"";
 const V_TABS=[["kep","Nagy kép"],["helyek","Mi hol van?"],["vonalak","Vonalak"],["kabel","Kábelkereső"],["cimke","Címke"],["szotar","Szótár"]];
 /* gyorsítótárazott keresőtáblák, amíg ugyanaz az adatváltozat van megnyitva */
 function vx(){
@@ -911,7 +925,7 @@ const vSfx=n=>{n=parseInt(n,10);if(n===0)return"-s";const l=n%10;if(l)return"-"+
 const vPortTxt=p=>!p?"":p==="DMXin"?"DMX bemenet":p==="DMXout"?"DMX kimenet (továbbvezetés)":/^E\d+$/.test(p)?p+" hálózati port":/^LAN/.test(p)?p+" port":/^[A-H]$/.test(p)?p+" kimenet":/^\d+$/.test(p)?p+vSfx(p)+" aljzat":"„"+p+"” aljzat";
 const vDevName=id=>{const k=vx().DEV[id];return k?k.nev:id};
 const vDevPort=(d,p)=>{const k=vx().DEV[d],o=k&&k.kijelzo&&k.kijelzo.portok&&k.kijelzo.portok[p]||"";return /^IN/.test(o)?p+" bemenet":vPortTxt(p)};
-const vDevLine=e=>{const[d,p]=vSplit(e),k=vx().DEV[d];return `${V_ICON[k&&k.tipus]||""} <b>${esc(vDevName(d))}</b>${d.startsWith("=")?` <span class="meta" style="margin:0">${esc(d)}</span>`:""}${p?" – "+esc(vDevPort(d,p)):""}`};
+const vDevLine=e=>{const[d,p]=vSplit(e),k=vx().DEV[d];return `${vIco(k&&k.tipus)} <b>${esc(vDevName(d))}</b>${d.startsWith("=")?` <span class="meta" style="margin:0">${esc(d)}</span>`:""}${p?" – "+esc(vDevPort(d,p)):""}`};
 const vHely=e=>{const X=vx(),k=X.DEV[vSplit(e)[0]];return k&&X.HELY[k.hely]?X.HELY[k.hely].nev:""};
 function vCable(c){
  const X=vx();
@@ -919,14 +933,14 @@ function vCable(c){
  <h2><span class="vcab">${c.szam}</span>${c.fajta==="halozat"?"Hálózati kábel (CAT6)":c.vonal?`DMX kábel – .${c.vonal} ${esc(X.LINE[c.vonal].nev)}`:"DMX kábel – tartalék, nincs vonalszáma"}</h2>
  <div class="vconn"><span class="meta" style="margin:0">Egyik vége:</span><span>${vDevLine(c.honnan)} <span class="meta" style="margin:0">(${esc(vHely(c.honnan))})</span></span>
  <span class="meta" style="margin:0">Másik vége:</span><span>${vDevLine(c.hova)} <span class="meta" style="margin:0">(${esc(vHely(c.hova))})</span></span></div>
- ${c.megjegyzes?`<p class="sub" style="margin:6px 0 0">${esc(c.megjegyzes)}</p>`:""}${c.kerdes?`<p class="sub" style="margin:6px 0 0">⚠ ${esc(c.kerdes)}</p>`:""}</div>`;
+ ${c.megjegyzes?`<p class="sub" style="margin:6px 0 0">${esc(c.megjegyzes)}</p>`:""}${c.kerdes?`<p class="sub" style="margin:6px 0 0">${vIco("figy","vi vw")} ${esc(c.kerdes)}</p>`:""}</div>`;
 }
 /* egy vonal fája: a kábel végén lévő készülékből ugyanazon a vonalon továbbmenő kábelek (az átvezető dobozoknál a párosított aljzaton) */
 function vKids(cab){const X=vx(),[d,p]=vSplit(cab.hova);return X.D.kabelek.filter(k=>k.vonal===cab.vonal&&k!==cab&&vSplit(k.honnan)[0]===d&&(!X.PASS[d]||!X.PASS[d][p]||vSplit(k.honnan)[1]===X.PASS[d][p]))}
 function vLi(cab,depth){
  const X=vx(),[d,p]=vSplit(cab.hova),k=X.DEV[d]||{},ch=depth<8?vKids(cab):[];
  const pass=X.PASS[d]&&X.PASS[d][p]?` · ${p}${vSfx(p)} aljzaton be, ${X.PASS[d][p]}${vSfx(X.PASS[d][p])} aljzaton ki`:"";
- return `<li><span class="vcab">${cab.szam}</span><span class="vnode">${V_ICON[k.tipus]||""} <b>${esc(vDevName(d))}</b><small>${esc(X.HELY[k.hely]?X.HELY[k.hely].nev:"")}${d.startsWith("=")?" · "+esc(d):""}${p&&!pass?" · "+esc(vPortTxt(p)):""}${pass}${k.db?` · ${k.db} db ${esc(k.lampak)}`:""}</small></span>${ch.length?`<ul>${ch.map(c=>vLi(c,depth+1)).join("")}</ul>`:""}</li>`;
+ return `<li><span class="vcab">${cab.szam}</span><span class="vnode">${vIco(k.tipus)} <b>${esc(vDevName(d))}</b><small>${esc(X.HELY[k.hely]?X.HELY[k.hely].nev:"")}${d.startsWith("=")?" · "+esc(d):""}${p&&!pass?" · "+esc(vPortTxt(p)):""}${pass}${k.db?` · ${k.db} db ${esc(k.lampak)}`:""}</small></span>${ch.length?`<ul>${ch.map(c=>vLi(c,depth+1)).join("")}</ul>`:""}</li>`;
 }
 /* kábelcímke-olvasó; a kettőspont az elején elmaradhat (a PDF-ből másolva gyakran lemarad) */
 const V_RE=/^(?::?([^\-:=]+?))?\s*-->\s*(=?[^:\[]+?)(?:\[(\d+)\])?(?::([^.]+?))?(?:\.(\d+))?\s*-\s*(\d{3})$/;
@@ -948,7 +962,7 @@ function vLabel(s){
  let sum="";const c=X.D.kabelek.find(k=>k.szam===no);
  if(c){const hd=vSplit(c.honnan)[0],td=vSplit(c.hova)[0],near=td===devId?c.honnan:hd===devId?c.hova:null;
   sum=(near?`<b>Vagyis:</b> ez a címke itt van: ${vDevLine(near)}. A kábel másik vége: ${vDevLine(near===c.hova?c.honnan:c.hova)}.`
-   :`<b>Vagyis:</b> a ${no}${vSfx(no)} kábel ezt a kettőt köti össze: ${vDevLine(c.honnan)} és ${vDevLine(c.hova)}.`)+(c.kerdes?`<br><span class="meta" style="margin:0">⚠ ${esc(c.kerdes)}</span>`:"")}
+   :`<b>Vagyis:</b> a ${no}${vSfx(no)} kábel ezt a kettőt köti össze: ${vDevLine(c.honnan)} és ${vDevLine(c.hova)}.`)+(c.kerdes?`<br><span class="meta" style="margin:0">${vIco("figy","vi vw")} ${esc(c.kerdes)}</span>`:"")}
  return `<div class="vlab">${show.join("")}</div><ul class="vparts">${parts.map(([k,a,b])=>`<li><span class="${k}">${esc(a)}</span><span>${b}</span></li>`).join("")}</ul>${sum?`<p style="margin:12px 0 0">${sum}</p>`:""}`;
 }
 function vKabelRes(v){
@@ -960,7 +974,7 @@ function vDetail(id){
  const X=vx(),k=X.DEV[id];if(!k)return "";
  const cs=X.D.kabelek.filter(c=>vSplit(c.honnan)[0]===k.id||vSplit(c.hova)[0]===k.id);
  const kij=k.kijelzo?`<p style="margin:6px 0">A kijelzője szerint: <b>${esc(k.kijelzo.nev)}</b>, ${esc(k.kijelzo.halozat)}, IP ${esc(k.kijelzo.ip)}.<br>${Object.entries(k.kijelzo.portok).map(([p,v])=>`${p}: ${esc(v)}`).join(" · ")}</p>`:"";
- return `<div class="card vdet"><button class="vx" data-vclose aria-label="Bezárás">×</button><h2>${V_ICON[k.tipus]||""} ${esc(k.nev)} <span class="meta" style="margin:0">${k.id.startsWith("=")?esc(k.id):""}</span></h2>
+ return `<div class="card vdet"><button class="vx" data-vclose aria-label="Bezárás">×</button><h2>${vIco(k.tipus)} ${esc(k.nev)} <span class="meta" style="margin:0">${k.id.startsWith("=")?esc(k.id):""}</span></h2>
  <p class="sub" style="margin:0">${esc(X.HELY[k.hely]?X.HELY[k.hely].nev:"")}${k.modell?" · "+esc(k.modell):""}${k.db?` · ${k.db} db ${esc(k.lampak)}`:""}</p>${kij}${k.megjegyzes?`<p style="margin:6px 0">${esc(k.megjegyzes)}</p>`:""}
  <p style="margin:10px 0 6px"><b>${cs.length} kábel csatlakozik hozzá:</b></p>${cs.map(vCable).join("")}</div>`;
 }
@@ -976,18 +990,18 @@ function renderVil(){
   const facts=[[2,"GrandMA2 pult"],[3,"node"],[D.vonalak.length,"DMX vonal"],[D.kabelek.length,"számozott kábel"],[D.keszulekek.filter(k=>k.tipus==="splitter").length,"splitter"],[lampak+"+","lámpa a tartókon"]];
   h=`<div class="card t"><h2>Hogyan jut el a parancs a pulttól a lámpáig?</h2><p class="sub">Minden fényparancs ugyanazt az utat járja be, fentről lefelé.</p>
   <div class="vflow">
-   <div class="vst"><div class="em">🎛️</div><b>Pult (2 db)</b><i>az agy</i><p>Két GrandMA2 konzol: az A-pult és a B-pult. Itt dönti el a világosító, melyik lámpa mit csináljon.</p></div>
-   <div class="vst"><div class="em">📮</div><b>Switch</b><i>a posta</i><p>A pultok parancsai hálózati kábelen jutnak el ide, és innen mennek tovább a node-okhoz.</p></div>
-   <div class="vst"><div class="em">🗣️</div><b>Node (3 db)</b><i>a tolmács</i><p>Lefordítja a hálózati jelet DMX-re, mert a lámpák ezt a nyelvet értik. Minden kimenete egy DMX vonal.</p></div>
-   <div class="vst"><div class="em">🔀</div><b>Splitter / doboz</b><i>az elosztó</i><p>A splitter egy vonalat több felé oszt szét. Az átvezető doboz csak továbbadja a jelet egy másik helyiségbe.</p></div>
-   <div class="vst"><div class="em">💡</div><b>Végpont</b><i>aki végrehajtja</i><p>Dimmerszekrény, direkt szekrény, lámpa vagy egy aljzat a csapdában, ahova lámpát lehet dugni.</p></div>
+   <div class="vst"><div class="em">${vIco("konzol","ve")}</div><b>Pult (2 db)</b><i>az agy</i><p>Két GrandMA2 konzol: az A-pult és a B-pult. Itt dönti el a világosító, melyik lámpa mit csináljon.</p></div>
+   <div class="vst"><div class="em">${vIco("halozat","ve")}</div><b>Switch</b><i>a posta</i><p>A pultok parancsai hálózati kábelen jutnak el ide, és innen mennek tovább a node-okhoz.</p></div>
+   <div class="vst"><div class="em">${vIco("node","ve")}</div><b>Node (3 db)</b><i>a tolmács</i><p>Lefordítja a hálózati jelet DMX-re, mert a lámpák ezt a nyelvet értik. Minden kimenete egy DMX vonal.</p></div>
+   <div class="vst"><div class="em">${vIco("splitter","ve")}</div><b>Splitter / doboz</b><i>az elosztó</i><p>A splitter egy vonalat több felé oszt szét. Az átvezető doboz csak továbbadja a jelet egy másik helyiségbe.</p></div>
+   <div class="vst"><div class="em">${vIco("lampa","ve")}</div><b>Végpont</b><i>aki végrehajtja</i><p>Dimmerszekrény, direkt szekrény, lámpa vagy egy aljzat a csapdában, ahova lámpát lehet dugni.</p></div>
   </div>
   <div class="vfacts">${facts.map(([n,t])=>`<div class="vfact"><b>${n}</b><span>${t}</span></div>`).join("")}</div></div>
   <div class="vwarn">${esc(D.meta.megjegyzes_a_rajzrol)} Forrás: ${esc(D.meta.keszitette)} rajza (${esc(D.meta.rajz_datuma)}).</div>`;
  }
  else if(vTab==="helyek"){
   h=`<p class="sub">Helyiségenként az összes készülék. Koppints egyre, és megmutatja, mi jön bele és mi megy ki belőle.</p><div id="vdet">${vDev?vDetail(vDev):""}</div>
-  <div class="vplaces">${D.helyek.map(p=>`<div class="card"><h2>${esc(p.nev)}</h2><p class="sub" style="margin:0 0 6px">${esc(p.leiras)}</p>${D.keszulekek.filter(k=>k.hely===p.id).map(k=>`<button class="vchip${k.id===vDev?" on":""}" data-vd="${esc(k.id)}">${V_ICON[k.tipus]||""} ${esc(k.nev)}</button>`).join("")}</div>`).join("")}</div>`;
+  <div class="vplaces">${D.helyek.map(p=>`<div class="card"><h2>${esc(p.nev)}</h2><p class="sub" style="margin:0 0 6px">${esc(p.leiras)}</p>${D.keszulekek.filter(k=>k.hely===p.id).map(k=>`<button class="vchip${k.id===vDev?" on":""}" data-vd="${esc(k.id)}">${vIco(k.tipus)} ${esc(k.nev)}</button>`).join("")}</div>`).join("")}</div>`;
  }
  else if(vTab==="vonalak"){
   const v=X.LINE[vLine],[sd,sp]=vSplit(v.forras),node=X.DEV[sd],start=D.kabelek.filter(k=>k.honnan===v.forras),ins=D.kabelek.filter(k=>k.vonal===vLine&&vSplit(k.hova)[0]===sd);
@@ -995,7 +1009,7 @@ function renderVil(){
   <div class="vlines">${D.vonalak.map(l=>`<button class="${l.id===vLine?"on":""}" data-vl="${l.id}" style="--c:${vColor(l.id)}">.${l.id} ${esc(l.nev)}</button>`).join("")}</div>
   <div class="card" style="--c:${vColor(vLine)}"><h2><span class="vdot"></span>.${vLine} – ${esc(v.nev)}</h2>
   <p class="sub">A pultban: ${v.univerzum}. univerzum. Indul: ${esc(node.nev)} (${esc(sd)}), ${esc(sp)} kimenet.</p>
-  <ul class="vtree"><li><span class="vnode">🗣️ <b>${esc(node.nev)}</b><small>${esc(X.HELY[node.hely].nev)} · ${esc(sd)} · ${esc(sp)} kimenet</small></span><ul>${start.map(c=>vLi(c,0)).join("")}</ul></li></ul>
+  <ul class="vtree"><li><span class="vnode">${vIco("node")} <b>${esc(node.nev)}</b><small>${esc(X.HELY[node.hely].nev)} · ${esc(sd)} · ${esc(sp)} kimenet</small></span><ul>${start.map(c=>vLi(c,0)).join("")}</ul></li></ul>
   ${ins.map(c=>`<p class="sub" style="margin:10px 0 0">↩ Erre a vonalra be is jön jel: <span class="vcab">${c.szam}</span> ${vDevLine(c.honnan)} → ${vDevLine(c.hova)}. ${esc(c.megjegyzes||"")}</p>`).join("")}</div>`;
  }
  else if(vTab==="kabel"){

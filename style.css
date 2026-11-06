@@ -225,10 +225,10 @@ tr.g.op .chev{transform:rotate(90deg)}
 .vwarn{background:var(--prebg);color:var(--pre);border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:14px}
 .vflow{display:grid;gap:16px;margin-bottom:14px}
 .vst{background:var(--pn);border:1px solid var(--bd);border-top:4px solid var(--teal);border-radius:10px;padding:12px;position:relative}
-.vst .em{font-size:26px;line-height:1}.vst b{display:block;margin-top:6px}
+.vst .em{line-height:1}.vi{width:16px;height:16px;vertical-align:-3px;color:var(--teal)}.vi.vw{color:var(--pre)}svg.ve{width:28px;height:28px;color:var(--teal)}.vst b{display:block;margin-top:6px}
 .vst i{display:block;font-style:normal;color:var(--teal);font-weight:600;font-size:13px;margin:2px 0 6px}.vst p{margin:0;font-size:13px;color:var(--mu)}
-.vst:not(:last-child)::after{content:"⬇";position:absolute;left:50%;bottom:-16px;transform:translateX(-50%);color:var(--mu);font-size:13px}
-@media(min-width:900px){.vflow{grid-template-columns:repeat(5,1fr);gap:12px}.vst:not(:last-child)::after{content:"➜";left:auto;right:-12px;top:50%;bottom:auto;transform:translateY(-50%)}}
+.vst:not(:last-child)::after{content:"↓";position:absolute;left:50%;bottom:-16px;transform:translateX(-50%);color:var(--mu);font-size:13px}
+@media(min-width:900px){.vflow{grid-template-columns:repeat(5,1fr);gap:12px}.vst:not(:last-child)::after{content:"→";left:auto;right:-12px;top:50%;bottom:auto;transform:translateY(-50%)}}
 .vfacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
 .vfact{background:var(--nbg);border-radius:10px;padding:10px 12px}.vfact b{display:block;font-size:22px;color:var(--navy)}.vfact span{font-size:12px;color:var(--mu)}
 .vplaces{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}.vplaces .card{margin:0}
