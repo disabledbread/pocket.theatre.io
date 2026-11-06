@@ -1,0 +1,192 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Pocket Theatre//Musor//HU
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Pocket Theatre – Padlásszínház
+X-WR-TIMEZONE:Europe/Budapest
+REFRESH-INTERVAL;VALUE=DURATION:PT6H
+X-PUBLISHED-TTL:PT6H
+BEGIN:VTIMEZONE
+TZID:Europe/Budapest
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+TZNAME:CEST
+DTSTART:19700329T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+TZNAME:CET
+DTSTART:19701025T030000
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:0e6afa2d286bc104e98a@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261002T193000
+DTEND;TZID=Europe/Budapest:20261002T223000
+SUMMARY:RÉV ➲ 20ÉV FESZTIVÁL: IRINA
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:
+END:VEVENT
+BEGIN:VEVENT
+UID:7cdeb6c9f250968c9315@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261011T193000
+DTEND;TZID=Europe/Budapest:20261011T223000
+SUMMARY:152 lépés Auschwitz felé
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:Karácsony Gergely előadása
+END:VEVENT
+BEGIN:VEVENT
+UID:405bbeb1d7d34c53439a@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261016T193000
+DTEND;TZID=Europe/Budapest:20261016T223000
+SUMMARY:Szorongó vigyorgó
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:Posonyi Takács László előadása · bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:8a0d69ec9dceb238a306@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261020T193000
+DTEND;TZID=Europe/Budapest:20261020T223000
+SUMMARY:A nagy füzet
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:f4cda19cd2664e4bde2d@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261028T193000
+DTEND;TZID=Europe/Budapest:20261028T223000
+SUMMARY:Ernie\, Hem\, Papa
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:Sárközi József előadása
+END:VEVENT
+BEGIN:VEVENT
+UID:262a3dfe38afa0f9854c@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261104T193000
+DTEND;TZID=Europe/Budapest:20261104T223000
+SUMMARY:Asszony a fronton
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:612ae1a36280867d3ec7@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261106T190000
+DTEND;TZID=Europe/Budapest:20261106T220000
+SUMMARY:Ünnepélyes megnyitó:
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:Pintér Bence\, Bakos-Kiss Gábor\, Lutter Imre
+END:VEVENT
+BEGIN:VEVENT
+UID:2fabf62905feda3b650c@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261106T191500
+DTEND;TZID=Europe/Budapest:20261106T221500
+SUMMARY:Béle\, borzalom: Radnóti-
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:verskoncert Jávori Ferenc Fegya és Lutter Imre előadásában
+END:VEVENT
+BEGIN:VEVENT
+UID:045f66a0d529375ca117@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261107T100000
+DTEND;TZID=Europe/Budapest:20261107T130000
+SUMMARY:Ünnepélyes megnyitó
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:
+END:VEVENT
+BEGIN:VEVENT
+UID:ce8fb50daf97406b8d94@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261107T103000
+DTEND;TZID=Europe/Budapest:20261107T133000
+SUMMARY:Radnóti Miklós vers- és prózamondó verseny\, a győztesek vers
+ enye
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:
+END:VEVENT
+BEGIN:VEVENT
+UID:d8aab63cdc52164c54d4@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261108T100000
+DTEND;TZID=Europe/Budapest:20261108T130000
+SUMMARY:Radnóti Miklós vers- és prózamondó verseny\, a győztesek vers
+ enye
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:
+END:VEVENT
+BEGIN:VEVENT
+UID:b78cf90c3780635f62c7@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261108T170000
+DTEND;TZID=Europe/Budapest:20261108T200000
+SUMMARY:Ünnepélyes eredményhirdetés és a Radnóti-díjak átadása
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:
+END:VEVENT
+BEGIN:VEVENT
+UID:39b71e2d3dec0a415f57@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261113T193000
+DTEND;TZID=Europe/Budapest:20261113T223000
+SUMMARY:Szorongó vigyorgó
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:Posonyi Takács László előadása · bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:8ca8ea6cfe23cfc7219c@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261115T193000
+DTEND;TZID=Europe/Budapest:20261115T223000
+SUMMARY:152 lépés Auschwitz felé
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:Karácsony Gergely előadása · bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:7584dbdeb5461bd49bf1@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261120T193000
+DTEND;TZID=Europe/Budapest:20261120T223000
+SUMMARY:Hamu vagy gyémánt?
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:Molnár Ágnes zenés előadása Cserháti Zsuzsa dalaival · r
+ egisztrációs jegy
+END:VEVENT
+BEGIN:VEVENT
+UID:544380d865fcb7b1f56b@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261125T193000
+DTEND;TZID=Europe/Budapest:20261125T223000
+SUMMARY:Belém égsz
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:RÉV Színház előadása · bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:52b5ab92dbb8982fa398@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261127T193000
+DTEND;TZID=Europe/Budapest:20261127T223000
+SUMMARY:Ernie\, Hem\, Papa
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:Sárközi József előadása
+END:VEVENT
+BEGIN:VEVENT
+UID:0c322c4add3277a24926@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261129T193000
+DTEND;TZID=Europe/Budapest:20261129T223000
+SUMMARY:Hegyen át\, vízen át
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:Szina Kinga előadása · bérletszünet
+END:VEVENT
+END:VCALENDAR

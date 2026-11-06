@@ -1,0 +1,636 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Pocket Theatre//Musor//HU
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Pocket Theatre – Kisfaludy terem · Padlásszínház
+X-WR-TIMEZONE:Europe/Budapest
+REFRESH-INTERVAL;VALUE=DURATION:PT6H
+X-PUBLISHED-TTL:PT6H
+BEGIN:VTIMEZONE
+TZID:Europe/Budapest
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+TZNAME:CEST
+DTSTART:19700329T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+TZNAME:CET
+DTSTART:19701025T030000
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:f6562b7876275e9e10af@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261003T190000
+DTEND;TZID=Europe/Budapest:20261003T220000
+SUMMARY:Még egy kört mindenkinek
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:bemutató
+END:VEVENT
+BEGIN:VEVENT
+UID:67d5ba0ced85f0ddfd2b@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261004T150000
+DTEND;TZID=Europe/Budapest:20261004T180000
+SUMMARY:Még egy kört mindenkinek
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Sipka A
+END:VEVENT
+BEGIN:VEVENT
+UID:40db136351212fbd1e99@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261006T100000
+DTEND;TZID=Europe/Budapest:20261006T130000
+SUMMARY:Líra és Epika
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Sulibérlet G
+END:VEVENT
+BEGIN:VEVENT
+UID:6788c27b3a4d909c55eb@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261006T123000
+DTEND;TZID=Europe/Budapest:20261006T153000
+SUMMARY:Líra és Epika
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Sulibérlet I
+END:VEVENT
+BEGIN:VEVENT
+UID:a1308ddc60b583107173@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261007T100000
+DTEND;TZID=Europe/Budapest:20261007T130000
+SUMMARY:Líra és Epika
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Sulibérlet E
+END:VEVENT
+BEGIN:VEVENT
+UID:85b26c0c0c95b01fd01a@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261007T123000
+DTEND;TZID=Europe/Budapest:20261007T153000
+SUMMARY:Líra és Epika
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Sulibérlet F
+END:VEVENT
+BEGIN:VEVENT
+UID:7a6e8310b1f6abf9de7b@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261009T190000
+DTEND;TZID=Europe/Budapest:20261009T220000
+SUMMARY:Még egy kört mindenkinek
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Várady A
+END:VEVENT
+BEGIN:VEVENT
+UID:d55dbfd52d7e3956878b@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261010T190000
+DTEND;TZID=Europe/Budapest:20261010T220000
+SUMMARY:Még egy kört mindenkinek
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Somlai A
+END:VEVENT
+BEGIN:VEVENT
+UID:ca7fb0c182c5a69ced74@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261011T093000
+DTEND;TZID=Europe/Budapest:20261011T123000
+SUMMARY:Bodó és az elvarázsolt tök története
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:7278a04ec283d3c33c20@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261011T104500
+DTEND;TZID=Europe/Budapest:20261011T134500
+SUMMARY:Színház az egész világ
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:BoDoBo Művészetért Egyesület előadásai · bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:52b9af019b013224279b@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261013T100000
+DTEND;TZID=Europe/Budapest:20261013T130000
+SUMMARY:Líra és Epika
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Sulibérlet K
+END:VEVENT
+BEGIN:VEVENT
+UID:021fe6a0dc77510e00ee@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261013T123000
+DTEND;TZID=Europe/Budapest:20261013T153000
+SUMMARY:Líra és Epika
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Sulibérlet C
+END:VEVENT
+BEGIN:VEVENT
+UID:7c933f64df6c732751b1@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261015T190000
+DTEND;TZID=Europe/Budapest:20261015T220000
+SUMMARY:Még egy kört mindenkinek
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Déryné A
+END:VEVENT
+BEGIN:VEVENT
+UID:39792d53cf005ed3394b@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261016T190000
+DTEND;TZID=Europe/Budapest:20261016T220000
+SUMMARY:Még egy kört mindenkinek
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Várady B
+END:VEVENT
+BEGIN:VEVENT
+UID:f07835dd80562aa92ed1@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261017T190000
+DTEND;TZID=Europe/Budapest:20261017T220000
+SUMMARY:Még egy kört mindenkinek
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Somlai B
+END:VEVENT
+BEGIN:VEVENT
+UID:5c9a877c217d7febe91f@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261018T110000
+DTEND;TZID=Europe/Budapest:20261018T140000
+SUMMARY:Tom Sawyer kalandjai
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:bérletszünet · módosítva
+END:VEVENT
+BEGIN:VEVENT
+UID:a9172663ece0a337d42c@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261020T100000
+DTEND;TZID=Europe/Budapest:20261020T130000
+SUMMARY:Líra és Epika
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Sulibérlet P
+END:VEVENT
+BEGIN:VEVENT
+UID:171e38e22ea61c88ec9d@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261020T123000
+DTEND;TZID=Europe/Budapest:20261020T153000
+SUMMARY:Líra és Epika
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Sulibérlet H
+END:VEVENT
+BEGIN:VEVENT
+UID:88fb3f31a42ad3628747@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261021T190000
+DTEND;TZID=Europe/Budapest:20261021T220000
+SUMMARY:Boeing\, Boeing
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:be4b5d4bff4d6c66b7b4@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261022T190000
+DTEND;TZID=Europe/Budapest:20261022T220000
+SUMMARY:Még egy kört mindenkinek
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Déryné B
+END:VEVENT
+BEGIN:VEVENT
+UID:257b457afc1542ab9e27@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261024T110000
+DTEND;TZID=Europe/Budapest:20261024T140000
+SUMMARY:Tom Sawyer kalandjai
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:817056dd597de593f2c9@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261024T190000
+DTEND;TZID=Europe/Budapest:20261024T220000
+SUMMARY:Még egy kört mindenkinek
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Csengery A
+END:VEVENT
+BEGIN:VEVENT
+UID:edf11eda84454f6532dd@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261027T190000
+DTEND;TZID=Europe/Budapest:20261027T220000
+SUMMARY:Mona
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:c0501c235863c60bb35b@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261030T190000
+DTEND;TZID=Europe/Budapest:20261030T220000
+SUMMARY:Még egy kört mindenkinek
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:f3386a534e447ff969aa@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261031T190000
+DTEND;TZID=Europe/Budapest:20261031T220000
+SUMMARY:Még egy kört mindenkinek
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Csengery B
+END:VEVENT
+BEGIN:VEVENT
+UID:bc26dfb80d6cdeddec6e@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261103T190000
+DTEND;TZID=Europe/Budapest:20261103T220000
+SUMMARY:Mona
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:3a22e0a6a300247d3835@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261104T170000
+DTEND;TZID=Europe/Budapest:20261104T200000
+SUMMARY:Még egy kört mindenkinek
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Radnóti A
+END:VEVENT
+BEGIN:VEVENT
+UID:4ec1b5a72616a605a3b1@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261106T200000
+DTEND;TZID=Europe/Budapest:20261106T230000
+SUMMARY:FLÓDNI
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Improvizációs gasztroszínház · bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:a39c962dc098eb3cf520@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261107T200000
+DTEND;TZID=Europe/Budapest:20261107T230000
+SUMMARY:Grecsó Krisztián: Ott maradtok egymásnak
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Zenés könyvbemutató · bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:77f1043b473409446808@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261108T170000
+DTEND;TZID=Europe/Budapest:20261108T200000
+SUMMARY:Müller Péter: Önvallomás
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:könyvbemutató · bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:36bca13283bd7705f8d1@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261108T200000
+DTEND;TZID=Europe/Budapest:20261108T230000
+SUMMARY:Feleségek és szeretők
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Szűcs Gabi és Schell Judit zenés estje · bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:9adae3bf7f887d956de0@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261114T110000
+DTEND;TZID=Europe/Budapest:20261114T140000
+SUMMARY:Jancsi és Juliska
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:bemutató
+END:VEVENT
+BEGIN:VEVENT
+UID:74dde6cd5accf016d771@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261115T190000
+DTEND;TZID=Europe/Budapest:20261115T220000
+SUMMARY:Boeing\, Boeing
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:abceed77a9d0e48902ef@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261117T190000
+DTEND;TZID=Europe/Budapest:20261117T220000
+SUMMARY:Még egy kört mindenkinek
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:9f10c521bee5786ee1be@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261118T170000
+DTEND;TZID=Europe/Budapest:20261118T200000
+SUMMARY:Még egy kört mindenkinek
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Radnóti B
+END:VEVENT
+BEGIN:VEVENT
+UID:979bcca42b847d817f70@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261119T190000
+DTEND;TZID=Europe/Budapest:20261119T220000
+SUMMARY:Még egy kört mindenkinek
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Déryné C
+END:VEVENT
+BEGIN:VEVENT
+UID:a6529d1d6b7b5def03dc@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261120T100000
+DTEND;TZID=Europe/Budapest:20261120T130000
+SUMMARY:Jancsi és Juliska
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Sulibérlet J
+END:VEVENT
+BEGIN:VEVENT
+UID:33c4df56f8e3f7c82d58@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261120T123000
+DTEND;TZID=Europe/Budapest:20261120T153000
+SUMMARY:Jancsi és Juliska
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:SulibérletA
+END:VEVENT
+BEGIN:VEVENT
+UID:a15917ece33bd5280014@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261121T153000
+DTEND;TZID=Europe/Budapest:20261121T183000
+SUMMARY:Fonák
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:River Creative Dance Academy kortárs táncszíynházi előadá
+ sa · bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:181be0cc1f86396ba1c2@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261121T190000
+DTEND;TZID=Europe/Budapest:20261121T220000
+SUMMARY:Fonák
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:River Creative Dance Academy kortárs táncszíynházi előadá
+ sa · bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:5697f46a58be27487829@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261122T150000
+DTEND;TZID=Europe/Budapest:20261122T180000
+SUMMARY:Jancsi és Juliska
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:előadás után dedikálás a Pódiumszínpadon · bérletszün
+ et
+END:VEVENT
+BEGIN:VEVENT
+UID:6fdaf582c22963316bf3@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261124T120000
+DTEND;TZID=Europe/Budapest:20261124T150000
+SUMMARY:Édes Anna
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:
+END:VEVENT
+BEGIN:VEVENT
+UID:3e267892a323d73bf80d@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261125T100000
+DTEND;TZID=Europe/Budapest:20261125T130000
+SUMMARY:Jancsi és Juliska
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Sulibérlet D
+END:VEVENT
+BEGIN:VEVENT
+UID:0a444d648135463078c0@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261125T123000
+DTEND;TZID=Europe/Budapest:20261125T153000
+SUMMARY:Jancsi és Juliska
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Sulibérlet N
+END:VEVENT
+BEGIN:VEVENT
+UID:430fca971d081467ce18@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261126T123000
+DTEND;TZID=Europe/Budapest:20261126T153000
+SUMMARY:Líra és Epika
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Sulibérlet R
+END:VEVENT
+BEGIN:VEVENT
+UID:7f699e1e2238f057d1a9@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261127T100000
+DTEND;TZID=Europe/Budapest:20261127T130000
+SUMMARY:Líra és Epika
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Sulibérlet Q
+END:VEVENT
+BEGIN:VEVENT
+UID:b4543266d9f22a12da28@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261127T123000
+DTEND;TZID=Europe/Budapest:20261127T153000
+SUMMARY:Líra és Epika
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:Sulibérlet O
+END:VEVENT
+BEGIN:VEVENT
+UID:f0643e81a9c4be7f8dc4@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261128T150000
+DTEND;TZID=Europe/Budapest:20261128T180000
+SUMMARY:Mona
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:9d725cf89c5cfc7665ee@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261129T170000
+DTEND;TZID=Europe/Budapest:20261129T200000
+SUMMARY:Még egy kört mindenkinek
+LOCATION:Győri Nemzeti Színház\, Kisfaludy terem
+DESCRIPTION:bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:0e6afa2d286bc104e98a@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261002T193000
+DTEND;TZID=Europe/Budapest:20261002T223000
+SUMMARY:RÉV ➲ 20ÉV FESZTIVÁL: IRINA
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:
+END:VEVENT
+BEGIN:VEVENT
+UID:7cdeb6c9f250968c9315@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261011T193000
+DTEND;TZID=Europe/Budapest:20261011T223000
+SUMMARY:152 lépés Auschwitz felé
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:Karácsony Gergely előadása
+END:VEVENT
+BEGIN:VEVENT
+UID:405bbeb1d7d34c53439a@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261016T193000
+DTEND;TZID=Europe/Budapest:20261016T223000
+SUMMARY:Szorongó vigyorgó
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:Posonyi Takács László előadása · bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:8a0d69ec9dceb238a306@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261020T193000
+DTEND;TZID=Europe/Budapest:20261020T223000
+SUMMARY:A nagy füzet
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:f4cda19cd2664e4bde2d@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261028T193000
+DTEND;TZID=Europe/Budapest:20261028T223000
+SUMMARY:Ernie\, Hem\, Papa
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:Sárközi József előadása
+END:VEVENT
+BEGIN:VEVENT
+UID:262a3dfe38afa0f9854c@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261104T193000
+DTEND;TZID=Europe/Budapest:20261104T223000
+SUMMARY:Asszony a fronton
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:612ae1a36280867d3ec7@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261106T190000
+DTEND;TZID=Europe/Budapest:20261106T220000
+SUMMARY:Ünnepélyes megnyitó:
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:Pintér Bence\, Bakos-Kiss Gábor\, Lutter Imre
+END:VEVENT
+BEGIN:VEVENT
+UID:2fabf62905feda3b650c@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261106T191500
+DTEND;TZID=Europe/Budapest:20261106T221500
+SUMMARY:Béle\, borzalom: Radnóti-
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:verskoncert Jávori Ferenc Fegya és Lutter Imre előadásában
+END:VEVENT
+BEGIN:VEVENT
+UID:045f66a0d529375ca117@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261107T100000
+DTEND;TZID=Europe/Budapest:20261107T130000
+SUMMARY:Ünnepélyes megnyitó
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:
+END:VEVENT
+BEGIN:VEVENT
+UID:ce8fb50daf97406b8d94@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261107T103000
+DTEND;TZID=Europe/Budapest:20261107T133000
+SUMMARY:Radnóti Miklós vers- és prózamondó verseny\, a győztesek vers
+ enye
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:
+END:VEVENT
+BEGIN:VEVENT
+UID:d8aab63cdc52164c54d4@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261108T100000
+DTEND;TZID=Europe/Budapest:20261108T130000
+SUMMARY:Radnóti Miklós vers- és prózamondó verseny\, a győztesek vers
+ enye
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:
+END:VEVENT
+BEGIN:VEVENT
+UID:b78cf90c3780635f62c7@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261108T170000
+DTEND;TZID=Europe/Budapest:20261108T200000
+SUMMARY:Ünnepélyes eredményhirdetés és a Radnóti-díjak átadása
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:
+END:VEVENT
+BEGIN:VEVENT
+UID:39b71e2d3dec0a415f57@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261113T193000
+DTEND;TZID=Europe/Budapest:20261113T223000
+SUMMARY:Szorongó vigyorgó
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:Posonyi Takács László előadása · bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:8ca8ea6cfe23cfc7219c@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261115T193000
+DTEND;TZID=Europe/Budapest:20261115T223000
+SUMMARY:152 lépés Auschwitz felé
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:Karácsony Gergely előadása · bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:7584dbdeb5461bd49bf1@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261120T193000
+DTEND;TZID=Europe/Budapest:20261120T223000
+SUMMARY:Hamu vagy gyémánt?
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:Molnár Ágnes zenés előadása Cserháti Zsuzsa dalaival · r
+ egisztrációs jegy
+END:VEVENT
+BEGIN:VEVENT
+UID:544380d865fcb7b1f56b@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261125T193000
+DTEND;TZID=Europe/Budapest:20261125T223000
+SUMMARY:Belém égsz
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:RÉV Színház előadása · bérletszünet
+END:VEVENT
+BEGIN:VEVENT
+UID:52b5ab92dbb8982fa398@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261127T193000
+DTEND;TZID=Europe/Budapest:20261127T223000
+SUMMARY:Ernie\, Hem\, Papa
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:Sárközi József előadása
+END:VEVENT
+BEGIN:VEVENT
+UID:0c322c4add3277a24926@pocket-theatre
+DTSTAMP:20261105T175805Z
+DTSTART;TZID=Europe/Budapest:20261129T193000
+DTEND;TZID=Europe/Budapest:20261129T223000
+SUMMARY:Hegyen át\, vízen át
+LOCATION:Győri Nemzeti Színház\, Padlásszínház
+DESCRIPTION:Szina Kinga előadása · bérletszünet
+END:VEVENT
+END:VCALENDAR

@@ -1,6 +1,7 @@
 name: Napi műsorfrissítés
 
-# Naponta egyszer: a színház műsoroldalának PDF-jeiből musorlista.json a repó gyökerébe. Csak változáskor ment.
+# Naponta egyszer: a színház műsoroldalának PDF-jeiből musorlista.json a repó gyökerébe, és belőle naptár-feliratkozások
+# a naptar/ mappába. Csak változáskor ment.
 # Hiba esetén (pl. elérhetetlen oldal, nulla előadás) a régi fájl marad, és a futás pirosra vált.
 on:
   schedule:
@@ -12,6 +13,8 @@ on:
 
 permissions:
   contents: write
+  # a naptárfájlok a GitHub Pages-ről mennek ki, ezért mentés után újraépíttetjük az oldalt
+  pages: write
 
 concurrency: napi
 
@@ -26,12 +29,22 @@ jobs:
       - run: pip install -r musor/requirements.txt
       - name: Frissítés
         run: python -I musor/frissit.py musorlista.json
+      - name: Naptárak
+        run: python -I musor/naptar.py musorlista.json naptar
       - name: Mentés, ha változott
+        id: mentes
         run: |
-          git add musorlista.json
+          git add musorlista.json naptar
           if git diff --cached --quiet; then echo 'Nincs mit menteni.'; exit 0; fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git commit -m 'Műsorlista frissítése'
           git pull --rebase
           git push
+          echo 'mentve=1' >> "$GITHUB_OUTPUT"
+      # a botként mentett változás magától nem építi újra a Pages-oldalt, ezért kérjük
+      - name: Oldal újraépítése
+        if: steps.mentes.outputs.mentve == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/${{ github.repository }}/pages/builds"

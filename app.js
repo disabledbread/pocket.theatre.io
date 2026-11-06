@@ -282,10 +282,12 @@ $("thm").addEventListener("click",e=>{const b=e.target.closest("[data-th]");if(!
 renderTheme();
 
 /* ---- navigáció ---- */
-const TT={"v-console":"Konzol","v-dmx":"DMX","v-musor":"Műsor","v-shows":"Előadások","v-misc":"Egyebek","v-notes":"Jegyzetek","v-patch":"Patch sheet","v-calc":"Patch számoló","v-rig":"Színpad","v-gep":"Gépállás","v-set":"Beállítások","v-hours":"Bérkalkulátor","v-map":"Térkép","v-tiri":"Tirisztor"};
+const TT={"v-console":"Konzol","v-dmx":"DMX","v-musor":"Műsor","v-shows":"Előadások","v-misc":"Egyebek","v-notes":"Jegyzetek","v-patch":"Patch sheet","v-calc":"Patch számoló","v-rig":"Színpad","v-gep":"Gépállás","v-set":"Beállítások","v-hours":"Bérkalkulátor","v-map":"Térkép","v-sys":"Rendszer"};
 /* az Egyebek oldalai; közülük egy (alapból a Színpad) a Beállításokban választhatóan az alsó menü negyedik gombjára kerül */
-const SUBALL=["v-shows","v-notes","v-patch","v-calc","v-rig","v-gep","v-hours","v-map","v-set","v-tiri"];
-const SLOT_NEV={"v-shows":"Táj","v-notes":"Jegyzet","v-patch":"Patch","v-calc":"Számoló","v-rig":"Színpad","v-gep":"Gépállás","v-hours":"Bér","v-map":"Térkép","v-tiri":"Tirisztor"};
+const SUBALL=["v-shows","v-notes","v-patch","v-calc","v-rig","v-gep","v-hours","v-map","v-set","v-sys"];
+const SLOT_NEV={"v-shows":"Táj","v-notes":"Jegyzet","v-patch":"Patch","v-calc":"Számoló","v-rig":"Színpad","v-gep":"Gépállás","v-hours":"Bér","v-map":"Térkép","v-sys":"Rendszer"};
+/* a Tirisztor a Rendszer fül része lett: aki azt tette az alsó menübe, annak a Rendszer kerül oda */
+if(S.set.slot==="v-tiri")S.set.slot="v-sys";
 const slotId=()=>SLOT_NEV[S.set.slot]?S.set.slot:"v-rig";
 const isSub=id=>SUBALL.includes(id)&&id!==slotId();
 function renderSlot(){
@@ -297,15 +299,21 @@ function renderSlot(){
 }
 $("slt").onchange=()=>{S.set.slot=$("slt").value;save();renderSlot()};
 function go(id){
+ const prev=(document.querySelector(".view.on")||{}).id;
  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id===id));
  const root=isSub(id)?"v-misc":id;
  document.querySelectorAll(".side button").forEach(b=>b.classList.toggle("on",b.dataset.t===root));
  $("ttl").textContent=TT[id];
  $("back").style.display=isSub(id)?"":"none";
  $("newShow").style.display=id==="v-shows"?"":"none";
+ /* a Beállítások az Egyebek fejlécében, fogaskerékként érhető el; a kettő közötti váltás animált */
+ $("gear").style.display=id==="v-misc"?"":"none";
+ const anim=(el,c)=>{el.classList.remove(c);void el.offsetWidth;el.classList.add(c)};
+ if(prev==="v-misc"&&id==="v-set")anim($("back"),"pop");
+ if(prev==="v-set"&&id==="v-misc")anim($("gear"),"in");
  if(id==="v-hours")renderHours();
  if(id==="v-set")driveLoad().catch(()=>{});
- if(id==="v-tiri")$("tq").value="",renderTiri();
+ if(id==="v-sys")renderSys();
  if(id==="v-map")renderMap();
  if(id==="v-musor")renderMusor();
  if(id==="v-rig")renderRig();
@@ -499,6 +507,25 @@ function musorLoad(){
 const msSzinpadok=()=>MS_SOR.filter(s=>MU.szinpadok[s]).concat(Object.keys(MU.szinpadok).filter(s=>!MS_SOR.includes(s)));
 /* színpadonként: a mai nap, ha van ma előadás, különben a következő előadásnap */
 function msKiemelt(sz){const td=today(),nap=(MU.szinpadok[sz]||[]).map(t=>t.datum).filter(d=>d>=td).sort()[0];return {nap,ma:nap===td}}
+/* naptár-feliratkozás: a napi futás a három székhelyi színpad minden kombinációjára készít egy .ics fájlt a naptar/ mappába
+   (pl. nagyszinhaz-padlas.ics); a telefon naptára magától újraolvassa, így a módosítások és az új hónapok is megjelennek,
+   amíg le nem iratkozol. Androidon a Google Naptár veszi fel. A táj nem kerül bele. */
+const MS_FEED={"Nagyszínház":"nagyszinhaz","Kisfaludy terem":"kisfaludy","Padlásszínház":"padlas"};
+let msFeedOpen=false,msFeedSel=new Set(Object.keys(MS_FEED));
+function msFeedUrl(f){
+ const u=new URL("naptar/"+f+".ics",location.href),wc="webcal://"+u.host+u.pathname;
+ return /Android/i.test(navigator.userAgent)?"https://calendar.google.com/calendar/render?cid="+encodeURIComponent(wc):wc;
+}
+function msFeed(){
+ if(!msFeedOpen)return "";
+ const iOS=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1),and=/Android/i.test(navigator.userAgent);
+ const ki=iOS?"Leiratkozás: Naptár app → Naptárak → ⓘ → Leiratkozás.":and?"Leiratkozás: Google Naptár → Beállítások → a naptár → Leiratkozás.":"Leiratkozás a naptárprogram beállításaiban.";
+ const f=Object.keys(MS_FEED).filter(s=>msFeedSel.has(s)).map(s=>MS_FEED[s]).join("-");
+ return `<div class="msdd"><p class="sub" style="margin:0 0 8px">Jelöld be, melyik színpadok kellenek. Egyszer kell felvenni, utána a változások és az új hónapok maguktól megjelennek. Csak a végleges műsor kerül bele, az előzetes nem.</p>
+  <div class="msfd">${Object.keys(MS_FEED).map(s=>`<button class="msck${msFeedSel.has(s)?" on":""}" data-mfs="${esc(s)}">${msFeedSel.has(s)?"✓ ":""}${esc(MS_ROV[s]||s)}</button>`).join("")}</div>
+  ${f?`<a class="btn pr wide" style="margin-top:10px" href="${msFeedUrl(f)}" target="_blank" rel="noopener">Feliratkozás</a>`:'<p class="sub" style="margin:10px 0 0">Legalább egy színpadot jelölj be.</p>'}
+  <p class="sub" style="margin:8px 0 0">${ki} Ha később másik színpadokat szeretnél, a régire iratkozz le, és vedd fel az újat.</p></div>`;
+}
 const msHely=(t,sz)=>sz==="Székhelyen kívül"?(t.megjegyzes||"Tájelőadás"):"Győri Nemzeti Színház, "+sz;
 const msDatum=d=>{const x=new Date(d+"T12:00:00");return `${MS_HO[x.getMonth()]} ${x.getDate()}., ${MS_NAP[x.getDay()]}`};
 function renderMusor(){
@@ -508,20 +535,23 @@ function renderMusor(){
  if(!hs.includes(msH))msH=hs.includes(td.slice(0,7))?td.slice(0,7):hs[0];
  if(!szs.includes(msSz))msSz=szs[0];
  const L=MU.szinpadok[msSz]||[],k=msKiemelt(msSz),a=MU.honapok[msH]||{},hi=hs.indexOf(msH);
- const ev=(t,i)=>{const hl=t.datum===k.nap,tg=[t.megjegyzes&&`<i>${esc(t.megjegyzes)}</i>`,t.modositott&&'<i class="w">módosítva</i>',t.ellenorizendo&&'<i class="w">ellenőrizendő</i>'].filter(Boolean).join("");
-  return `<button class="msev${hl?(k.ma?" ma":" kov"):""}" data-ms="${i}"><span class="mst">${esc(t.kezdes||"–")}</span><span class="msd"><b>${hl?`<span class="msbg${k.ma?"":" kov"}">${k.ma?"Ma":"Következő"}</span>`:""}${esc(t.cim||"(cím nélkül)")}</b>${t.alcim?`<span class="meta">${esc(t.alcim)}</span>`:""}${tg?`<span class="mstg">${tg}</span>`:""}</span></button>`};
+ /* a premier (a kisebb színpadokon „bemutató”) nekünk főpróbahetet jelent, ezért külön színnel jelöljük */
+ const ev=(t,i)=>{const hl=t.datum===k.nap,pr=/premier|bemutat/i.test(t.megjegyzes||""),tg=[t.megjegyzes&&`<i${pr?' class="p"':""}>${esc(t.megjegyzes)}</i>`,t.modositott&&'<i class="w">módosítva</i>',t.ellenorizendo&&'<i class="w">ellenőrizendő</i>'].filter(Boolean).join("");
+  return `<button class="msev${hl?(k.ma?" ma":" kov"):""}${pr?" prem":""}" data-ms="${i}"><span class="mst">${esc(t.kezdes||"–")}</span><span class="msd"><b>${hl?`<span class="msbg${k.ma?"":" kov"}">${k.ma?"Ma":"Következő"}</span>`:""}${esc(t.cim||"(cím nélkül)")}</b>${t.alcim?`<span class="meta">${esc(t.alcim)}</span>`:""}${tg?`<span class="mstg">${tg}</span>`:""}</span></button>`};
  const kiem=!k.nap?`<h3>${esc(msSz)}: nincs több előadás a listában</h3>`:`<h3>${k.ma?"Ma · "+esc(msSz):"Ma nincs előadás · következő: "+msDatum(k.nap)}</h3>`+L.map((t,i)=>t.datum===k.nap?ev(t,i):"").join("");
  const napok=[];L.forEach((t,i)=>{if(!t.datum.startsWith(msH))return;const n=napok[napok.length-1];if(n&&n.d===t.datum)n.l.push(ev(t,i));else napok.push({d:t.datum,l:[ev(t,i)]})});
  const fr=new Date(MU.frissitve);
- B.innerHTML=`<div class="card t"><h2>Győri Nemzeti Színház</h2><p class="meta" style="margin:0">Frissítve: ${esc(isNaN(fr)?"":fr.toLocaleString("hu-HU",{dateStyle:"medium",timeStyle:"short"}))}${msOff?" · offline, az utoljára letöltött lista":""}</p>
+ B.innerHTML=`<div class="card t"><div class="msfh"><h2>Győri Nemzeti Színház</h2><button class="btn sm" data-msf>Naptárba ${msFeedOpen?"▴":"▾"}</button></div><p class="meta" style="margin:0">Frissítve: ${esc(isNaN(fr)?"":fr.toLocaleString("hu-HU",{dateStyle:"medium",timeStyle:"short"}))}${msOff?" · offline, az utoljára letöltött lista":""}</p>
   <div class="mshon"><button data-mh="${hs[hi-1]||""}" ${hi>0?"":"disabled"} aria-label="Előző hónap">‹</button><b>${msH.slice(0,4)}. ${MS_HO[+msH.slice(5)-1]}<span class="msst ${esc(a.allapot)}">${a.allapot==="elozetes"?"Előzetes":"Végleges"}</span></b><button data-mh="${hs[hi+1]||""}" ${hi<hs.length-1?"":"disabled"} aria-label="Következő hónap">›</button></div>
-  <div class="mstab">${szs.map(s=>`<button class="${s===msSz?"on":""}" data-msz="${esc(s)}" title="${esc(s)}">${esc(MS_ROV[s]||s)}</button>`).join("")}</div></div>
+  <div class="mstab">${szs.map(s=>`<button class="${s===msSz?"on":""}" data-msz="${esc(s)}" title="${esc(s)}">${esc(MS_ROV[s]||s)}</button>`).join("")}</div>${msFeed()}</div>
   <div class="msmai">${kiem}</div>
   <p class="meta msnot"><span>${a.allapot==="elozetes"?"Előzetes":"Végleges"} lista${a.kiadva?" · kiadva: "+esc(String(a.kiadva).replace(/\.+$/,".")):""}${(a.modositva||[]).length?" · módosítva: "+esc(a.modositva.join(", ")):""}</span>${a.pdf?`<a href="${esc(a.pdf)}" target="_blank" rel="noopener">Eredeti PDF</a>`:""}</p>
   ${napok.map(n=>`<div class="msday${n.d<td?" mult":""}${n.d===td?" ma":""}"><div class="msdt"><b>${+n.d.slice(8)}</b><span>${MS_NAP[new Date(n.d+"T12:00:00").getDay()]}</span></div><div class="msevs">${n.l.join("")}</div></div>`).join("")||`<p class="meta" style="text-align:center">Ebben a hónapban nincs előadás: ${esc(msSz)}.</p>`}`;
 }
 $("msb").addEventListener("click",e=>{
- const b=e.target.closest("[data-mh],[data-msz],[data-ms]");if(!b)return;
+ const b=e.target.closest("[data-mh],[data-msz],[data-ms],[data-msf],[data-mfs]");if(!b)return;
+ if(b.dataset.msf!==undefined){msFeedOpen=!msFeedOpen;renderMusor();return}
+ if(b.dataset.mfs){const s=b.dataset.mfs;msFeedSel.has(s)?msFeedSel.delete(s):msFeedSel.add(s);renderMusor();return}
  if(b.dataset.mh!==undefined){if(b.dataset.mh){msH=b.dataset.mh;renderMusor()}}
  else if(b.dataset.msz){msSz=b.dataset.msz;renderMusor()}
  else{const t=(MU.szinpadok[msSz]||[])[+b.dataset.ms];if(t)msNaptar(t,msSz)}
@@ -860,11 +890,162 @@ function renderMap(){
  if(!MAP)$("mf").removeAttribute("srcdoc");
  else if($("v-map").classList.contains("on")&&!$("mf").hasAttribute("srcdoc"))$("mf").srcdoc=MAP.html;
 }
-const LOCK={"":()=>!TI,map:()=>!MAP,patch:()=>!S.nszSeed};
+const LOCK={"":()=>!TI,map:()=>!MAP,patch:()=>!S.nszSeed,vil:()=>!VIL};
+/* ---- rendszer: a világításvezérlés (Csalogány Zsolt GYNSY rajza alapján) és a tirisztorok egy fülön ---- */
+/* a vezérlés adata is jelszóval titkosítva van a repóban (vilagitas.enc.json); megnyitás után csak ezen az eszközön marad */
+const VK="lt-vil";
+let VIL=null;try{VIL=JSON.parse(localStorage.getItem(VK))}catch(e){}
+let sysTab="vez",vTab="kep",vLine="01",vDev=null;
+const V_ICON={konzol:"🎛️",halozat:"🌐",node:"🗣️",splitter:"🔀",dimmer:"🎚️",direkt:"⚡",panel:"🔘",patch:"🧩",atvezeto:"📦",ado:"📡",lampa:"💡",vegpont:"🔌"};
+const V_TABS=[["kep","Nagy kép"],["helyek","Mi hol van?"],["vonalak","Vonalak"],["kabel","Kábelkereső"],["cimke","Címke"],["szotar","Szótár"]];
+/* gyorsítótárazott keresőtáblák, amíg ugyanaz az adatváltozat van megnyitva */
+function vx(){
+ if(vx.c&&vx.c.v===VIL.v)return vx.c;
+ const D=VIL.d,PASS={};D.atkotesek.forEach(a=>{(PASS[a.keszulek]=PASS[a.keszulek]||{})[a.be]=a.ki});
+ return vx.c={v:VIL.v,D,PASS,DEV:Object.fromEntries(D.keszulekek.map(k=>[k.id,k])),HELY:Object.fromEntries(D.helyek.map(h=>[h.id,h])),LINE:Object.fromEntries(D.vonalak.map(v=>[v.id,v]))};
+}
+const vColor=id=>id?`hsl(${(parseInt(id,10)*47)%360} 70% var(--L))`:"var(--mu)";
+const vSplit=e=>{const i=e.indexOf(":");return i<0?[e,""]:[e.slice(0,i),e.slice(i+1)]};
+/* magyar toldalék számokhoz: 1-es, 3-as, 5-ös, 6-os, 20-as, 40-es … */
+const vSfx=n=>{n=parseInt(n,10);if(n===0)return"-s";const l=n%10;if(l)return"-"+["","es","es","as","es","ös","os","es","as","es"][l];const t=n%100/10|0;if(t)return"-"+["","es","as","as","es","es","as","es","as","es"][t];return"-as"};
+const vPortTxt=p=>!p?"":p==="DMXin"?"DMX bemenet":p==="DMXout"?"DMX kimenet (továbbvezetés)":/^E\d+$/.test(p)?p+" hálózati port":/^LAN/.test(p)?p+" port":/^[A-H]$/.test(p)?p+" kimenet":/^\d+$/.test(p)?p+vSfx(p)+" aljzat":"„"+p+"” aljzat";
+const vDevName=id=>{const k=vx().DEV[id];return k?k.nev:id};
+const vDevPort=(d,p)=>{const k=vx().DEV[d],o=k&&k.kijelzo&&k.kijelzo.portok&&k.kijelzo.portok[p]||"";return /^IN/.test(o)?p+" bemenet":vPortTxt(p)};
+const vDevLine=e=>{const[d,p]=vSplit(e),k=vx().DEV[d];return `${V_ICON[k&&k.tipus]||""} <b>${esc(vDevName(d))}</b>${d.startsWith("=")?` <span class="meta" style="margin:0">${esc(d)}</span>`:""}${p?" – "+esc(vDevPort(d,p)):""}`};
+const vHely=e=>{const X=vx(),k=X.DEV[vSplit(e)[0]];return k&&X.HELY[k.hely]?X.HELY[k.hely].nev:""};
+function vCable(c){
+ const X=vx();
+ return `<div class="card" style="--c:${vColor(c.vonal)};border-left:4px solid var(--c);margin:0 0 8px">
+ <h2><span class="vcab">${c.szam}</span>${c.fajta==="halozat"?"Hálózati kábel (CAT6)":c.vonal?`DMX kábel – .${c.vonal} ${esc(X.LINE[c.vonal].nev)}`:"DMX kábel – tartalék, nincs vonalszáma"}</h2>
+ <div class="vconn"><span class="meta" style="margin:0">Egyik vége:</span><span>${vDevLine(c.honnan)} <span class="meta" style="margin:0">(${esc(vHely(c.honnan))})</span></span>
+ <span class="meta" style="margin:0">Másik vége:</span><span>${vDevLine(c.hova)} <span class="meta" style="margin:0">(${esc(vHely(c.hova))})</span></span></div>
+ ${c.megjegyzes?`<p class="sub" style="margin:6px 0 0">${esc(c.megjegyzes)}</p>`:""}${c.kerdes?`<p class="sub" style="margin:6px 0 0">⚠ ${esc(c.kerdes)}</p>`:""}</div>`;
+}
+/* egy vonal fája: a kábel végén lévő készülékből ugyanazon a vonalon továbbmenő kábelek (az átvezető dobozoknál a párosított aljzaton) */
+function vKids(cab){const X=vx(),[d,p]=vSplit(cab.hova);return X.D.kabelek.filter(k=>k.vonal===cab.vonal&&k!==cab&&vSplit(k.honnan)[0]===d&&(!X.PASS[d]||!X.PASS[d][p]||vSplit(k.honnan)[1]===X.PASS[d][p]))}
+function vLi(cab,depth){
+ const X=vx(),[d,p]=vSplit(cab.hova),k=X.DEV[d]||{},ch=depth<8?vKids(cab):[];
+ const pass=X.PASS[d]&&X.PASS[d][p]?` · ${p}${vSfx(p)} aljzaton be, ${X.PASS[d][p]}${vSfx(X.PASS[d][p])} aljzaton ki`:"";
+ return `<li><span class="vcab">${cab.szam}</span><span class="vnode">${V_ICON[k.tipus]||""} <b>${esc(vDevName(d))}</b><small>${esc(X.HELY[k.hely]?X.HELY[k.hely].nev:"")}${d.startsWith("=")?" · "+esc(d):""}${p&&!pass?" · "+esc(vPortTxt(p)):""}${pass}${k.db?` · ${k.db} db ${esc(k.lampak)}`:""}</small></span>${ch.length?`<ul>${ch.map(c=>vLi(c,depth+1)).join("")}</ul>`:""}</li>`;
+}
+/* kábelcímke-olvasó; a kettőspont az elején elmaradhat (a PDF-ből másolva gyakran lemarad) */
+const V_RE=/^(?::?([^\-:=]+?))?\s*-->\s*(=?[^:\[]+?)(?:\[(\d+)\])?(?::([^.]+?))?(?:\.(\d+))?\s*-\s*(\d{3})$/;
+const V_EX=[":B-->=02x:2.09-021",":F-->=11x[17]:DMXin.11-055",":5-->=042:DMXin.01-026",":1-->Bal Első Direkt csapda.01-027",":E3-->=014:E1-007"];
+function vLabel(s){
+ const X=vx();s=s.replace(/\s*\n\s*/g,"").trim();const m=s.match(V_RE);
+ if(!m){const no=(s.match(/-(\d{3})\s*$/)||[])[1],c=no&&X.D.kabelek.find(k=>k.szam===no);
+  return c?`<p class="sub" style="margin:12px 0 6px">A címke többi részét nem tudom szétszedni, de a végén lévő szám alapján ez a ${no}${vSfx(no)} kábel:</p>${vCable(c)}`:s?'<p class="sub" style="margin:12px 0 0">Ezt nem tudom értelmezni. A formátum: <code>:honnan-->=hova:aljzat.vonal-kábel</code></p>':""}
+ let[,fp,dv,db,tp,ln,no]=m;dv=dv.trim();
+ const lnId=ln?String(parseInt(ln,10)).padStart(2,"0"):null;
+ const devId=dv.startsWith("=")?dv.replace(/^=(\d\d)$/,"=0$1"):(X.D.keszulekek.find(k=>k.nev.toLowerCase()===dv.toLowerCase())||{}).id||dv;
+ const show=[],parts=[];
+ if(fp){show.push(`<span class="vk1">:${esc(fp)}</span>`);parts.push(["vk1",":"+fp,`Ebből az aljzatból indul (${vPortTxt(fp)} ennél a készüléknél, ahol a címke van).`])}
+ show.push('<span class="vk0">--></span>');
+ show.push(`<span class="vk2">${esc(dv)}${db?"["+db+"]":""}</span>`);parts.push(["vk2",dv,`Ide megy: <b>${esc(vDevName(devId))}</b>${db?`, rajta ${db} lámpa`:""}.`]);
+ if(tp){show.push(`<span class="vk3">:${esc(tp)}</span>`);parts.push(["vk3",":"+tp,`Annak a készüléknek ebbe az aljzatába: ${vPortTxt(tp)}.`])}
+ if(ln){show.push(`<span class="vk4">.${esc(ln)}</span>`);parts.push(["vk4","."+ln,`A ${parseInt(ln,10)}. DMX vonalon utazik: ${esc(X.LINE[lnId]?X.LINE[lnId].nev:"?")}.`])}
+ show.push(`<span class="vk5">-${esc(no)}</span>`);parts.push(["vk5","-"+no,`Ez a ${no}${vSfx(no)} kábel. A másik végén ugyanez a szám áll.`]);
+ let sum="";const c=X.D.kabelek.find(k=>k.szam===no);
+ if(c){const hd=vSplit(c.honnan)[0],td=vSplit(c.hova)[0],near=td===devId?c.honnan:hd===devId?c.hova:null;
+  sum=(near?`<b>Vagyis:</b> ez a címke itt van: ${vDevLine(near)}. A kábel másik vége: ${vDevLine(near===c.hova?c.honnan:c.hova)}.`
+   :`<b>Vagyis:</b> a ${no}${vSfx(no)} kábel ezt a kettőt köti össze: ${vDevLine(c.honnan)} és ${vDevLine(c.hova)}.`)+(c.kerdes?`<br><span class="meta" style="margin:0">⚠ ${esc(c.kerdes)}</span>`:"")}
+ return `<div class="vlab">${show.join("")}</div><ul class="vparts">${parts.map(([k,a,b])=>`<li><span class="${k}">${esc(a)}</span><span>${b}</span></li>`).join("")}</ul>${sum?`<p style="margin:12px 0 0">${sum}</p>`:""}`;
+}
+function vKabelRes(v){
+ const X=vx(),n=String(v||"").replace(/\D/g,"");if(!n)return "";
+ const c=X.D.kabelek.find(k=>k.szam===n.padStart(3,"0"));
+ return c?vCable(c):`<p class="sub" style="margin:0">Nincs ${esc(n)}${vSfx(n)} kábel a rajzon (001–068 vannak).</p>`;
+}
+function vDetail(id){
+ const X=vx(),k=X.DEV[id];if(!k)return "";
+ const cs=X.D.kabelek.filter(c=>vSplit(c.honnan)[0]===k.id||vSplit(c.hova)[0]===k.id);
+ const kij=k.kijelzo?`<p style="margin:6px 0">A kijelzője szerint: <b>${esc(k.kijelzo.nev)}</b>, ${esc(k.kijelzo.halozat)}, IP ${esc(k.kijelzo.ip)}.<br>${Object.entries(k.kijelzo.portok).map(([p,v])=>`${p}: ${esc(v)}`).join(" · ")}</p>`:"";
+ return `<div class="card vdet"><button class="vx" data-vclose aria-label="Bezárás">×</button><h2>${V_ICON[k.tipus]||""} ${esc(k.nev)} <span class="meta" style="margin:0">${k.id.startsWith("=")?esc(k.id):""}</span></h2>
+ <p class="sub" style="margin:0">${esc(X.HELY[k.hely]?X.HELY[k.hely].nev:"")}${k.modell?" · "+esc(k.modell):""}${k.db?` · ${k.db} db ${esc(k.lampak)}`:""}</p>${kij}${k.megjegyzes?`<p style="margin:6px 0">${esc(k.megjegyzes)}</p>`:""}
+ <p style="margin:10px 0 6px"><b>${cs.length} kábel csatlakozik hozzá:</b></p>${cs.map(vCable).join("")}</div>`;
+}
+function renderVil(){
+ renderLocks();
+ $("vbody").style.display=VIL?"":"none";
+ if(!VIL){$("vpan").innerHTML="";return}
+ const X=vx(),D=X.D;
+ $("vnav").innerHTML=V_TABS.map(([k,n])=>`<button class="${k===vTab?"on":""}" data-vt="${k}">${n}</button>`).join("");
+ let h="";
+ if(vTab==="kep"){
+  const lampak=D.keszulekek.reduce((s,k)=>s+(k.db||0),0);
+  const facts=[[2,"GrandMA2 pult"],[3,"node"],[D.vonalak.length,"DMX vonal"],[D.kabelek.length,"számozott kábel"],[D.keszulekek.filter(k=>k.tipus==="splitter").length,"splitter"],[lampak+"+","lámpa a tartókon"]];
+  h=`<div class="card t"><h2>Hogyan jut el a parancs a pulttól a lámpáig?</h2><p class="sub">Minden fényparancs ugyanazt az utat járja be, fentről lefelé.</p>
+  <div class="vflow">
+   <div class="vst"><div class="em">🎛️</div><b>Pult (2 db)</b><i>az agy</i><p>Két GrandMA2 konzol: az A-pult és a B-pult. Itt dönti el a világosító, melyik lámpa mit csináljon.</p></div>
+   <div class="vst"><div class="em">📮</div><b>Switch</b><i>a posta</i><p>A pultok parancsai hálózati kábelen jutnak el ide, és innen mennek tovább a node-okhoz.</p></div>
+   <div class="vst"><div class="em">🗣️</div><b>Node (3 db)</b><i>a tolmács</i><p>Lefordítja a hálózati jelet DMX-re, mert a lámpák ezt a nyelvet értik. Minden kimenete egy DMX vonal.</p></div>
+   <div class="vst"><div class="em">🔀</div><b>Splitter / doboz</b><i>az elosztó</i><p>A splitter egy vonalat több felé oszt szét. Az átvezető doboz csak továbbadja a jelet egy másik helyiségbe.</p></div>
+   <div class="vst"><div class="em">💡</div><b>Végpont</b><i>aki végrehajtja</i><p>Dimmerszekrény, direkt szekrény, lámpa vagy egy aljzat a csapdában, ahova lámpát lehet dugni.</p></div>
+  </div>
+  <div class="vfacts">${facts.map(([n,t])=>`<div class="vfact"><b>${n}</b><span>${t}</span></div>`).join("")}</div></div>
+  <div class="vwarn">${esc(D.meta.megjegyzes_a_rajzrol)} Forrás: ${esc(D.meta.keszitette)} rajza (${esc(D.meta.rajz_datuma)}).</div>`;
+ }
+ else if(vTab==="helyek"){
+  h=`<p class="sub">Helyiségenként az összes készülék. Koppints egyre, és megmutatja, mi jön bele és mi megy ki belőle.</p><div id="vdet">${vDev?vDetail(vDev):""}</div>
+  <div class="vplaces">${D.helyek.map(p=>`<div class="card"><h2>${esc(p.nev)}</h2><p class="sub" style="margin:0 0 6px">${esc(p.leiras)}</p>${D.keszulekek.filter(k=>k.hely===p.id).map(k=>`<button class="vchip${k.id===vDev?" on":""}" data-vd="${esc(k.id)}">${V_ICON[k.tipus]||""} ${esc(k.nev)}</button>`).join("")}</div>`).join("")}</div>`;
+ }
+ else if(vTab==="vonalak"){
+  const v=X.LINE[vLine],[sd,sp]=vSplit(v.forras),node=X.DEV[sd],start=D.kabelek.filter(k=>k.honnan===v.forras),ins=D.kabelek.filter(k=>k.vonal===vLine&&vSplit(k.hova)[0]===sd);
+  h=`<p class="sub">Válassz egy vonalat, és megmutatja, honnan indul és hova jut el. A kis szám a kábel száma. A vonal száma megegyezik a pultban lévő univerzum számával.</p>
+  <div class="vlines">${D.vonalak.map(l=>`<button class="${l.id===vLine?"on":""}" data-vl="${l.id}" style="--c:${vColor(l.id)}">.${l.id} ${esc(l.nev)}</button>`).join("")}</div>
+  <div class="card" style="--c:${vColor(vLine)}"><h2><span class="vdot"></span>.${vLine} – ${esc(v.nev)}</h2>
+  <p class="sub">A pultban: ${v.univerzum}. univerzum. Indul: ${esc(node.nev)} (${esc(sd)}), ${esc(sp)} kimenet.</p>
+  <ul class="vtree"><li><span class="vnode">🗣️ <b>${esc(node.nev)}</b><small>${esc(X.HELY[node.hely].nev)} · ${esc(sd)} · ${esc(sp)} kimenet</small></span><ul>${start.map(c=>vLi(c,0)).join("")}</ul></li></ul>
+  ${ins.map(c=>`<p class="sub" style="margin:10px 0 0">↩ Erre a vonalra be is jön jel: <span class="vcab">${c.szam}</span> ${vDevLine(c.honnan)} → ${vDevLine(c.hova)}. ${esc(c.megjegyzes||"")}</p>`).join("")}</div>`;
+ }
+ else if(vTab==="kabel"){
+  h=`<div class="card t"><h2>Kábelkereső</h2><p class="sub">Írd be a kábel számát (pl. 47), és megmondja, mit hova köt.</p><input id="vkin" inputmode="numeric" placeholder="Kábelszám, pl. 47" autocomplete="off"><div id="vkres" style="margin-top:12px"></div></div>`;
+ }
+ else if(vTab==="cimke"){
+  h=`<div class="card t"><h2>Így olvasd a kábelcímkét</h2><p class="sub">Minden kábel mindkét végén van egy címke, és mindig azt mondja meg, <b>hova megy</b> a kábel másik vége. Írj be egy címkét a rajzról, vagy válassz egy példát.</p>
+  <input id="vlin" value="${esc(V_EX[0])}" autocomplete="off" spellcheck="false" aria-label="Kábelcímke"><div class="msfd" style="display:flex;flex-wrap:wrap;margin-top:8px">${V_EX.map(e=>`<button class="vchip" data-vex="${esc(e)}">${esc(e)}</button>`).join("")}</div><div id="vlres">${vLabel(V_EX[0])}</div></div>`;
+ }
+ else{
+  h=`<div class="vdict">
+  <div class="card"><h2>DMX vonal (univerzum)</h2><p>Egy „utca”, amin a parancsok utaznak. Egy vonalon legfeljebb 512 csatorna fér el. A vonal száma megegyezik a pultban lévő univerzum számával (a .04-es vonal = 4-es univerzum).</p></div>
+  <div class="card"><h2>Node</h2><p>Doboz, ami a hálózati kábelről érkező parancsot DMX-re fordítja. Három van: a fényszabályzóban egy 4 portos, a felső tirisztorosban egy 4 és egy 8 portos.</p></div>
+  <div class="card"><h2>Splitter</h2><p>Elosztó: egy bemenő DMX vonalat több kimenetre másol. Mint egy elosztó, csak jelnek.</p></div>
+  <div class="card"><h2>Dimmer / tirisztor</h2><p>A hagyományos lámpák fényerejét szabályozó szekrény. A „tirisztoros” az a helyiség, ahol ezek állnak.</p></div>
+  <div class="card"><h2>Direkt szekrény</h2><p>Nem szabályoz fényerőt, csak ki-be kapcsol (pl. motoros lámpák, ködgép áramellátása).</p></div>
+  <div class="card"><h2>Csapda</h2><p>Fedeles aljzatdoboz a színpad padlójában. Ide lehet bedugni a lámpát vagy a DMX kábelt.</p></div>
+  <div class="card"><h2>Lány és Fiú</h2><p>A DMX csatlakozók két fajtája. Lány = lyukas aljzat, Fiú = tüskés aljzat. Az átvezető dobozokban a jel a Lányon jön be, és a mellette lévő Fiún megy tovább.</p></div>
+  <div class="card"><h2>Tartó</h2><p>A színpad fölötti rúd (0–4.), amin a lámpák lógnak. A szögletes zárójel a lámpák száma, pl. [28] = 28 lámpa.</p></div></div>
+  <div class="card" style="margin-top:12px"><h2>Nyitott kérdések a rajzhoz</h2><p class="sub">Ezekre még nincs biztos válasz. Ha tudod, szólj.</p><ol class="vq">${D.kerdesek.map(q=>`<li>${esc(q)}</li>`).join("")}</ol></div>`;
+ }
+ $("vpan").innerHTML=h;
+}
+function renderSys(){
+ document.querySelectorAll("#sysseg button").forEach(b=>b.classList.toggle("on",b.dataset.sys===sysTab));
+ $("sys-vez").style.display=sysTab==="vez"?"":"none";$("sys-tiri").style.display=sysTab==="tiri"?"":"none";
+ if(sysTab==="tiri"){$("tq").value="";renderTiri()}else renderVil();
+}
+$("sysseg").addEventListener("click",e=>{const b=e.target.closest("[data-sys]");if(b){sysTab=b.dataset.sys;renderSys()}});
+$("sys-vez").addEventListener("click",e=>{
+ const b=e.target.closest("[data-vt],[data-vl],[data-vd],[data-vclose],[data-vex]");if(!b)return;
+ if(b.dataset.vt){vTab=b.dataset.vt;renderVil()}
+ else if(b.dataset.vl){vLine=b.dataset.vl;renderVil()}
+ else if(b.dataset.vd){vDev=vDev===b.dataset.vd?null:b.dataset.vd;renderVil();if(vDev)$("vdet").scrollIntoView({block:"start",behavior:"smooth"})}
+ else if(b.dataset.vclose!==undefined){vDev=null;renderVil()}
+ else{$("vlin").value=b.dataset.vex;$("vlres").innerHTML=vLabel(b.dataset.vex)}
+});
+/* gépelés közben csak az eredmény frissül, hogy a mező ne veszítse el a fókuszt */
+$("sys-vez").addEventListener("input",e=>{
+ if(e.target.id==="vkin")$("vkres").innerHTML=vKabelRes(e.target.value);
+ else if(e.target.id==="vlin")$("vlres").innerHTML=vLabel(e.target.value);
+});
+
 const rowCells=r=>r.c.flat();
 function tiriFind(n){for(const t of TI.tiris)for(const r of t.rows)if(rowCells(r).includes(n))return {t,r,kw:r.c.some(c=>Array.isArray(c)&&c.includes(n))?2:5};return null}
-function renderTiri(){
+function renderLocks(){
  document.querySelectorAll("[data-tlock]").forEach(el=>{el.innerHTML=!LOCK[el.dataset.tlock]()?"":`<p class="sub">${el.dataset.tlock==="patch"?"A beépített patch":"Ez a rész"} jelszóval védett, eszközönként egyszer kell megadni.</p><div class="row"><div><input type="password" data-tpw autocomplete="current-password" placeholder="Jelszó"></div><button class="btn pr a" data-tun>Megnyitás</button></div>`});
+}
+function renderTiri(){
+ renderLocks();
  document.querySelectorAll("[data-tbody]").forEach(el=>{el.style.display=TI?"":"none"});
  if(!TI){$("tig").innerHTML="";return}
  const n=parseInt($("tq").value,10),m=n?tiriFind(n):null;
@@ -889,11 +1070,13 @@ async function tiriUnlock(btn){
  const pw=btn.closest("[data-tlock]").querySelector("[data-tpw]").value;if(!pw)return;
  btn.disabled=true;
  try{
-  const [t,m,p]=await Promise.all(["tiri.enc.json","terkep.enc.json","nagyszinpad.enc.json"].map(f=>encOpen(f,pw)));
+  /* a világítási rendszer fájlja később került be, ezért ha még nincs fent, a többi akkor is megnyílik */
+  const [t,m,p,v]=await Promise.all(["tiri.enc.json","terkep.enc.json","nagyszinpad.enc.json"].map(f=>encOpen(f,pw)).concat(encOpen("vilagitas.enc.json",pw).catch(e=>{if(e.message==="nincs")return null;throw e})));
+  if(v){VIL={v:v.v,d:JSON.parse(v.txt)};localStorage.setItem(VK,JSON.stringify(VIL))}
   TI=JSON.parse(t.txt);localStorage.setItem(TK,t.txt);
   MAP={v:m.v,html:m.txt};localStorage.setItem(MK,JSON.stringify(MAP));
   if(!S.nszSeed)seedPatch(JSON.parse(p.txt));
-  renderTiri();renderHk();renderMap();
+  renderTiri();renderHk();renderMap();renderVil();
  }
  catch(e){
   toast(e.name==="OperationError"?"Hibás jelszó":location.protocol==="file:"?"Fájlból megnyitva nem működik, a localhost címen próbáld":!(window.crypto&&crypto.subtle)?"Ezen a címen nem nyitható meg, csak https vagy localhost alatt":e instanceof TypeError&&!navigator.onLine?"Nincs internet, ellenőrizd a kapcsolatot":"Nem sikerült megnyitni: "+e.message);
@@ -906,6 +1089,7 @@ renderTiri();
 /* ha új kiosztás vagy térkép jelent meg, a jelszót újra kérjük */
 if(TI)encHead("tiri.enc.json").then(h=>{if(h.v!==TI.v){TI=null;localStorage.removeItem(TK);renderTiri();renderHk()}}).catch(()=>{});
 if(MAP)encHead("terkep.enc.json").then(h=>{if(h.v!==MAP.v){MAP=null;localStorage.removeItem(MK);renderTiri();renderMap()}}).catch(()=>{});
+if(VIL)encHead("vilagitas.enc.json").then(h=>{if(h.v!==VIL.v){VIL=null;localStorage.removeItem(VK);renderVil()}}).catch(()=>{});
 
 /* ---- bérkalkulátor ---- */
 const fm=n=>Math.round(n).toLocaleString("hu-HU")+" Ft";
