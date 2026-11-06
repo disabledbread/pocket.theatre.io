@@ -252,7 +252,6 @@ tr.g.op .chev{transform:rotate(90deg)}
 .vparts{display:grid;gap:6px;margin:0;padding:0;list-style:none}.vparts li{display:flex;gap:10px;align-items:baseline}
 .vparts li span:first-child{flex:none;min-width:70px;text-align:center;border-radius:6px;padding:1px 6px;font:600 13px ui-monospace,Consolas,monospace}
 .vdict{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}.vdict .card{margin:0}.vdict p{margin:0}
-.vq{padding-left:20px;margin:0}.vq li{margin-bottom:8px}
 @media(max-width:700px){
 .side{top:auto;right:0;width:auto;flex-direction:row;justify-content:space-around;border-right:0;border-top:1px solid var(--bd);padding:6px 0 calc(6px + env(safe-area-inset-bottom,0px))}
 .logo{display:none}

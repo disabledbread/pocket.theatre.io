@@ -1014,8 +1014,7 @@ function renderVil(){
   <div class="card"><h2>Direkt szekrény</h2><p>Nem szabályoz fényerőt, csak ki-be kapcsol (pl. motoros lámpák, ködgép áramellátása).</p></div>
   <div class="card"><h2>Csapda</h2><p>Fedeles aljzatdoboz a színpad padlójában. Ide lehet bedugni a lámpát vagy a DMX kábelt.</p></div>
   <div class="card"><h2>Lány és Fiú</h2><p>A DMX csatlakozók két fajtája. Lány = lyukas aljzat, Fiú = tüskés aljzat. Az átvezető dobozokban a jel a Lányon jön be, és a mellette lévő Fiún megy tovább.</p></div>
-  <div class="card"><h2>Tartó</h2><p>A színpad fölötti rúd (0–4.), amin a lámpák lógnak. A szögletes zárójel a lámpák száma, pl. [28] = 28 lámpa.</p></div></div>
-  <div class="card" style="margin-top:12px"><h2>Nyitott kérdések a rajzhoz</h2><p class="sub">Ezekre még nincs biztos válasz. Ha tudod, szólj.</p><ol class="vq">${D.kerdesek.map(q=>`<li>${esc(q)}</li>`).join("")}</ol></div>`;
+  <div class="card"><h2>Tartó</h2><p>A színpad fölötti rúd (0–4.), amin a lámpák lógnak. A szögletes zárójel a lámpák száma, pl. [28] = 28 lámpa.</p></div></div>`;
  }
  $("vpan").innerHTML=h;
 }
