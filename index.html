@@ -27,7 +27,7 @@
  <button data-t="v-dmx"><svg class="i" viewBox="0 0 24 24"><rect x="1" y="5" width="22" height="14" rx="7" ry="7"/><circle cx="16" cy="12" r="3"/></svg><span>DMX</span></button>
  <button data-t="v-musor"><svg class="i" viewBox="0 0 24 24"><path d="M3 8a2 2 0 0 0 2-2V5h14v1a2 2 0 0 0 2 2v8a2 2 0 0 0-2 2v1H5v-1a2 2 0 0 0-2-2z"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg><span>Műsor</span></button>
  <button id="slot" data-t="v-rig"></button>
- <button data-t="v-misc"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span>Egyebek</span></button>
+ <button data-t="v-misc" id="mnu"><i class="mc"><svg class="i g" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><svg class="i x" viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></i><span>Egyebek</span></button>
 </aside>
 <main>
 <div class="top"><h1 id="ttl">Konzol</h1><button class="btn sm" id="back" style="display:none" data-go="v-misc">← Vissza</button><button class="btn sm gear" id="scan" style="display:none" aria-label="Megosztott előadás beolvasása" title="Megosztott előadás beolvasása"><svg class="i" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 8v8" stroke-width="1.5"/><path d="M9.5 8v8" stroke-width="1"/><path d="M12 8v8" stroke-width="2"/><path d="M14.5 8v8" stroke-width="1"/><path d="M17 8v8" stroke-width="1.5"/></svg></button><button class="btn sm gear" id="gear" data-go="v-set" style="display:none" aria-label="Beállítások" title="Beállítások"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.830l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="btn pr sm" id="newShow" style="display:none">＋ Új előadás</button></div>
@@ -166,7 +166,7 @@
  <div class="card"><h2>Alsó menü</h2><p class="sub">A negyedik gomb helyére bármelyik Egyebek oldal tehető. Ami nincs lent, az az Egyebek alatt érhető el.</p><select id="slt"></select></div>
  <div class="card"><h2>Megjelenés</h2><p class="sub">Az automatikus a telefon világos vagy sötét beállítását követi.</p><div class="seg" id="thm"><button data-th="">Automatikus</button><button data-th="light">Világos</button><button data-th="dark">Sötét</button></div></div>
  <div class="card"><h2>Az app</h2><p class="sub" style="margin:0">Pocket Theatre. Az adatok ezen az eszközön, a böngészőben tárolódnak.</p><p class="sub" id="sto" style="margin:6px 0 0"></p></div>
- <p class="sub" style="text-align:center">Verzió: v1.2</p>
+ <p class="sub" style="text-align:center">Verzió: v1.3</p>
 </section>
 
 <section class="view" id="v-calc">
@@ -233,6 +233,7 @@
 <div id="dlg"><div class="dbox"><p id="dm"></p><input id="di2" autocomplete="off"><div class="drow"><button class="btn" id="dno">Mégse</button><button class="btn pr" id="dyes">OK</button></div></div></div>
 <div id="shr" class="ovl"><div class="dbox"><h2 id="shrt" style="margin:0 0 10px"></h2><div id="shrq" class="shrq"></div><p class="sub" style="margin:10px 0 12px">A másik telefonon: Pocket Theatre → Színpad → jobb felül a beolvasás ikon. Távolra küldd linkként.</p><div class="drow"><button class="btn" id="shrx">Bezárás</button><button class="btn pr" id="shrs">Küldés linkként</button></div></div></div>
 <div id="scn" class="ovl"><div class="dbox"><h2 style="margin:0 0 10px">Beolvasás</h2><video id="scnv" playsinline muted></video><p class="sub" id="scnm" style="margin:8px 0 12px"></p><div class="drow"><button class="btn" id="scnx">Mégse</button><button class="btn" id="scnp">Link beillesztése</button></div></div></div>
+<div id="lnch" aria-hidden="true"><div class="lgrid" id="lgrid"></div></div>
 <div id="toast"></div>
 <script src="app.js"></script>
 <script>

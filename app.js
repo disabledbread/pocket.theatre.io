@@ -298,7 +298,38 @@ function renderSlot(){
  $("back").style.display=isSub(v)?"":"none";
 }
 $("slt").onchange=()=>{S.set.slot=$("slt").value;save();renderSlot()};
-function go(id){
+/* telefonon az Egyebek nem külön oldal, hanem a középső gombból kirepülő menü */
+const LN=$("lnch"),LG=$("lgrid"),phone=matchMedia("(max-width:700px)");
+let lnBack=false;
+function lnBuild(){
+ if(LG.childElementCount)return;
+ const it=[...document.querySelectorAll("#v-misc .mi")].map(m=>[m.dataset.go,m.querySelector("svg").outerHTML,m.querySelector("b").textContent]);
+ it.push(["v-set",$("gear").querySelector("svg").outerHTML,"Beállítások"]);
+ LG.innerHTML=it.map(([g,s,n])=>`<button class="lt" data-go="${g}"><span class="ic">${s}</span>${esc(n)}</button>`).join("");
+}
+/* minden menüpont a gomb közepéből indul; a gombhoz közelebbiek indulnak előbb */
+function lnPos(){
+ const b=$("mnu").querySelector(".mc").getBoundingClientRect(),cx=b.left+b.width/2,cy=b.top+b.height/2,g=LG.getBoundingClientRect();
+ const d=[...LG.children].map(t=>({t,dx:cx-(g.left+t.offsetLeft+t.offsetWidth/2),dy:cy-(g.top+t.offsetTop+28)}));
+ d.sort((a,b)=>Math.hypot(a.dx,a.dy)-Math.hypot(b.dx,b.dy)).forEach((o,i,a)=>{
+  const st=o.t.style;st.setProperty("--dx",o.dx+"px");st.setProperty("--dy",o.dy+"px");st.setProperty("--do",i*7+"ms");st.setProperty("--dc",(a.length-1-i)*5+"ms");
+ });
+}
+function lnOpen(back){
+ lnBuild();lnPos();void LG.offsetWidth;
+ lnBack=!!back;LN.classList.add("on");LN.setAttribute("aria-hidden","false");document.body.classList.add("lopen","noscroll");
+}
+function lnClose(pick){
+ if(!LN.classList.contains("on"))return;
+ LN.classList.remove("on");LN.setAttribute("aria-hidden","true");document.body.classList.remove("lopen","noscroll");
+ if(pick){pick.classList.add("go");setTimeout(()=>pick.classList.remove("go"),450)}
+}
+LN.addEventListener("click",e=>lnClose(e.target.closest(".lt")));
+phone.addEventListener("change",()=>{if(!phone.matches)lnClose()});
+function go(id,back){
+ /* telefonon az Egyebek a kirepülő menüt nyitja-zárja, az aktuális oldal marad alatta */
+ if(id==="v-misc"&&phone.matches){LN.classList.contains("on")?lnClose():lnOpen(back);return}
+ lnClose();
  const prev=(document.querySelector(".view.on")||{}).id;
  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id===id));
  const root=isSub(id)?"v-misc":id;
@@ -324,7 +355,7 @@ function go(id){
 /* telefonos vissza (Android gesztus és gomb): az appon belül lép vissza, és csak a Konzolról lép ki.
    Ehhez egy őrző előzmény-bejegyzés kell, amíg nem a sima Konzolon vagyunk. */
 const navCur=()=>{const v=document.querySelector(".view.on");return v?v.id:"v-console"};
-const navOverlay=()=>$("dlg").classList.contains("on")||$("shr").classList.contains("on")||$("scn").classList.contains("on")||$("lb").classList.contains("on")||$("rm").classList.contains("full")||$("mp").classList.contains("full");
+const navOverlay=()=>LN.classList.contains("on")||$("dlg").classList.contains("on")||$("shr").classList.contains("on")||$("scn").classList.contains("on")||$("lb").classList.contains("on")||$("rm").classList.contains("full")||$("mp").classList.contains("full");
 function navSync(){
  const need=navCur()!=="v-console"||navOverlay(),has=!!(history.state&&history.state.pt);
  if(need&&!has)history.pushState({pt:1},"");
@@ -338,7 +369,9 @@ window.addEventListener("popstate",()=>{
  else if($("lb").classList.contains("on"))closeLb();
  else if($("rm").classList.contains("full"))setFull(false);
  else if($("mp").classList.contains("full"))setMapFull(false);
- else go(isSub(navCur())?"v-misc":"v-console");
+ /* ha a vissza gesztus nyitotta a menüt, a következő vissza a Konzolra visz (mint régen az Egyebek oldalról); egyébként csak bezárja */
+ else if(LN.classList.contains("on")){const b=lnBack;lnClose();if(b&&isSub(navCur()))go("v-console")}
+ else go(isSub(navCur())?"v-misc":"v-console",true);
  navSync();
 });
 /* ablakok nyitása és zárása után igazítjuk az őrzőt (rögzítő fázis, mert egyes gombok megállítják a kattintást) */
@@ -873,7 +906,8 @@ function renderPatch(){
   let inner="";
   st.files.forEach(f=>{
    const R=typeCh(f.fx);
-   const L=f.fx.map((x,i)=>Object.assign({},x,{_i:i})).filter(x=>!q||[x.n,x.t,x.l,x.id,x.ch,x.p].join(" ").toLowerCase().includes(q));
+   /* ha a keresésben van pont, DMX címre keres: a táblázatban látható cím elejére illeszt (10. = 10-es univerzum, 10.1 = 10.1xx, 10.116 = pontosan ez) */
+   const L=f.fx.map((x,i)=>Object.assign({},x,{_i:i})).filter(x=>!q||(q.includes(".")?fmtP(x.p).startsWith(q):[x.n,x.t,x.l,x.id,x.ch,x.p].join(" ").toLowerCase().includes(q)));
    if(q&&!L.length)return;
    const cnt={};L.forEach(x=>{const k=x.t||"?";cnt[k]=(cnt[k]||0)+1});
    const chips=Object.keys(cnt).map(k=>{const c=chOf(R,k);return `<span class="tp">${esc(k==="?"?"Ismeretlen":k)} ×${cnt[k]}${c?" · "+c+" csat.":""}</span>`}).join(" ");
