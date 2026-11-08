@@ -269,27 +269,29 @@ main{margin-left:0;padding:0 14px 100px}.top{padding-top:calc(14px + env(safe-ar
 @media(pointer:coarse){input,select,textarea{font-size:16px}}
 /* telefonon az Egyebek középső gomb, amiből a menüpontok kirepülnek (csak transform és opacity animál, így nem terheli a telefont) */
 #mnu .mc{display:contents}#mnu .x{display:none}
+/* iPhone-on a gyors dupla koppintás ne nagyítson rá az oldalra */
+.side,.side button,#lnch,.lt{touch-action:manipulation}
 #lnch{display:none}
 @media(max-width:700px){
 .side button[data-t="v-musor"],#slot{order:2}#mnu{order:1}
 #back{display:none!important}
 #mnu{flex:none;width:68px;margin:-24px 0 0;padding:0;gap:4px;background:none!important}
-#mnu .mc{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:var(--teal);color:var(--on);box-shadow:0 4px 14px rgba(0,0,0,.2);transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+#mnu .mc{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:var(--teal);color:var(--on);box-shadow:0 4px 14px rgba(0,0,0,.2);transition:transform .45s cubic-bezier(.34,1.56,.64,1)}
 #mnu:active .mc{transform:scale(.9)}
-#mnu .mc svg{display:block;grid-area:1/1;width:22px;height:22px;transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .2s}
+#mnu .mc svg{display:block;grid-area:1/1;width:22px;height:22px;transition:transform .45s cubic-bezier(.34,1.56,.64,1),opacity .2s}
 #mnu .x{opacity:0;transform:rotate(-90deg) scale(.4)}
 body.lopen #mnu .g{opacity:0;transform:rotate(90deg) scale(.4)}
 body.lopen #mnu .x{opacity:1;transform:none}
 body.lopen #mnu .mc{transform:rotate(180deg)}
 body.lopen #mnu:active .mc{transform:rotate(180deg) scale(.9)}
-#lnch{display:flex;flex-direction:column;justify-content:flex-end;position:fixed;inset:0;z-index:4;padding:0 10px calc(104px + env(safe-area-inset-bottom,0px));visibility:hidden;pointer-events:none;transition:visibility 0s .25s}
+#lnch{display:flex;flex-direction:column;justify-content:flex-end;position:fixed;inset:0;z-index:4;padding:0 10px calc(104px + env(safe-area-inset-bottom,0px));visibility:hidden;pointer-events:none;transition:visibility 0s .47s}
 #lnch.on{visibility:visible;pointer-events:auto;transition:none}
 #lnch::before{content:"";position:absolute;inset:0;background:var(--bg);opacity:0;transition:opacity .3s}
 #lnch.on::before{opacity:.97}
 .lgrid{position:relative;display:flex;flex-wrap:wrap;justify-content:center;row-gap:22px}
 .lt{width:25%;display:flex;flex-direction:column;align-items:center;gap:7px;padding:0 2px;border:0;background:none;color:var(--tx);font-family:inherit;font-size:12px;line-height:1.2;text-align:center;cursor:pointer;
- opacity:0;transform:translate(var(--dx,0),var(--dy,0)) scale(.25);transform-origin:50% 28px;transition:transform .18s cubic-bezier(.5,0,.75,0),opacity .12s .04s;transition-delay:var(--dc,0s)}
-#lnch.on .lt{opacity:1;transform:none;transition:transform .24s cubic-bezier(.34,1.4,.64,1),opacity .12s;transition-delay:var(--do,0s)}
+ opacity:0;transform:translate(var(--dx,0),var(--dy,0)) scale(.25);transform-origin:50% 28px;transition:transform .34s cubic-bezier(.5,0,.75,0),opacity .18s .08s;transition-delay:var(--dc,0s)}
+#lnch.on .lt{opacity:1;transform:none;transition:transform .36s cubic-bezier(.34,1.4,.64,1),opacity .18s;transition-delay:var(--do,0s)}
 .lt .ic{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;background:var(--pn);border:1px solid var(--bd);color:var(--teal);box-shadow:0 2px 8px rgba(0,0,0,.07);transition:transform .15s}
 .lt:active .ic{transform:scale(.9)}
 .lt[data-go="v-set"] .ic{background:var(--nbg);color:var(--navy);border-color:transparent}

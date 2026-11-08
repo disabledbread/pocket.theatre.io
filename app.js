@@ -312,7 +312,7 @@ function lnPos(){
  const b=$("mnu").querySelector(".mc").getBoundingClientRect(),cx=b.left+b.width/2,cy=b.top+b.height/2,g=LG.getBoundingClientRect();
  const d=[...LG.children].map(t=>({t,dx:cx-(g.left+t.offsetLeft+t.offsetWidth/2),dy:cy-(g.top+t.offsetTop+28)}));
  d.sort((a,b)=>Math.hypot(a.dx,a.dy)-Math.hypot(b.dx,b.dy)).forEach((o,i,a)=>{
-  const st=o.t.style;st.setProperty("--dx",o.dx+"px");st.setProperty("--dy",o.dy+"px");st.setProperty("--do",i*7+"ms");st.setProperty("--dc",(a.length-1-i)*5+"ms");
+  const st=o.t.style;st.setProperty("--dx",o.dx+"px");st.setProperty("--dy",o.dy+"px");st.setProperty("--do",i*10+"ms");st.setProperty("--dc",(a.length-1-i)*12+"ms");
  });
 }
 function lnOpen(back){
