@@ -1,11 +1,12 @@
 name: Napi műsorfrissítés
 
-# Naponta egyszer: a színház műsoroldalának PDF-jeiből musorlista.json a repó gyökerébe, és belőle naptár-feliratkozások
+# Naponta háromszor: a színház műsoroldalának PDF-jeiből musorlista.json a repó gyökerébe, és belőle naptár-feliratkozások
 # a naptar/ mappába. Csak változáskor ment.
 # Hiba esetén (pl. elérhetetlen oldal, nulla előadás) a régi fájl marad, és a futás pirosra vált.
 on:
   schedule:
-    - cron: '17 4 * * *'
+    # az idő UTC; magyar nyári idő szerint 6:17, 12:17 és 20:17 (télen mind egy órával korábban)
+    - cron: '17 4,10,18 * * *'
   workflow_dispatch:
   # A feldolgozó módosításakor is lefut, hogy azonnal látszódjon az eredmény
   push:
