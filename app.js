@@ -911,7 +911,7 @@ function typeCh(fx){
   let mode=0,best=0;Object.keys(cnt).forEach(d=>{if(cnt[d]>best||(cnt[d]===best&&+d<mode)){best=cnt[d];mode=+d}});
   if(mode)R[k]=mode;
  });
- /* ha nincs szomszéd, amiből kiszámolható (pl. egyetlen ilyen gép van), a típus nevében lévő csatornaszám számít: „Atomic 3000 4 channel”, „10 ch”, „2ch” */
+ /* ha nincs szomszéd, amiből kiszámolható (pl. egyetlen ilyen gép van), a típus nevében lévő csatornaszám számít: „… 4 channel”, „10 ch”, „2ch” */
  new Set(fx.map(x=>x.t||"?")).forEach(k=>{if(R[k])return;const m=/(\d+)\s*(?:channels?|chan|ch|csat\w*)\b/i.exec(k);if(m&&+m[1]>=1&&+m[1]<=512)R[k]=+m[1]});
  return R;
 }
@@ -1070,9 +1070,15 @@ function freeBody(u){
  const chips=fit.slice(0,12).map(([s,e])=>`<span class="tp fok">${frA(u,s)}${e>s?"–"+frA(u,e):""} · ${e-s+1}</span>`).join(" ")+(fit.length>12?` <span class="meta">+${fit.length-12} további</span>`:"");
  return `<p class="sub fhl">${n?`Ide befér ${n} csatorna:`:"Szabad helyek:"} ${chips||"nincs ilyen hely"}</p><div class="fgr">${g}</div><p class="sub finfo">Koppints egy címre a részletekért.</p>`;
 }
-/* csak azok a vonalak látszanak, amelyeken van lámpa; a beépített Nagyszínpadon a 23. vonal (LED szalagok) sem kell ide */
-const FR_SKIP=[23];
+/* a beépített színpadnál a vonalak listája és neve a jelszóval védett világítási adatból jön (a kereső saját neve, ha van);
+   más színpadnál azok a vonalak látszanak, amelyeken van lámpa */
+const frLines=()=>VIL&&VIL.d&&Array.isArray(VIL.d.vonalak)?VIL.d.vonalak:[];
+const frName=(cur,u)=>{if(!cur.b)return "";const l=frLines().find(v=>+v.univerzum===u);return l?l.kereso||l.nev||"":""};
 function renderFree(){
+ /* a fül jelszóval védett: zárva csak a jelszómező látszik */
+ const lk=LOCK.vil();
+ $("fbody").style.display=lk?"none":"";
+ if(lk){$("fin").style.display="";$("fre").innerHTML="";return}
  const src=freeSrc();
  $("fin").style.display=src.length?"":"none";
  if(!src.length){$("fre").innerHTML='<div class="card"><p class="sub">Ehhez kell egy patch sheet: tölts be egy MA2 XML fájlt a Patch sheet fülön, és itt látszik, hol van szabad DMX cím.</p><button class="btn" data-go="v-patch">Patch sheet megnyitása</button></div>';return}
@@ -1080,8 +1086,10 @@ function renderFree(){
  if(src.some(o=>o.k===frSel))$("fst").value=frSel;else frSel=$("fst").value;
  const cur=src.find(o=>o.k===frSel);
  const {U,unk}=freeMap(cur.files);
- const us=Object.keys(U).map(Number).filter(u=>!(cur.b&&FR_SKIP.includes(u))).sort((a,b)=>a-b);
- $("fun").innerHTML='<option value="">Mindegyik</option>'+us.map(u=>`<option value="${u}">${u}. vonal</option>`).join("");
+ const vl=cur.b?frLines().map(v=>+v.univerzum).filter(u=>u>=1):[];
+ const us=(vl.length?vl:Object.keys(U).map(Number)).filter((u,i,a)=>a.indexOf(u)===i).sort((a,b)=>a-b);
+ const lab=u=>{const nm=frName(cur,u);return `${u}. vonal${nm?" · "+esc(nm):""}`};
+ $("fun").innerHTML='<option value="">Mindegyik</option>'+us.map(u=>`<option value="${u}">${lab(u)}</option>`).join("");
  if(us.includes(+frUni))$("fun").value=frUni;else frUni="";
  const v=parseInt($("fch").value,10),n=v>=1&&v<=512?v:0;
  frData={U,n};
@@ -1095,9 +1103,9 @@ function renderFree(){
   let seg="",p=1;const bar=(c,s,e)=>{seg+=`<i class="${c}" style="left:${(s-1)/5.12}%;width:${(e-s+1)/5.12}%"></i>`};
   runs.forEach(r=>{if(r[0]>p)bar("o",p,r[0]-1);if(n&&len(r)>=n)bar("f",r[0],r[1]);p=r[1]+1});
   if(p<=512)bar("o",p,512);
-  h+=`<details class="fg fu${n&&!ok?" no":""}" data-u="${u}"${op?" open":""}><summary>${CHEV}<b>${u}. vonal</b><span class="tp fno">${free} szabad</span>${n?`<span class="tp ${ok?"fok":"fno"}">${ok?"befér":"nem fér be"}</span>`:`<span class="meta" style="margin:0">legnagyobb hely: ${big}</span>`}<div class="fbar">${seg}</div></summary><div class="fgb">${op?freeBody(u):""}</div></details>`;
+  h+=`<details class="fg fu${n&&!ok?" no":""}" data-u="${u}"${op?" open":""}><summary>${CHEV}<b>${lab(u)}</b><span class="tp fno">${free} szabad</span>${n?`<span class="tp ${ok?"fok":"fno"}">${ok?"befér":"nem fér be"}</span>`:`<span class="meta" style="margin:0">legnagyobb hely: ${big}</span>`}<div class="fbar">${seg}</div></summary><div class="fgb">${op?freeBody(u):""}</div></details>`;
  }
- $("fre").innerHTML=h+'<p class="sub" style="text-align:center">Csak azok a vonalak látszanak, amelyeken van lámpa.</p>';
+ $("fre").innerHTML=h+(vl.length?"":'<p class="sub" style="text-align:center">Csak azok a vonalak látszanak, amelyeken van lámpa.</p>');
 }
 $("fst").onchange=()=>{frSel=$("fst").value;renderFree()};
 $("fun").onchange=()=>{frUni=$("fun").value;renderFree()};
@@ -1342,7 +1350,7 @@ async function tiriUnlock(btn){
   TI=JSON.parse(t.txt);localStorage.setItem(TK,t.txt);
   MAP={v:m.v,html:m.txt};localStorage.setItem(MK,JSON.stringify(MAP));
   if(!S.nszSeed)seedPatch(JSON.parse(p.txt));
-  renderTiri();renderHk();renderMap();renderVil();
+  renderTiri();renderHk();renderMap();renderVil();renderFree();
  }
  catch(e){
   toast(e.name==="OperationError"?"Hibás jelszó":location.protocol==="file:"?"Fájlból megnyitva nem működik, a localhost címen próbáld":!(window.crypto&&crypto.subtle)?"Ezen a címen nem nyitható meg, csak https vagy localhost alatt":e instanceof TypeError&&!navigator.onLine?"Nincs internet, ellenőrizd a kapcsolatot":"Nem sikerült megnyitni: "+e.message);
@@ -1355,7 +1363,7 @@ renderTiri();
 /* ha új kiosztás vagy térkép jelent meg, a jelszót újra kérjük */
 if(TI)encHead("tiri.enc.json").then(h=>{if(h.v!==TI.v){TI=null;localStorage.removeItem(TK);renderTiri();renderHk()}}).catch(()=>{});
 if(MAP)encHead("terkep.enc.json").then(h=>{if(h.v!==MAP.v){MAP=null;localStorage.removeItem(MK);renderTiri();renderMap()}}).catch(()=>{});
-if(VIL)encHead("vilagitas.enc.json").then(h=>{if(h.v!==VIL.v){VIL=null;localStorage.removeItem(VK);renderVil()}}).catch(()=>{});
+if(VIL)encHead("vilagitas.enc.json").then(h=>{if(h.v!==VIL.v){VIL=null;localStorage.removeItem(VK);renderVil();renderTiri();renderFree()}}).catch(()=>{});
 
 /* ---- bérkalkulátor ---- */
 const fm=n=>Math.round(n).toLocaleString("hu-HU")+" Ft";

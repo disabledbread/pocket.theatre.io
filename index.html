@@ -170,7 +170,7 @@
  <div class="card"><h2>Alsó menü</h2><p class="sub">A négy gomb bármelyik oldal lehet, az Egyebek mindig megmarad (telefonon középen: az 1–2. tőle balra, a 3–4. jobbra). Ami nincs lent, az az Egyebek alatt érhető el. Ha egy már lent lévőt választasz, a két gomb helyet cserél.</p><div class="bar4" id="bar"></div></div>
  <div class="card"><h2>Megjelenés</h2><p class="sub">Az automatikus a telefon világos vagy sötét beállítását követi.</p><div class="seg" id="thm"><button data-th="">Automatikus</button><button data-th="light">Világos</button><button data-th="dark">Sötét</button></div></div>
  <div class="card"><h2>Az app</h2><p class="sub" style="margin:0">Pocket Theatre. Az adatok ezen az eszközön, a böngészőben tárolódnak.</p><p class="sub" id="sto" style="margin:6px 0 0"></p></div>
- <p class="sub" style="text-align:center">Verzió: v1.4</p>
+ <p class="sub" style="text-align:center">Verzió: v1.4.1</p>
 </section>
 
 <section class="view" id="v-calc">
@@ -188,10 +188,13 @@
  <div class="card t" id="fin">
   <h2>Szabad DMX címek</h2>
   <p class="sub">A Patch sheet lámpái alapján mutatja, melyik vonalon hol van üres hely. Add meg, hány csatorna kell, és látszik, hova fér be.</p>
+  <div data-tlock="vil"></div>
+  <div id="fbody">
   <div class="row"><div><label>Színpad</label><select id="fst"></select></div></div>
   <div class="row"><div><label>Vonal (univerzum)</label><select id="fun"></select></div><div><label>Hány csatorna kell</label><input id="fch" type="number" inputmode="numeric" min="1" max="512" placeholder="pl. 16"></div></div>
   <p class="sub flg" style="margin:6px 0 0"><i class="o"></i>foglalt<i></i>szabad<i class="f"></i>ide befér</p>
   <p class="sub" id="fnote" style="display:none;margin:8px 0 0"></p>
+  </div>
  </div>
  <div id="fre"></div>
 </section>
