@@ -269,11 +269,31 @@ main{margin-left:0;padding:0 14px 100px}.top{padding-top:calc(14px + env(safe-ar
 @media(pointer:coarse){input,select,textarea{font-size:16px}}
 /* telefonon az Egyebek középső gomb, amiből a menüpontok kirepülnek (csak transform és opacity animál, így nem terheli a telefont) */
 #mnu .mc{display:contents}#mnu .x{display:none}
+/* gépen az Egyebek az oldalsáv alján, telefonon a négy választható gomb közepén */
+#mnu{order:1}
+.mi[hidden]{display:none}
+.bar4{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+/* szabad DMX címek: vonalanként 20 oszlopos rács (mint az MA2 DMX lapja), a foglalt lámpák összefüggő sávok */
+.fgr{display:grid;grid-template-columns:30px repeat(20,minmax(0,1fr));max-width:520px;margin:10px 0 8px;user-select:none;-webkit-user-select:none}
+.fgr b{font-size:10px;font-weight:600;color:var(--mu);display:flex;align-items:center;justify-content:flex-end;padding-right:5px}
+.fgr span{font-size:9px;color:var(--mu);text-align:center;padding-bottom:3px}
+.fgr i{aspect-ratio:1;margin:1px 0;cursor:pointer;touch-action:manipulation}
+.fgr i,.flg i{background:var(--sf);box-shadow:inset 0 0 0 1px var(--pn),inset 0 0 0 2px var(--trku)}
+.fgr i.o,.flg i.o{background:var(--kn);box-shadow:none}
+.fgr i.o.s{box-shadow:inset 2px 0 0 var(--pn)}.fgr i.o.e{box-shadow:inset -2px 0 0 var(--pn)}.fgr i.o.s.e{box-shadow:inset 2px 0 0 var(--pn),inset -2px 0 0 var(--pn)}
+.fgr i.f,.flg i.f{background:var(--okbg);box-shadow:inset 0 0 0 1px var(--pn),inset 0 0 0 2px var(--okt)}
+.fgr i.sel{outline:2px solid var(--tx);outline-offset:-2px;position:relative;z-index:1}
+.flg i{display:inline-block;width:13px;height:13px;vertical-align:-2px;margin:0 5px 0 12px;border-radius:2px}.flg i:first-child{margin-left:0}
+.fhl{margin:0;line-height:2}.finfo{margin:0;min-height:18px;color:var(--tx)}
+.fbar{flex:0 0 100%;position:relative;height:8px;border-radius:4px;background:var(--pn);overflow:hidden;box-shadow:inset 0 0 0 1px var(--bd)}
+.fbar i{position:absolute;top:0;bottom:0}.fbar i.o{background:var(--kn)}.fbar i.f{background:var(--okt)}
+.tp.fok{background:var(--okbg);color:var(--okt)}.tp.fno{background:var(--pn);color:var(--mu)}
+.fu.no>summary{opacity:.6}
 /* iPhone-on a gyors dupla koppintás ne nagyítson rá az oldalra */
 .side,.side button,#lnch,.lt{touch-action:manipulation}
 #lnch{display:none}
 @media(max-width:700px){
-.side button[data-t="v-musor"],#slot{order:2}#mnu{order:1}
+#mnu{order:0}
 #back{display:none!important}
 #mnu{flex:none;width:68px;margin:-24px 0 0;padding:0;gap:4px;background:none!important}
 #mnu .mc{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:var(--teal);color:var(--on);box-shadow:0 4px 14px rgba(0,0,0,.2);transition:transform .45s cubic-bezier(.34,1.56,.64,1)}
@@ -289,9 +309,11 @@ body.lopen #mnu:active .mc{transform:rotate(180deg) scale(.9)}
 #lnch::before{content:"";position:absolute;inset:0;background:var(--bg);opacity:0;transition:opacity .3s}
 #lnch.on::before{opacity:.97}
 .lgrid{position:relative;display:flex;flex-wrap:wrap;justify-content:center;row-gap:22px}
-.lt{width:25%;display:flex;flex-direction:column;align-items:center;gap:7px;padding:0 2px;border:0;background:none;color:var(--tx);font-family:inherit;font-size:12px;line-height:1.2;text-align:center;cursor:pointer;
+.lt{width:33.333%;display:flex;flex-direction:column;align-items:center;gap:7px;padding:0 2px;border:0;background:none;color:var(--tx);font-family:inherit;font-size:12px;line-height:1.2;text-align:center;cursor:pointer;
  opacity:0;transform:translate(var(--dx,0),var(--dy,0)) scale(.25);transform-origin:50% 28px;transition:transform .34s cubic-bezier(.5,0,.75,0),opacity .18s .08s;transition-delay:var(--dc,0s)}
 #lnch.on .lt{opacity:1;transform:none;transition:transform .36s cubic-bezier(.34,1.4,.64,1),opacity .18s;transition-delay:var(--do,0s)}
+/* három oszlop: a menüben mindig 9 oldal van (3×3), a Beállítások pedig egyedül, alul középen áll */
+.lt[data-go="v-set"]{margin:0 33.333%}
 .lt .ic{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;background:var(--pn);border:1px solid var(--bd);color:var(--teal);box-shadow:0 2px 8px rgba(0,0,0,.07);transition:transform .15s}
 .lt:active .ic{transform:scale(.9)}
 .lt[data-go="v-set"] .ic{background:var(--nbg);color:var(--navy);border-color:transparent}

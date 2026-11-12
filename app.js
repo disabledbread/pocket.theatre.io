@@ -14,7 +14,10 @@ const BELL='<svg class="i" style="width:14px;height:14px;vertical-align:-2px" vi
 const CHEV='<svg class="i chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>';
 const KEY="lt-app-v3";
 /* saját párbeszédablak: a natív confirm/prompt beágyazott nézetekben (és egyes böngészőkben) le van tiltva */
-function dialog(o){return new Promise(res=>{
+/* egyszerre egy kérdés látszik: ha közben egy másik is érkezik, az megvárja az előző válaszát */
+let dlgQ=Promise.resolve();
+function dialog(o){const p=dlgQ.then(()=>dialogShow(o));dlgQ=p.catch(()=>{});return p}
+function dialogShow(o){return new Promise(res=>{
  const L=$("dlg"),I=$("di2"),Y=$("dyes"),N=$("dno");
  $("dm").textContent=o.msg;I.style.display=o.input?"block":"none";I.value=o.def==null?"":o.def;
  Y.textContent=o.ok||"OK";Y.className="btn "+(o.danger?"rd":"pr");
@@ -33,6 +36,16 @@ const idb=(mode,fn)=>DB.then(db=>new Promise((res,rej)=>{const t=db.transaction(
 const imgPut=(k,v)=>idb("readwrite",s=>s.put(v,k));
 const imgGet=k=>idb("readonly",s=>s.get(k));
 const imgDel=k=>idb("readwrite",s=>s.delete(k));
+/* a bélyegképek csak akkor töltődnek be a tárból, amikor a képernyő közelébe érnek (rejtett oldalon és csukott listában nem) */
+const imgFill=im=>imgGet(im.dataset.gk||im.dataset.k).then(v=>{if(v)im.src=v}).catch(()=>{});
+const imgIO={};
+function imgLazy(sel){
+ const l=document.querySelectorAll(sel);
+ if(!window.IntersectionObserver){l.forEach(imgFill);return}
+ if(imgIO[sel])imgIO[sel].disconnect();
+ const io=imgIO[sel]=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){io.unobserve(e.target);imgFill(e.target)}}),{rootMargin:"300px"});
+ l.forEach(im=>io.observe(im));
+}
 const shrink=f=>new Promise((res,rej)=>{const r=new FileReader();r.onerror=rej;
  r.onload=()=>{const im=new Image();im.onerror=rej;
   im.onload=()=>{const k=Math.min(1,1400/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",0.75))};
@@ -86,7 +99,9 @@ if(navigator.storage&&navigator.storage.persist)navigator.storage.persisted().th
 
 /* ---- mentés fájlba / visszatöltés ---- */
 async function backupBlob(){
- const keys=await idb("readonly",s=>s.getAllKeys()),vals=await idb("readonly",s=>s.getAll()),imgs={};
+ /* a kulcsok és a képek egy tranzakcióban, hogy biztosan összetartozzanak */
+ let keys=[],vals=[];const imgs={};
+ await idb("readonly",s=>{const k=s.getAllKeys(),v=s.getAll();k.onsuccess=()=>keys=k.result;v.onsuccess=()=>vals=v.result});
  keys.forEach((k,i)=>imgs[k]=vals[i]);
  return new Blob([JSON.stringify({app:"pocket-theatre",v:1,at:new Date().toISOString(),state:S,imgs})],{type:"application/json"});
 }
@@ -272,7 +287,8 @@ document.addEventListener("visibilitychange",renderDrive);
 if(navigator.connection&&navigator.connection.addEventListener)navigator.connection.addEventListener("change",renderDrive);
 setInterval(renderDrive,600000);
 driveStore();renderDrive();
-if(DR.on)driveLoad().catch(()=>{});
+/* a Google-szkript előtöltése (hogy a koppintásra rögtön nyílhasson a bejelentkezés) ne az indulással versenyezzen */
+if(DR.on)setTimeout(()=>driveLoad().catch(()=>{}),1500);
 
 /* ---- megjelenés: automatikus, világos vagy sötét; eszközönként, a mentésfájlba nem kerül ---- */
 function renderTheme(){const v=document.documentElement.dataset.theme||"";document.querySelectorAll("#thm button").forEach(b=>b.classList.toggle("on",b.dataset.th===v))}
@@ -282,28 +298,43 @@ $("thm").addEventListener("click",e=>{const b=e.target.closest("[data-th]");if(!
 renderTheme();
 
 /* ---- navigáció ---- */
-const TT={"v-console":"Konzol","v-dmx":"DMX","v-musor":"Műsor","v-shows":"Előadások","v-misc":"Egyebek","v-notes":"Jegyzetek","v-patch":"Patch sheet","v-calc":"Patch számoló","v-rig":"Színpad","v-gep":"Gépállás","v-set":"Beállítások","v-hours":"Bérkalkulátor","v-map":"Térkép","v-sys":"Rendszer"};
-/* az Egyebek oldalai; közülük egy (alapból a Színpad) a Beállításokban választhatóan az alsó menü negyedik gombjára kerül */
-const SUBALL=["v-shows","v-notes","v-patch","v-calc","v-rig","v-gep","v-hours","v-map","v-set","v-sys"];
-const SLOT_NEV={"v-shows":"Táj","v-notes":"Jegyzet","v-patch":"Patch","v-calc":"Számoló","v-rig":"Színpad","v-gep":"Gépállás","v-hours":"Bér","v-map":"Térkép","v-sys":"Rendszer"};
+const TT={"v-console":"Konzol","v-dmx":"DMX","v-musor":"Műsor","v-shows":"Előadások","v-misc":"Egyebek","v-notes":"Jegyzetek","v-patch":"Patch sheet","v-calc":"Patch számoló","v-free":"Szabad DMX címek","v-rig":"Színpad","v-gep":"Gépállás","v-set":"Beállítások","v-hours":"Bérkalkulátor","v-map":"Térkép","v-sys":"Rendszer"};
+/* az alsó menü négy gombja szabadon választható (az Egyebek mindig megmarad); ami nincs lent, az az Egyebek alatt érhető el */
+const SLOT_NEV={"v-console":"Konzol","v-dmx":"DMX","v-musor":"Műsor","v-shows":"Táj","v-notes":"Jegyzet","v-patch":"Patch","v-calc":"Számoló","v-free":"Szabad","v-rig":"Színpad","v-gep":"Gépállás","v-hours":"Bér","v-map":"Térkép","v-sys":"Rendszer"};
 /* a Tirisztor a Rendszer fül része lett: aki azt tette az alsó menübe, annak a Rendszer kerül oda */
 if(S.set.slot==="v-tiri")S.set.slot="v-sys";
-const slotId=()=>SLOT_NEV[S.set.slot]?S.set.slot:"v-rig";
-const isSub=id=>SUBALL.includes(id)&&id!==slotId();
+/* régebben csak a negyedik gomb volt választható (S.set.slot); a régi mentésekből is ebből indulunk */
+function barIds(){
+ const src=Array.isArray(S.set.bar)?S.set.bar:["v-console","v-dmx","v-musor",SLOT_NEV[S.set.slot]?S.set.slot:"v-rig"];
+ const b=src.filter((x,i,a)=>SLOT_NEV[x]&&a.indexOf(x)===i).slice(0,4);
+ for(const x of Object.keys(SLOT_NEV))if(b.length<4&&!b.includes(x))b.push(x);
+ return b;
+}
+/* az első gomb a kezdőoldal: ide nyílik az app, és innen lép ki a telefonos vissza */
+const home=()=>barIds()[0];
+const isSub=id=>!!TT[id]&&id!=="v-misc"&&!barIds().includes(id);
 function renderSlot(){
- const id=slotId(),m=document.querySelector(`.mi[data-go="${id}"]`),b=$("slot");
- b.dataset.t=id;b.innerHTML=m.querySelector("svg").outerHTML+`<span>${SLOT_NEV[id]}</span>`;
- $("slt").innerHTML=Object.keys(SLOT_NEV).map(k=>`<option value="${k}" ${k===id?"selected":""}>${esc(document.querySelector(`.mi[data-go="${k}"] b`).textContent)}</option>`).join("");
+ const ids=barIds();
+ document.querySelectorAll(".side .bb").forEach((b,i)=>{const id=ids[i];b.dataset.t=id;b.innerHTML=document.querySelector(`.mi[data-go="${id}"] svg`).outerHTML+`<span>${SLOT_NEV[id]}</span>`});
+ document.querySelectorAll("#v-misc .mi").forEach(m=>{m.hidden=ids.includes(m.dataset.go)});
+ LG.innerHTML="";
+ const nev=k=>esc(document.querySelector(`.mi[data-go="${k}"] b`).textContent);
+ $("bar").innerHTML=ids.map((id,i)=>`<div><label>${i+1}. gomb</label><select data-i="${i}">${Object.keys(SLOT_NEV).map(k=>`<option value="${k}"${k===id?" selected":""}>${nev(k)}</option>`).join("")}</select></div>`).join("");
  const v=navCur();document.querySelectorAll(".side button").forEach(x=>x.classList.toggle("on",x.dataset.t===(isSub(v)?"v-misc":v)));
  $("back").style.display=isSub(v)?"":"none";
 }
-$("slt").onchange=()=>{S.set.slot=$("slt").value;save();renderSlot()};
+$("bar").addEventListener("change",e=>{
+ const s=e.target.closest("select");if(!s)return;
+ const ids=barIds(),i=+s.dataset.i,v=s.value,k=ids.indexOf(v);
+ if(k>=0&&k!==i)ids[k]=ids[i];
+ ids[i]=v;S.set.bar=ids;save();renderSlot();
+});
 /* telefonon az Egyebek nem külön oldal, hanem a középső gombból kirepülő menü */
 const LN=$("lnch"),LG=$("lgrid"),phone=matchMedia("(max-width:700px)");
 let lnBack=false;
 function lnBuild(){
  if(LG.childElementCount)return;
- const it=[...document.querySelectorAll("#v-misc .mi")].map(m=>[m.dataset.go,m.querySelector("svg").outerHTML,m.querySelector("b").textContent]);
+ const it=[...document.querySelectorAll("#v-misc .mi:not([hidden])")].map(m=>[m.dataset.go,m.querySelector("svg").outerHTML,m.querySelector("b").textContent]);
  it.push(["v-set",$("gear").querySelector("svg").outerHTML,"Beállítások"]);
  LG.innerHTML=it.map(([g,s,n])=>`<button class="lt" data-go="${g}"><span class="ic">${s}</span>${esc(n)}</button>`).join("");
 }
@@ -349,15 +380,16 @@ function go(id,back){
  if(id==="v-map")renderMap();
  if(id==="v-musor")renderMusor();
  if(id==="v-rig")renderRig();
+ if(id==="v-free")renderFree();
  window.scrollTo(0,0);
  navSync();
 }
 /* telefonos vissza (Android gesztus és gomb): az appon belül lép vissza, és csak a Konzolról lép ki.
    Ehhez egy őrző előzmény-bejegyzés kell, amíg nem a sima Konzolon vagyunk. */
-const navCur=()=>{const v=document.querySelector(".view.on");return v?v.id:"v-console"};
+const navCur=()=>{const v=document.querySelector(".view.on");return v?v.id:home()};
 const navOverlay=()=>LN.classList.contains("on")||$("dlg").classList.contains("on")||$("shr").classList.contains("on")||$("scn").classList.contains("on")||$("lb").classList.contains("on")||$("rm").classList.contains("full")||$("mp").classList.contains("full");
 function navSync(){
- const need=navCur()!=="v-console"||navOverlay(),has=!!(history.state&&history.state.pt);
+ const need=navCur()!==home()||navOverlay(),has=!!(history.state&&history.state.pt);
  if(need&&!has)history.pushState({pt:1},"");
  else if(!need&&has){navSync.skip=true;history.back()}
 }
@@ -370,8 +402,8 @@ window.addEventListener("popstate",()=>{
  else if($("rm").classList.contains("full"))setFull(false);
  else if($("mp").classList.contains("full"))setMapFull(false);
  /* ha a vissza gesztus nyitotta a menüt, a következő vissza a Konzolra visz (mint régen az Egyebek oldalról); egyébként csak bezárja */
- else if(LN.classList.contains("on")){const b=lnBack;lnClose();if(b&&isSub(navCur()))go("v-console")}
- else go(isSub(navCur())?"v-misc":"v-console",true);
+ else if(LN.classList.contains("on")){const b=lnBack;lnClose();if(b&&isSub(navCur()))go(home())}
+ else go(isSub(navCur())?"v-misc":home(),true);
  navSync();
 });
 /* ablakok nyitása és zárása után igazítjuk az őrzőt (rögzítő fázis, mert egyes gombok megállítják a kattintást) */
@@ -537,8 +569,7 @@ function musorLoad(){
  fetch(MUSOR_URL,{cache:"no-cache"}).then(r=>{if(!r.ok)throw new Error(r.status);return r.json()}).then(d=>{
   if(!d||!d.honapok||!d.szinpadok)throw new Error("adat");
   MU=d;msOff=false;try{localStorage.setItem(MUK,JSON.stringify(d))}catch(e){}
-  if($("v-musor").classList.contains("on"))renderMusor();renderRig();
- }).catch(()=>{msOff=true;renderMusor()});
+ }).then(()=>{if($("v-musor").classList.contains("on"))renderMusor();renderRig()},()=>{msOff=true;renderMusor()});
 }
 const msSzinpadok=()=>MS_SOR.filter(s=>MU.szinpadok[s]).concat(Object.keys(MU.szinpadok).filter(s=>!MS_SOR.includes(s)));
 /* színpadonként: a mai nap, ha van ma előadás, különben a következő előadásnap */
@@ -670,7 +701,7 @@ async function rigReceive(code){
  let d;try{d=await rigUnpack(code)}catch(e){toast("Ez nem érvényes Pocket Theatre megosztás");return}
  if(!await ask(`Hozzáadod a Színpadhoz?\n\n${d.n} (${d.items.length} tétel)`,"Hozzáadás",false))return;
  const n=rigUniqueName(d.n),r={id:uid(),n,items:d.items.map(([a,b])=>({id:uid(),n:a,w:b}))};
- S.rigs.push(r);RO.add(String(r.id));save();go("v-rig");renderRig();
+ S.rigs.push(r);RO.add(String(r.id));save();go("v-rig");
  toast(n===d.n?"Hozzáadva":`Hozzáadva „${n}” néven`);
 }
 let shrLink="",shrName="";
@@ -739,7 +770,7 @@ function renderGep(){
  $("gepl").innerHTML=S.gep.map(g=>`<details class="fg" data-gp="${g.id}" ${GO.has(String(g.id))?"open":""}><summary>${CHEV}<b>${esc(g.n)}</b><span class="tp">${g.items.length} lámpa</span><span class="gr"></span><button class="btn sm" data-gr="${g.id}">✎</button><button class="btn sm dg" data-gx="${g.id}">✕</button></summary>
  <div class="fgb">${g.items.map((it,i)=>`<div class="rg" style="align-items:flex-start"><span class="n">${i+1}</span><div class="tt" data-ge="${it.id}" data-of="${g.id}"><b>${esc(it.n)}</b>${it.w?`<div class="meta" style="margin:2px 0 0">Hova néz: ${esc(it.w)}</div>`:""}${(it.imgs||[]).length?`<div class="ims">${it.imgs.map((k,j)=>`<img class="ni" data-gk="${esc(k)}" data-it="${it.id}" data-of="${g.id}" data-j="${j}" alt="Kép">`).join("")}</div>`:""}</div><div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end"><button class="btn sm" data-gi="${it.id}" data-of="${g.id}">＋ Kép</button><button class="x2" data-gd="${it.id}" data-of="${g.id}">✕</button></div></div>`).join("")||'<p class="meta">Még nincs lámpa ebben az előadásban.</p>'}
  <div class="row" style="margin-top:10px"><input data-gn="${g.id}" placeholder="Lámpa, pl. Fresnel 650 [Szín]"><input data-gw="${g.id}" placeholder="Hova néz, pl. DSL, 3 m mélyen"><button class="btn pr a" data-ga="${g.id}">Hozzáad</button></div></div></details>`).join("")||'<div class="card"><p class="meta" style="text-align:center">Még nincs mentett előadás.</p></div>';
- document.querySelectorAll("#gepl img[data-gk]").forEach(im=>imgGet(im.dataset.gk).then(v=>{if(v)im.src=v}).catch(()=>{}));
+ imgLazy("#gepl img[data-gk]");
 }
 $("gpa").onclick=()=>{const n=$("gp2").value.trim();if(!n){toast("Adj nevet");return}const g={id:uid(),n,items:[]};S.gep.push(g);GO.add(String(g.id));save();$("gp2").value="";renderGep()};
 $("gepl").addEventListener("toggle",e=>{const d=e.target;if(d.dataset&&d.dataset.gp){d.open?GO.add(d.dataset.gp):GO.delete(d.dataset.gp)}},true);
@@ -793,7 +824,7 @@ $("nsv").onclick=async()=>{
 function renderNotes(){
  $("notes").innerHTML=S.notes.map(n=>{const im=n.imgs||[];
   return `<div class="nt${n.d?" d":""}" style="border-color:${n.c};background:${n.c}1a"><div class="h"><input type="checkbox" data-nd="${n.id}" ${n.d?"checked":""}><div class="nb">${n.i?BELL+" ":""}<span class="tx">${esc(n.t)}</span>${n.r?`<div class="meta" style="margin:2px 0 0">${esc(n.r.replace("T"," "))}</div>`:""}${im.length?`<div class="ims">${im.map((k,i)=>`<img class="ni" data-k="${esc(k)}" data-n="${n.id}" data-i="${i}" alt="Csatolt kép">`).join("")}</div>`:""}</div><button class="x2" data-nx="${n.id}">✕</button></div></div>`}).join("")||'<p class="meta" style="text-align:center">Még nincs jegyzet.</p>';
- document.querySelectorAll("#notes img[data-k]").forEach(im=>imgGet(im.dataset.k).then(v=>{if(v)im.src=v}).catch(()=>{}));
+ imgLazy("#notes img[data-k]");
 }
 $("notes").addEventListener("change",e=>{const c=e.target;if(!c.dataset.nd)return;
  S.notes.find(n=>String(n.id)===c.dataset.nd).d=c.checked;save();
@@ -869,7 +900,7 @@ function parseXml(txt){
 const absA=p=>{p=String(p||"");if(/^\d+$/.test(p)&&+p>0)return +p;const m=/^(\d+)\.(\d+)$/.exec(p);return m?(+m[1]-1)*512+ +m[2]:null};
 const fmtA=a=>`${Math.floor((a-1)/512)+1}.${String((a-1)%512+1).padStart(3,"0")}`;
 const fmtP=p=>{const a=absA(p);return a?fmtA(a):(p||"–")};
-/* típusonként EGY csatornaszám: az azonos universe-ben lévő, azonos típusú szomszédos gépek leggyakoribb címkülönbsége;
+/* típusonként EGY csatornaszám: az azonos universe-ben lévő, azonos típusú szomszédos gépek leggyakoribb címkülönbsége, ennek híján a típus nevéből;
    a kézzel beállított érték (S.chOv) mindig erősebb */
 function typeCh(fx){
  const g={},R={},uv=a=>Math.floor((a-1)/512);
@@ -880,6 +911,8 @@ function typeCh(fx){
   let mode=0,best=0;Object.keys(cnt).forEach(d=>{if(cnt[d]>best||(cnt[d]===best&&+d<mode)){best=cnt[d];mode=+d}});
   if(mode)R[k]=mode;
  });
+ /* ha nincs szomszéd, amiből kiszámolható (pl. egyetlen ilyen gép van), a típus nevében lévő csatornaszám számít: „Atomic 3000 4 channel”, „10 ch”, „2ch” */
+ new Set(fx.map(x=>x.t||"?")).forEach(k=>{if(R[k])return;const m=/(\d+)\s*(?:channels?|chan|ch|csat\w*)\b/i.exec(k);if(m&&+m[1]>=1&&+m[1]<=512)R[k]=+m[1]});
  return R;
 }
 const chOf=(R,t)=>S.chOv[t]||R[t]||0;
@@ -995,6 +1028,94 @@ $("xf").onchange=()=>{
  $("xf").value="";
 };
 renderPatch();
+
+/* ---- szabad DMX címek: a Patch sheet egy színpadának foglaltsága vonalanként (a csatornaszámok ugyanazok, mint a Patch sheetben) ---- */
+let frSel="",frUni="",frData={U:{},n:0};
+const frOpen=new Set();
+/* választható forrás: egy színpad összes fájlja együtt; ha több fájl van benne, azok külön is */
+function freeSrc(){
+ const o=[];
+ S.theatres.forEach(t=>t.stages.forEach(s=>{
+  if(!s.files.length)return;
+  const nm=(S.theatres.length>1?t.n+" › ":"")+s.n;
+  o.push({k:"s"+s.id,b:!!s.b,n:nm+(s.files.length>1?" (minden fájl együtt)":""),files:s.files});
+  if(s.files.length>1)s.files.forEach(f=>o.push({k:"f"+f.id,b:!!s.b,n:"— "+nm+" › "+f.n,files:[f]}));
+ }));
+ return o;
+}
+/* U[vonal][cím] = az ott ülő lámpák listája; az ismeretlen csatornaszámú lámpa 1 csatornát foglal */
+function freeMap(files){
+ const U={};let unk=0;
+ files.forEach(f=>{const R=typeCh(f.fx);f.fx.forEach(x=>{
+  const a=absA(x.p);if(a==null)return;
+  const c=chOf(R,x.t||"?");if(!c)unk++;
+  const u=Math.floor((a-1)/512)+1,s=(a-1)%512+1,it={x,s,e:Math.min(512,s+(c||1)-1),c};
+  const m=U[u]=U[u]||new Array(513).fill(null);
+  for(let i=s;i<=it.e;i++)(m[i]=m[i]||[]).push(it);
+ })});
+ return {U,unk};
+}
+/* egybefüggő üres részek egy vonalon: [első cím, utolsó cím] párok */
+const freeRuns=m=>{const r=[];let s=0;for(let i=1;i<=513;i++){const fr=i<=512&&!(m&&m[i]);if(fr&&!s)s=i;else if(!fr&&s){r.push([s,i-1]);s=0}}return r};
+const frA=(u,a)=>fmtA((u-1)*512+a);
+function freeBody(u){
+ const m=frData.U[u],n=frData.n,runs=freeRuns(m),fit=n?runs.filter(r=>r[1]-r[0]+1>=n):runs,ok=new Uint8Array(513);
+ if(n)fit.forEach(([s,e])=>{for(let i=s;i<=e;i++)ok[i]=1});
+ let g="<b></b>";for(let i=1;i<=20;i++)g+=`<span>${i}</span>`;
+ for(let a=1;a<=512;a++){
+  if(a%20===1)g+=`<b>${a}</b>`;
+  const c=m&&m[a];
+  g+=`<i data-a="${a}"${c?` class="o${c.some(t=>t.s===a)?" s":""}${c.some(t=>t.e===a)?" e":""}"`:ok[a]?' class="f"':""}></i>`;
+ }
+ const chips=fit.slice(0,12).map(([s,e])=>`<span class="tp fok">${frA(u,s)}${e>s?"–"+frA(u,e):""} · ${e-s+1}</span>`).join(" ")+(fit.length>12?` <span class="meta">+${fit.length-12} további</span>`:"");
+ return `<p class="sub fhl">${n?`Ide befér ${n} csatorna:`:"Szabad helyek:"} ${chips||"nincs ilyen hely"}</p><div class="fgr">${g}</div><p class="sub finfo">Koppints egy címre a részletekért.</p>`;
+}
+/* csak azok a vonalak látszanak, amelyeken van lámpa; a beépített Nagyszínpadon a 23. vonal (LED szalagok) sem kell ide */
+const FR_SKIP=[23];
+function renderFree(){
+ const src=freeSrc();
+ $("fin").style.display=src.length?"":"none";
+ if(!src.length){$("fre").innerHTML='<div class="card"><p class="sub">Ehhez kell egy patch sheet: tölts be egy MA2 XML fájlt a Patch sheet fülön, és itt látszik, hol van szabad DMX cím.</p><button class="btn" data-go="v-patch">Patch sheet megnyitása</button></div>';return}
+ $("fst").innerHTML=src.map(o=>`<option value="${o.k}">${esc(o.n)}</option>`).join("");
+ if(src.some(o=>o.k===frSel))$("fst").value=frSel;else frSel=$("fst").value;
+ const cur=src.find(o=>o.k===frSel);
+ const {U,unk}=freeMap(cur.files);
+ const us=Object.keys(U).map(Number).filter(u=>!(cur.b&&FR_SKIP.includes(u))).sort((a,b)=>a-b);
+ $("fun").innerHTML='<option value="">Mindegyik</option>'+us.map(u=>`<option value="${u}">${u}. vonal</option>`).join("");
+ if(us.includes(+frUni))$("fun").value=frUni;else frUni="";
+ const v=parseInt($("fch").value,10),n=v>=1&&v<=512?v:0;
+ frData={U,n};
+ $("fnote").style.display=unk?"":"none";
+ $("fnote").textContent=unk?unk+" lámpának nem ismert a csatornaszáma, ezek 1 csatornával számolnak. A Patch sheetben a Csatorna cellára koppintva megadhatod.":"";
+ let h="";
+ for(const u of us){
+  if(frUni&&+frUni!==u)continue;
+  const runs=freeRuns(U[u]),len=r=>r[1]-r[0]+1,free=runs.reduce((s,r)=>s+len(r),0),big=runs.reduce((s,r)=>Math.max(s,len(r)),0),ok=n&&big>=n,op=!!frUni||frOpen.has(u);
+  /* vékony áttekintő csík: a foglalt részek szürkék, ahova befér, az zöld */
+  let seg="",p=1;const bar=(c,s,e)=>{seg+=`<i class="${c}" style="left:${(s-1)/5.12}%;width:${(e-s+1)/5.12}%"></i>`};
+  runs.forEach(r=>{if(r[0]>p)bar("o",p,r[0]-1);if(n&&len(r)>=n)bar("f",r[0],r[1]);p=r[1]+1});
+  if(p<=512)bar("o",p,512);
+  h+=`<details class="fg fu${n&&!ok?" no":""}" data-u="${u}"${op?" open":""}><summary>${CHEV}<b>${u}. vonal</b><span class="tp fno">${free} szabad</span>${n?`<span class="tp ${ok?"fok":"fno"}">${ok?"befér":"nem fér be"}</span>`:`<span class="meta" style="margin:0">legnagyobb hely: ${big}</span>`}<div class="fbar">${seg}</div></summary><div class="fgb">${op?freeBody(u):""}</div></details>`;
+ }
+ $("fre").innerHTML=h+'<p class="sub" style="text-align:center">Csak azok a vonalak látszanak, amelyeken van lámpa.</p>';
+}
+$("fst").onchange=()=>{frSel=$("fst").value;renderFree()};
+$("fun").onchange=()=>{frUni=$("fun").value;renderFree()};
+$("fch").oninput=()=>{clearTimeout(renderFree.t);renderFree.t=setTimeout(renderFree,200)};
+/* a rács csak a kinyitott vonalnál készül el */
+$("fre").addEventListener("toggle",e=>{const d=e.target;if(!d.dataset||!d.dataset.u)return;
+ const u=+d.dataset.u,b=d.querySelector(".fgb");
+ d.open?frOpen.add(u):frOpen.delete(u);
+ if(d.open&&!b.firstChild)b.innerHTML=freeBody(u)},true);
+$("fre").addEventListener("click",e=>{
+ const c=e.target.closest(".fgr i");if(!c)return;
+ const d=c.closest("[data-u]"),u=+d.dataset.u,a=+c.dataset.a,m=frData.U[u];
+ d.querySelectorAll(".fgr i.sel").forEach(x=>x.classList.remove("sel"));c.classList.add("sel");
+ let h;
+ if(m&&m[a])h=`<b>${frA(u,a)}</b> foglalt: `+m[a].map(t=>`${esc(t.x.n||"Névtelen")}${t.x.id?" (ID "+esc(t.x.id)+")":t.x.ch?" (Ch "+esc(t.x.ch)+")":""}${t.x.t?" · "+esc(t.x.t):""} · ${frA(u,t.s)}${t.e>t.s?"–"+frA(u,t.e):""}${t.c?"":" · a csatornaszám ismeretlen"}`).join("; ");
+ else{const r=freeRuns(m).find(r=>a>=r[0]&&a<=r[1]);h=`<b>${frA(u,a)}</b> szabad. Innen ${r[1]-a+1} csatorna fér el egyben (${frA(u,a)}–${frA(u,r[1])}).`}
+ d.querySelector(".finfo").innerHTML=h;
+});
 
 /* ---- védett adatok (tirisztor, térkép, beépített patch): jelszóval titkosítva vannak a nyilvános repóban; megnyitás után csak ezen az eszközön maradnak ---- */
 const TK="lt-tiri",MK="lt-map";
@@ -1279,4 +1400,6 @@ $("rz").onclick=async()=>{
  ["oh","tn","tg","th","tw"].forEach(i=>$(i).value="");$("om").value="1";$("td").value=today();
  renderHours();toast("Bérkalkulátor nullázva");
 };
+/* indulás a kezdőoldalon (az alsó menü első gombja); a fájl végén áll, mert az oldalak rajzolásához minden fenti rész kell */
+if(navCur()==="v-console"&&home()!=="v-console")go(home());
 })();

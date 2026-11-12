@@ -1,6 +1,6 @@
 // Pocket Theatre – service worker
 // Új kiadásnál elég a VERSION-t átírni (pl. 'v0.7').
-const VERSION = 'v1.3.1';
+const VERSION = 'v1.4';
 const CACHE = 'pocket-theatre-' + VERSION;
 const RUNTIME = 'pocket-theatre-cdn';
 
@@ -70,7 +70,13 @@ self.addEventListener('fetch', event => {
       url.pathname.endsWith('/app.js') ||
       url.pathname.endsWith('.enc.json');
 
-    if (isPage) {
+    const isShell = url.pathname.endsWith('/style.css') || url.pathname.endsWith('/app.js');
+
+    if (req.mode === 'navigate') {
+      event.respondWith(pageFirst(req, url));
+    } else if (isShell && Date.now() < cachedUntil) {
+      event.respondWith(cachedShell(req, url));
+    } else if (isPage) {
       event.respondWith(networkFirst(req, url));
     } else {
       event.respondWith(staleWhileRevalidate(event, req, CACHE));
@@ -93,7 +99,7 @@ self.addEventListener('fetch', event => {
   // Minden más (pl. MA Web Remote IP-n) – nem nyúlunk hozzá
 });
 
-// HTML, CSS, JS és a titkosított adatok: először hálózat, offline esetén a tárolt példány, így ezek mindig együtt frissülnek
+// CSS, JS és a titkosított adatok: először hálózat, offline esetén a tárolt példány, így ezek mindig együtt frissülnek
 async function networkFirst(req, url) {
   const cache = await caches.open(CACHE);
   const key = url.origin + url.pathname; // ?v=2 és hasonlók nélkül
@@ -109,6 +115,44 @@ async function networkFirst(req, url) {
       (req.mode === 'navigate' ? await cache.match('./index.html') : null);
     return hit || Response.error();
   }
+}
+
+// Oldalbetöltés: először hálózat, de gyenge térerőn nem várunk a végtelenségig.
+// Ha PAGE_TIMEOUT alatt nem jön meg az oldal (vagy nincs net), a tárolt példány nyílik meg,
+// és a hozzá tartozó CSS és JS is a tárból jön, hogy a három fájl ugyanabból a kiadásból legyen.
+const PAGE_TIMEOUT = 3000;
+let cachedUntil = 0;
+
+async function pageFirst(req, url) {
+  const cache = await caches.open(CACHE);
+  const key = url.origin + url.pathname;
+  const hit = (await cache.match(key)) || (await cache.match(req, { ignoreSearch: true }));
+  // nincs tárolt példány: marad a sima hálózat-először
+  if (!hit) return networkFirst(req, url);
+
+  const ctl = new AbortController();
+  const timer = setTimeout(() => ctl.abort(), PAGE_TIMEOUT);
+  try {
+    const net = await fetch(req.url, { cache: 'no-cache', credentials: 'same-origin', signal: ctl.signal });
+    // a teljes letöltést megvárjuk, hogy az időkorlát arra is vonatkozzon (és Safarin se legyen átirányított válasz)
+    const body = await net.blob();
+    clearTimeout(timer);
+    const make = () => new Response(body, { status: net.status, statusText: net.statusText, headers: net.headers });
+    if (net.ok) cache.put(key, make());
+    cachedUntil = 0;
+    return make();
+  } catch (e) {
+    clearTimeout(timer);
+    cachedUntil = Date.now() + 15000;
+    return hit;
+  }
+}
+
+// A tárolt oldalhoz tartozó CSS és JS: a tárból, hálózat csak akkor, ha hiányzik
+async function cachedShell(req, url) {
+  const cache = await caches.open(CACHE);
+  const hit = (await cache.match(url.origin + url.pathname)) || (await cache.match(req, { ignoreSearch: true }));
+  return hit || networkFirst(req, url);
 }
 
 // Egyéb fájlok: azonnal a tárolt, háttérben frissítés

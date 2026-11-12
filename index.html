@@ -23,11 +23,11 @@
 <body>
 <aside class="side">
  <div class="logo">PT</div>
- <button data-t="v-console" class="on"><svg class="i" viewBox="0 0 24 24"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg><span>Konzol</span></button>
- <button data-t="v-dmx"><svg class="i" viewBox="0 0 24 24"><rect x="1" y="5" width="22" height="14" rx="7" ry="7"/><circle cx="16" cy="12" r="3"/></svg><span>DMX</span></button>
- <button data-t="v-musor"><svg class="i" viewBox="0 0 24 24"><path d="M3 8a2 2 0 0 0 2-2V5h14v1a2 2 0 0 0 2 2v8a2 2 0 0 0-2 2v1H5v-1a2 2 0 0 0-2-2z"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg><span>Műsor</span></button>
- <button id="slot" data-t="v-rig"></button>
+ <button class="bb"></button>
+ <button class="bb"></button>
  <button data-t="v-misc" id="mnu"><i class="mc"><svg class="i g" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><svg class="i x" viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></i><span>Egyebek</span></button>
+ <button class="bb"></button>
+ <button class="bb"></button>
 </aside>
 <main>
 <div class="top"><h1 id="ttl">Konzol</h1><button class="btn sm" id="back" style="display:none" data-go="v-misc">← Vissza</button><button class="btn sm gear" id="scan" style="display:none" aria-label="Megosztott előadás beolvasása" title="Megosztott előadás beolvasása"><svg class="i" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 8v8" stroke-width="1.5"/><path d="M9.5 8v8" stroke-width="1"/><path d="M12 8v8" stroke-width="2"/><path d="M14.5 8v8" stroke-width="1"/><path d="M17 8v8" stroke-width="1.5"/></svg></button><button class="btn sm gear" id="gear" data-go="v-set" style="display:none" aria-label="Beállítások" title="Beállítások"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.830l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="btn pr sm" id="newShow" style="display:none">＋ Új előadás</button></div>
@@ -87,10 +87,14 @@
 <!-- EGYEBEK -->
 <section class="view" id="v-misc">
  <div class="menu">
+  <button class="mi" data-go="v-console"><svg class="i" viewBox="0 0 24 24"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg><b>Konzol</b><span>MA2 / MA3 Web Remote, hibakereső</span></button>
+  <button class="mi" data-go="v-dmx"><svg class="i" viewBox="0 0 24 24"><rect x="1" y="5" width="22" height="14" rx="7" ry="7"/><circle cx="16" cy="12" r="3"/></svg><b>DMX</b><span>DIP switch kalkulátor</span></button>
+  <button class="mi" data-go="v-musor"><svg class="i" viewBox="0 0 24 24"><path d="M3 8a2 2 0 0 0 2-2V5h14v1a2 2 0 0 0 2 2v8a2 2 0 0 0-2 2v1H5v-1a2 2 0 0 0-2-2z"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg><b>Műsor</b><span>A színház havi műsora, naptár</span></button>
   <button class="mi" data-go="v-shows"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><b>Táj</b><span>Tájelőadások, checklist, indulás</span></button>
   <button class="mi" data-go="v-notes"><svg class="i" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="14 3 14 9 20 9"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="14" y2="17"/></svg><b>Jegyzetek</b><span>Színes jegyzetek, képek, emlékeztetők</span></button>
   <button class="mi" data-go="v-patch"><svg class="i" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg><b>Patch sheet</b><span>Színpadok és MA2 XML fájlok</span></button>
   <button class="mi" data-go="v-calc"><svg class="i" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="11" x2="8.01" y2="11"/><line x1="12" y1="11" x2="12.01" y2="11"/><line x1="16" y1="11" x2="16.01" y2="11"/><line x1="8" y1="16" x2="8.01" y2="16"/><line x1="12" y1="16" x2="12.01" y2="16"/><line x1="16" y1="16" x2="16.01" y2="16"/></svg><b>Patch számoló</b><span>Lámpák címei, universe-váltással</span></button>
+  <button class="mi" data-go="v-free"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><b>Szabad DMX címek</b><span>Üres DMX helyek keresése vonalanként</span></button>
   <button class="mi" data-go="v-rig"><svg class="i" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg><b>Színpad</b><span>Előadásonként: mi mire van dugva</span></button>
   <button class="mi" data-go="v-map"><svg class="i" viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg><b>Térkép</b><span>Vizuális térkép a lámpákról</span></button>
   <button class="mi" data-go="v-gep"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg><b>Gépállás</b><span>Lámpák, hova néznek, képekkel</span></button>
@@ -163,10 +167,10 @@
   <div class="two"><button class="btn pr" id="bks">Mentés</button><button class="btn" id="bkl">Visszatöltés</button></div>
   <input type="file" id="bkf" accept=".json,application/json" style="display:none">
  </div>
- <div class="card"><h2>Alsó menü</h2><p class="sub">A negyedik gomb helyére bármelyik Egyebek oldal tehető. Ami nincs lent, az az Egyebek alatt érhető el.</p><select id="slt"></select></div>
+ <div class="card"><h2>Alsó menü</h2><p class="sub">A négy gomb bármelyik oldal lehet, az Egyebek mindig megmarad (telefonon középen: az 1–2. tőle balra, a 3–4. jobbra). Ami nincs lent, az az Egyebek alatt érhető el. Ha egy már lent lévőt választasz, a két gomb helyet cserél.</p><div class="bar4" id="bar"></div></div>
  <div class="card"><h2>Megjelenés</h2><p class="sub">Az automatikus a telefon világos vagy sötét beállítását követi.</p><div class="seg" id="thm"><button data-th="">Automatikus</button><button data-th="light">Világos</button><button data-th="dark">Sötét</button></div></div>
  <div class="card"><h2>Az app</h2><p class="sub" style="margin:0">Pocket Theatre. Az adatok ezen az eszközön, a böngészőben tárolódnak.</p><p class="sub" id="sto" style="margin:6px 0 0"></p></div>
- <p class="sub" style="text-align:center">Verzió: v1.3.1</p>
+ <p class="sub" style="text-align:center">Verzió: v1.4</p>
 </section>
 
 <section class="view" id="v-calc">
@@ -177,6 +181,19 @@
   <div class="row"><button class="btn pr a" id="pc">Kiszámol</button><button class="btn a" id="pcp">Másolás</button></div>
   <div id="po" style="font:13px ui-monospace,Consolas,monospace;white-space:pre-wrap;background:var(--sf);border-radius:8px;padding:10px;max-height:300px;overflow:auto">Nyomd meg a Kiszámol gombot.</div>
  </div>
+</section>
+
+<!-- SZABAD DMX CÍMEK: a Patch sheet egy színpadának foglaltsága vonalanként -->
+<section class="view" id="v-free">
+ <div class="card t" id="fin">
+  <h2>Szabad DMX címek</h2>
+  <p class="sub">A Patch sheet lámpái alapján mutatja, melyik vonalon hol van üres hely. Add meg, hány csatorna kell, és látszik, hova fér be.</p>
+  <div class="row"><div><label>Színpad</label><select id="fst"></select></div></div>
+  <div class="row"><div><label>Vonal (univerzum)</label><select id="fun"></select></div><div><label>Hány csatorna kell</label><input id="fch" type="number" inputmode="numeric" min="1" max="512" placeholder="pl. 16"></div></div>
+  <p class="sub flg" style="margin:6px 0 0"><i class="o"></i>foglalt<i></i>szabad<i class="f"></i>ide befér</p>
+  <p class="sub" id="fnote" style="display:none;margin:8px 0 0"></p>
+ </div>
+ <div id="fre"></div>
 </section>
 
 <section class="view" id="v-notes">
