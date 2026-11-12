@@ -1,7 +1,15 @@
 {
- "frissitve": "2026-11-05T17:58:05Z",
+ "frissitve": "2026-11-12T14:08:12Z",
  "forras": "https://gyoriszinhaz.hu/musor/",
  "honapok": {
+  "2026-01": {
+   "allapot": "elozetes",
+   "pdf": "https://gyoriszinhaz.hu/wp-content/uploads/2026/11/2027januar-elozetes.pdf",
+   "felirat": "Januári előzetes műsor - nyomtatás",
+   "kiadva": "2026. november 10.",
+   "modositva": [],
+   "sajat_pdf": true
+  },
   "2026-10": {
    "allapot": "vegleges",
    "pdf": "https://gyoriszinhaz.hu/wp-content/uploads/2026/09/2026-oktober-jav0916.pdf",
@@ -22,10 +30,10 @@
    "sajat_pdf": true
   },
   "2026-12": {
-   "allapot": "elozetes",
-   "pdf": "https://gyoriszinhaz.hu/wp-content/uploads/2026/10/2026-dec-elozetes-1.pdf",
-   "felirat": "Decemberi előzetes műsor - nyomtatás",
-   "kiadva": "2026. okt. 9..",
+   "allapot": "vegleges",
+   "pdf": "https://gyoriszinhaz.hu/wp-content/uploads/2026/11/2026-december.pdf",
+   "felirat": "Decemberi műsor - nyomtatás",
+   "kiadva": "2026. november 10.",
    "modositva": [],
    "sajat_pdf": true
   },
@@ -39,767 +47,79 @@
   }
  },
  "szinpadok": {
-  "Nagyszínház": [
-   {
-    "datum": "2026-10-01",
-    "kezdes": "19:00",
-    "cim": "Traviata",
-    "alcim": null,
-    "megjegyzes": "Simon Kázmér",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-10-02",
-    "kezdes": "19:00",
-    "cim": "Traviata",
-    "alcim": "KultKredit Program",
-    "megjegyzes": "Földes",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-10-03",
-    "kezdes": "19:00",
-    "cim": "Traviata",
-    "alcim": null,
-    "megjegyzes": "Kisfaludy",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-10-04",
-    "kezdes": "19:00",
-    "cim": "Marica grófnő",
-    "alcim": null,
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-10-08",
-    "kezdes": "18:00",
-    "cim": "Kantharosz Gála",
-    "alcim": null,
-    "megjegyzes": null,
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-10-09",
-    "kezdes": "19:00",
-    "cim": "Traviata",
-    "alcim": null,
-    "megjegyzes": "Gárdonyi",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-10-10",
-    "kezdes": "19:00",
-    "cim": "Traviata",
-    "alcim": null,
-    "megjegyzes": "Csengery",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-10-11",
-    "kezdes": "15:00",
-    "cim": "Szaffi",
-    "alcim": "előadás után dedikálás az előcsarnokban",
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-10-17",
-    "kezdes": "19:00",
-    "cim": "LOVEre",
-    "alcim": "a Győri Balett előadása",
-    "megjegyzes": "Premier",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-10-18",
-    "kezdes": "15:00",
-    "cim": "LOVEre",
-    "alcim": "a Győri Balett előadása",
-    "megjegyzes": "Sipka",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-10-21",
-    "kezdes": "19:00",
-    "cim": "Tanulmány a nőkről",
-    "alcim": "KultKredit Program",
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-10-23",
-    "kezdes": "19:00",
-    "cim": "Tóth Ilona emlékére 56'",
-    "alcim": "a Győri Balett és a Győri Nemzeti Színhzáz közös előadása",
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-10-24",
-    "kezdes": "19:00",
-    "cim": "LOVEre",
-    "alcim": "a Győri Balett előadása",
-    "megjegyzes": "Kisfaludy",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-10-25",
-    "kezdes": "19:00",
-    "cim": "Rudolf",
-    "alcim": "KultKredit Program",
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-10-28",
-    "kezdes": "19:00",
-    "cim": "Az üvegcipő",
-    "alcim": "KultKredit Program",
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-10-29",
-    "kezdes": "19:00",
-    "cim": "Traviata",
-    "alcim": "KultKredit Program",
-    "megjegyzes": "Déryné",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-10-30",
-    "kezdes": "19:00",
-    "cim": "Traviata",
-    "alcim": null,
-    "megjegyzes": "Várady",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-10-31",
-    "kezdes": "19:00",
-    "cim": "Traviata",
-    "alcim": "utolsó bérletes előadás",
-    "megjegyzes": "Somlai",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-03",
-    "kezdes": "10:00",
-    "cim": "Tom Sawyer kalandjai",
-    "alcim": null,
-    "megjegyzes": "Lázár Ervin Program",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-03",
-    "kezdes": "13:00",
-    "cim": "Tom Sawyer kalandjai",
-    "alcim": null,
-    "megjegyzes": "Lázár Ervin Program",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-04",
-    "kezdes": "10:00",
-    "cim": "Tom Sawyer kalandjai",
-    "alcim": null,
-    "megjegyzes": "Lázár Ervin Program",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-04",
-    "kezdes": "13:00",
-    "cim": "Tom Sawyer kalandjai",
-    "alcim": null,
-    "megjegyzes": "Lázár Ervin Program",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-06",
-    "kezdes": "19:00",
-    "cim": "Dráma a Szalonban Kortárs drámajáték mindenkinek",
-    "alcim": "A Győri Nemzeti Színház drámaíró versenye",
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-07",
-    "kezdes": "11:00",
-    "cim": "Pöttöm Panna",
-    "alcim": "A Bóbita Bábszínház előadása",
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-07",
-    "kezdes": "19:00",
-    "cim": "Verdi’n the mood!",
-    "alcim": "a Classic Club Singers koncertje",
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-08",
-    "kezdes": "11:00",
-    "cim": "Lúdas Matyi",
-    "alcim": "a Kabóca Bábszínház előadása",
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-08",
-    "kezdes": "19:30",
-    "cim": "Vecsei H. Miklós és a QJÚB",
-    "alcim": "Koncertszínházi előadás Csoóri Sándor, Pilinszky János, Radnóti Miklós és Juhász Ferenc életműve nyomán…",
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-11",
-    "kezdes": "19:00",
-    "cim": "Marica grófnő",
-    "alcim": "KultKredit Program",
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-12",
-    "kezdes": "19:00",
-    "cim": "LOVEre",
-    "alcim": "a Győri Balett előadása",
-    "megjegyzes": "Simon Kázmér",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-13",
-    "kezdes": "19:00",
-    "cim": "LOVEre",
-    "alcim": "a Győri Balett előadása",
-    "megjegyzes": "Gárdonyi",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-14",
-    "kezdes": "19:00",
-    "cim": "LOVEre",
-    "alcim": "a Győri Balett előadása",
-    "megjegyzes": "Csengery",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-15",
-    "kezdes": "15:30",
-    "cim": "Egy Mederben",
-    "alcim": "a Rába Táncműhely csoportjainak bemutatója",
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-15",
-    "kezdes": "18:00",
-    "cim": "Egy Mederben",
-    "alcim": "Rába 75, Kisalföld 50, Marcal 20. Jubileumi Néptánc Gála",
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-21",
-    "kezdes": "19:00",
-    "cim": "Fröccs",
-    "alcim": null,
-    "megjegyzes": "Premier",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-22",
-    "kezdes": "15:00",
-    "cim": "Fröccs",
-    "alcim": null,
-    "megjegyzes": "Betlen",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-24",
-    "kezdes": "18:00",
-    "cim": "Primadonnák",
-    "alcim": null,
-    "megjegyzes": null,
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-25",
-    "kezdes": "19:00",
-    "cim": "Páratlan páros",
-    "alcim": "a soproni Petőfi Színház előadása",
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-26",
-    "kezdes": "19:00",
-    "cim": "Rudolf",
-    "alcim": null,
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-27",
-    "kezdes": "19:00",
-    "cim": "Fröccs",
-    "alcim": "KultKredit Program",
-    "megjegyzes": "Földes",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-28",
-    "kezdes": "19:00",
-    "cim": "Fröccs",
-    "alcim": null,
-    "megjegyzes": "Somlai",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-29",
-    "kezdes": "11:00",
-    "cim": "Szaffi",
-    "alcim": null,
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-12-05",
-    "kezdes": "15:00",
-    "cim": "17. Boogiefeszt",
-    "alcim": "Boogie Show",
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-12-05",
-    "kezdes": "19:00",
-    "cim": "17. Boogiefeszt",
-    "alcim": "Boogie Show",
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-12-05",
-    "kezdes": "22:00",
-    "cim": "17. Boogiefeszt",
-    "alcim": "Boogie Afterparty a Csillárszinten",
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-12-06",
-    "kezdes": "09:00",
-    "cim": "Mikulásposta",
-    "alcim": null,
-    "megjegyzes": null,
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-12-06",
-    "kezdes": "11:00",
-    "cim": "Mikulásposta",
-    "alcim": null,
-    "megjegyzes": null,
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-12-06",
-    "kezdes": "13:00",
-    "cim": "Mikulásposta",
-    "alcim": null,
-    "megjegyzes": null,
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-12-06",
-    "kezdes": "19:00",
-    "cim": "Tanulmány a nőkről",
-    "alcim": null,
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-12-12",
-    "kezdes": "19:00",
-    "cim": "Anna Karenina",
-    "alcim": null,
-    "megjegyzes": "Premier",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-12-15",
-    "kezdes": "11:00",
-    "cim": "Fröccs",
-    "alcim": null,
-    "megjegyzes": null,
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-12-17",
-    "kezdes": "19:00",
-    "cim": "Marica grófnő",
-    "alcim": null,
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-12-19",
-    "kezdes": "15:00",
-    "cim": "Anna Karenina",
-    "alcim": null,
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-12-25",
-    "kezdes": "15:00",
-    "cim": "Diótörő",
-    "alcim": "a Győri Nemzeti",
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-12-25",
-    "kezdes": "19:00",
-    "cim": "Színház és a Győri Balett koprodukciója",
-    "alcim": null,
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-12-26",
-    "kezdes": "15:00",
-    "cim": "Diótörő",
-    "alcim": "a Győri Nemzeti",
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-12-26",
-    "kezdes": "19:00",
-    "cim": "Színház és a Győri Balett koprodukciója",
-    "alcim": null,
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-12-27",
-    "kezdes": "11:00",
-    "cim": "Diótörő",
-    "alcim": "a Győri Nemzeti",
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-12-27",
-    "kezdes": "15:00",
-    "cim": "Színház és a Győri Balett koprodukciója",
-    "alcim": null,
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-12-28",
-    "kezdes": "11:00",
-    "cim": "Diótörő",
-    "alcim": "a Győri Nemzeti Színház és a Győri Balett koprodukciója",
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-12-30",
-    "kezdes": "17:00",
-    "cim": "A padlás",
-    "alcim": null,
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2027-01-09",
-    "kezdes": "19:00",
-    "cim": "Újévi Operett- és Musicalgála",
-    "alcim": null,
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2027-01-10",
-    "kezdes": "15:00",
-    "cim": "Újévi Operett- és Musicalgála",
-    "alcim": null,
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2027-01-10",
-    "kezdes": "19:00",
-    "cim": "Újévi Operett- és Musicalgála",
-    "alcim": null,
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   }
-  ],
-  "Padlásszínház": [
-   {
-    "datum": "2026-10-02",
-    "kezdes": "19:30",
-    "cim": "RÉV ➲ 20ÉV FESZTIVÁL: IRINA",
-    "alcim": null,
-    "megjegyzes": null,
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-10-11",
-    "kezdes": "19:30",
-    "cim": "152 lépés Auschwitz felé",
-    "alcim": "Karácsony Gergely előadása",
-    "megjegyzes": null,
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-10-16",
-    "kezdes": "19:30",
-    "cim": "Szorongó vigyorgó",
-    "alcim": "Posonyi Takács László előadása",
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-10-20",
-    "kezdes": "19:30",
-    "cim": "A nagy füzet",
-    "alcim": null,
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-10-28",
-    "kezdes": "19:30",
-    "cim": "Ernie, Hem, Papa",
-    "alcim": "Sárközi József előadása",
-    "megjegyzes": null,
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-04",
-    "kezdes": "19:30",
-    "cim": "Asszony a fronton",
-    "alcim": null,
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-06",
-    "kezdes": "19:00",
-    "cim": "Ünnepélyes megnyitó:",
-    "alcim": "Pintér Bence, Bakos-Kiss Gábor, Lutter Imre",
-    "megjegyzes": null,
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-06",
-    "kezdes": "19:15",
-    "cim": "Béle, borzalom: Radnóti-",
-    "alcim": "verskoncert Jávori Ferenc Fegya és Lutter Imre előadásában",
-    "megjegyzes": null,
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-07",
-    "kezdes": "10:00",
-    "cim": "Ünnepélyes megnyitó",
-    "alcim": null,
-    "megjegyzes": null,
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-07",
-    "kezdes": "10:30",
-    "cim": "Radnóti Miklós vers- és prózamondó verseny, a győztesek versenye",
-    "alcim": null,
-    "megjegyzes": null,
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-08",
-    "kezdes": "10:00",
-    "cim": "Radnóti Miklós vers- és prózamondó verseny, a győztesek versenye",
-    "alcim": null,
-    "megjegyzes": null,
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-08",
-    "kezdes": "17:00",
-    "cim": "Ünnepélyes eredményhirdetés és a Radnóti-díjak átadása",
-    "alcim": null,
-    "megjegyzes": null,
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-13",
-    "kezdes": "19:30",
-    "cim": "Szorongó vigyorgó",
-    "alcim": "Posonyi Takács László előadása",
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-15",
-    "kezdes": "19:30",
-    "cim": "152 lépés Auschwitz felé",
-    "alcim": "Karácsony Gergely előadása",
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-20",
-    "kezdes": "19:30",
-    "cim": "Hamu vagy gyémánt?",
-    "alcim": "Molnár Ágnes zenés előadása Cserháti Zsuzsa dalaival",
-    "megjegyzes": "regisztrációs jegy",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-25",
-    "kezdes": "19:30",
-    "cim": "Belém égsz",
-    "alcim": "RÉV Színház előadása",
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-27",
-    "kezdes": "19:30",
-    "cim": "Ernie, Hem, Papa",
-    "alcim": "Sárközi József előadása",
-    "megjegyzes": null,
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-29",
-    "kezdes": "19:30",
-    "cim": "Hegyen át, vízen át",
-    "alcim": "Szina Kinga előadása",
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-12-01",
-    "kezdes": "19:30",
-    "cim": "A nagy füzet",
-    "alcim": null,
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-12-09",
-    "kezdes": "19:30",
-    "cim": "Asszony a fronton",
-    "alcim": null,
-    "megjegyzes": "bérletszünet",
-    "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-12-19",
-    "kezdes": "19:30",
-    "cim": "A bárány utolsó megkísértése",
-    "alcim": null,
-    "megjegyzes": "bemutató",
-    "modositott": false,
-    "ellenorizendo": false
-   }
-  ],
   "Kisfaludy terem": [
+   {
+    "datum": "2026-01-03",
+    "kezdes": "15:00",
+    "cim": "Még egy kört mindenkinek",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-01-06",
+    "kezdes": "19:00",
+    "cim": "Még egy kört mindenkinek",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-01-09",
+    "kezdes": "11:00",
+    "cim": "Tom Sawyer kalandjai",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-01-09",
+    "kezdes": "19:00",
+    "cim": "Boeing, Boeing",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-01-16",
+    "kezdes": "11:00",
+    "cim": "Jancsi és Juliska",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-01-19",
+    "kezdes": "19:00",
+    "cim": "Mona",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-01-31",
+    "kezdes": "15:00",
+    "cim": "Marimama",
+    "alcim": "Járai Máté előadása",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-01-31",
+    "kezdes": "19:00",
+    "cim": "Marimama",
+    "alcim": "Járai Máté előadása",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
    {
     "datum": "2026-10-03",
     "kezdes": "19:00",
@@ -1242,11 +562,110 @@
     "ellenorizendo": false
    },
    {
+    "datum": "2026-12-03",
+    "kezdes": "10:00",
+    "cim": "Jancsi és Juliska",
+    "alcim": null,
+    "megjegyzes": "Sulibérlet E",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-03",
+    "kezdes": "12:30",
+    "cim": "Jancsi és Juliska",
+    "alcim": null,
+    "megjegyzes": "Sulibérlet L",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-04",
+    "kezdes": "10:00",
+    "cim": "Jancsi és Juliska",
+    "alcim": null,
+    "megjegyzes": "Sulibérlet M",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
     "datum": "2026-12-05",
     "kezdes": "11:00",
     "cim": "Jancsi és Juliska",
-    "alcim": null,
+    "alcim": "előadás után dedikálás és lözönségtalálkozó Nagy Balázzsal",
     "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-05",
+    "kezdes": "19:00",
+    "cim": "Még egy kört mindenkinek",
+    "alcim": null,
+    "megjegyzes": "Csengery C",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-06",
+    "kezdes": "15:00",
+    "cim": "Még egy kört mindenkinek",
+    "alcim": null,
+    "megjegyzes": "Sipka B",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-11",
+    "kezdes": "11:00",
+    "cim": "152 lépés Auschwitz felé",
+    "alcim": "Karácsony Gergely előadása",
+    "megjegyzes": null,
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-15",
+    "kezdes": "10:00",
+    "cim": "Jancsi és Juliska",
+    "alcim": null,
+    "megjegyzes": "Sulibérlet B",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-15",
+    "kezdes": "12:30",
+    "cim": "Jancsi és Juliska",
+    "alcim": null,
+    "megjegyzes": "Sulibérlet H",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-16",
+    "kezdes": "10:00",
+    "cim": "Jancsi és Juliska",
+    "alcim": null,
+    "megjegyzes": "Sulibérlet C",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-16",
+    "kezdes": "12:30",
+    "cim": "Jancsi és Juliska",
+    "alcim": null,
+    "megjegyzes": "Sulibérlet I",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-17",
+    "kezdes": "10:00",
+    "cim": "Jancsi és Juliska",
+    "alcim": null,
+    "megjegyzes": "Sulibérlet F",
     "modositott": false,
     "ellenorizendo": false
    },
@@ -1274,6 +693,1045 @@
     "cim": "Boeing, Boeing",
     "alcim": null,
     "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   }
+  ],
+  "Nagyszínház": [
+   {
+    "datum": "2026-01-09",
+    "kezdes": "19:00",
+    "cim": "Újévi Operett- és Musicalgála",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-01-10",
+    "kezdes": "15:00",
+    "cim": "Újévi Operett- és Musicalgála",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-01-10",
+    "kezdes": "19:00",
+    "cim": "Újévi Operett- és Musicalgála",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-01-11",
+    "kezdes": "19:00",
+    "cim": "Közös hang",
+    "alcim": "Nagy Balázs beszélgetése Bede Fazekas Csabával",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-01-13",
+    "kezdes": "19:00",
+    "cim": "Az üvegcipő",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-01-17",
+    "kezdes": "15:00",
+    "cim": "Anna Karenina",
+    "alcim": "dedikálás és közönségtalálkozó az előcsarnokban Nagy Balázzsal",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-01-19",
+    "kezdes": "19:00",
+    "cim": "Tiszta forrás - Bolero",
+    "alcim": "a Győri Balett előadása",
+    "megjegyzes": "Markó-Gombár bérlet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-01-20",
+    "kezdes": "19:00",
+    "cim": "Marica grófnő",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-01-21",
+    "kezdes": "19:00",
+    "cim": "Rudolf",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-01-24",
+    "kezdes": "11:00",
+    "cim": "Szaffi",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-01-30",
+    "kezdes": "19:00",
+    "cim": "Rokonok",
+    "alcim": null,
+    "megjegyzes": "Premier",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-10-01",
+    "kezdes": "19:00",
+    "cim": "Traviata",
+    "alcim": null,
+    "megjegyzes": "Simon Kázmér",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-10-02",
+    "kezdes": "19:00",
+    "cim": "Traviata",
+    "alcim": "KultKredit Program",
+    "megjegyzes": "Földes",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-10-03",
+    "kezdes": "19:00",
+    "cim": "Traviata",
+    "alcim": null,
+    "megjegyzes": "Kisfaludy",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-10-04",
+    "kezdes": "19:00",
+    "cim": "Marica grófnő",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-10-08",
+    "kezdes": "18:00",
+    "cim": "Kantharosz Gála",
+    "alcim": null,
+    "megjegyzes": null,
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-10-09",
+    "kezdes": "19:00",
+    "cim": "Traviata",
+    "alcim": null,
+    "megjegyzes": "Gárdonyi",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-10-10",
+    "kezdes": "19:00",
+    "cim": "Traviata",
+    "alcim": null,
+    "megjegyzes": "Csengery",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-10-11",
+    "kezdes": "15:00",
+    "cim": "Szaffi",
+    "alcim": "előadás után dedikálás az előcsarnokban",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-10-17",
+    "kezdes": "19:00",
+    "cim": "LOVEre",
+    "alcim": "a Győri Balett előadása",
+    "megjegyzes": "Premier",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-10-18",
+    "kezdes": "15:00",
+    "cim": "LOVEre",
+    "alcim": "a Győri Balett előadása",
+    "megjegyzes": "Sipka",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-10-21",
+    "kezdes": "19:00",
+    "cim": "Tanulmány a nőkről",
+    "alcim": "KultKredit Program",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-10-23",
+    "kezdes": "19:00",
+    "cim": "Tóth Ilona emlékére 56'",
+    "alcim": "a Győri Balett és a Győri Nemzeti Színhzáz közös előadása",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-10-24",
+    "kezdes": "19:00",
+    "cim": "LOVEre",
+    "alcim": "a Győri Balett előadása",
+    "megjegyzes": "Kisfaludy",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-10-25",
+    "kezdes": "19:00",
+    "cim": "Rudolf",
+    "alcim": "KultKredit Program",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-10-28",
+    "kezdes": "19:00",
+    "cim": "Az üvegcipő",
+    "alcim": "KultKredit Program",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-10-29",
+    "kezdes": "19:00",
+    "cim": "Traviata",
+    "alcim": "KultKredit Program",
+    "megjegyzes": "Déryné",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-10-30",
+    "kezdes": "19:00",
+    "cim": "Traviata",
+    "alcim": null,
+    "megjegyzes": "Várady",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-10-31",
+    "kezdes": "19:00",
+    "cim": "Traviata",
+    "alcim": "utolsó bérletes előadás",
+    "megjegyzes": "Somlai",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-03",
+    "kezdes": "10:00",
+    "cim": "Tom Sawyer kalandjai",
+    "alcim": null,
+    "megjegyzes": "Lázár Ervin Program",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-03",
+    "kezdes": "13:00",
+    "cim": "Tom Sawyer kalandjai",
+    "alcim": null,
+    "megjegyzes": "Lázár Ervin Program",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-04",
+    "kezdes": "10:00",
+    "cim": "Tom Sawyer kalandjai",
+    "alcim": null,
+    "megjegyzes": "Lázár Ervin Program",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-04",
+    "kezdes": "13:00",
+    "cim": "Tom Sawyer kalandjai",
+    "alcim": null,
+    "megjegyzes": "Lázár Ervin Program",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-06",
+    "kezdes": "19:00",
+    "cim": "Dráma a Szalonban Kortárs drámajáték mindenkinek",
+    "alcim": "A Győri Nemzeti Színház drámaíró versenye",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-07",
+    "kezdes": "11:00",
+    "cim": "Pöttöm Panna",
+    "alcim": "A Bóbita Bábszínház előadása",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-07",
+    "kezdes": "19:00",
+    "cim": "Verdi’n the mood!",
+    "alcim": "a Classic Club Singers koncertje",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-08",
+    "kezdes": "11:00",
+    "cim": "Lúdas Matyi",
+    "alcim": "a Kabóca Bábszínház előadása",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-08",
+    "kezdes": "19:30",
+    "cim": "Vecsei H. Miklós és a QJÚB",
+    "alcim": "Koncertszínházi előadás Csoóri Sándor, Pilinszky János, Radnóti Miklós és Juhász Ferenc életműve nyomán…",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-11",
+    "kezdes": "19:00",
+    "cim": "Marica grófnő",
+    "alcim": "KultKredit Program",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-12",
+    "kezdes": "19:00",
+    "cim": "LOVEre",
+    "alcim": "a Győri Balett előadása",
+    "megjegyzes": "Simon Kázmér",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-13",
+    "kezdes": "19:00",
+    "cim": "LOVEre",
+    "alcim": "a Győri Balett előadása",
+    "megjegyzes": "Gárdonyi",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-14",
+    "kezdes": "19:00",
+    "cim": "LOVEre",
+    "alcim": "a Győri Balett előadása",
+    "megjegyzes": "Csengery",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-15",
+    "kezdes": "15:30",
+    "cim": "Egy Mederben",
+    "alcim": "a Rába Táncműhely csoportjainak bemutatója",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-15",
+    "kezdes": "18:00",
+    "cim": "Egy Mederben",
+    "alcim": "Rába 75, Kisalföld 50, Marcal 20. Jubileumi Néptánc Gála",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-21",
+    "kezdes": "19:00",
+    "cim": "Fröccs",
+    "alcim": null,
+    "megjegyzes": "Premier",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-22",
+    "kezdes": "15:00",
+    "cim": "Fröccs",
+    "alcim": null,
+    "megjegyzes": "Betlen",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-24",
+    "kezdes": "18:00",
+    "cim": "Primadonnák",
+    "alcim": null,
+    "megjegyzes": null,
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-25",
+    "kezdes": "19:00",
+    "cim": "Páratlan páros",
+    "alcim": "a soproni Petőfi Színház előadása",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-26",
+    "kezdes": "19:00",
+    "cim": "Rudolf",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-27",
+    "kezdes": "19:00",
+    "cim": "Fröccs",
+    "alcim": "KultKredit Program",
+    "megjegyzes": "Földes",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-28",
+    "kezdes": "19:00",
+    "cim": "Fröccs",
+    "alcim": null,
+    "megjegyzes": "Somlai",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-29",
+    "kezdes": "11:00",
+    "cim": "Szaffi",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-01",
+    "kezdes": "10:00",
+    "cim": "Tom Sawyer kalandjai",
+    "alcim": null,
+    "megjegyzes": "Lázár Ervin",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-01",
+    "kezdes": "13:00",
+    "cim": "Tom Sawyer kalandjai",
+    "alcim": null,
+    "megjegyzes": "Program",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-02",
+    "kezdes": "10:00",
+    "cim": "Tom Sawyer kalandjai",
+    "alcim": null,
+    "megjegyzes": "Lázár Ervin Program",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-03",
+    "kezdes": "19:00",
+    "cim": "LOVEre",
+    "alcim": "a Győri Balett előadása",
+    "megjegyzes": "Déryné",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-04",
+    "kezdes": "19:00",
+    "cim": "LOVEre",
+    "alcim": "a Győri Balett előadása",
+    "megjegyzes": "Várady",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-05",
+    "kezdes": "15:00",
+    "cim": "17. Boogiefeszt",
+    "alcim": "Boogie Show",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-05",
+    "kezdes": "19:00",
+    "cim": "17. Boogiefeszt",
+    "alcim": "Boogie Show",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-05",
+    "kezdes": "22:00",
+    "cim": "17. Boogiefeszt",
+    "alcim": "Boogie Afterparty a Csillárszinten",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-06",
+    "kezdes": "09:00",
+    "cim": "Mikulásposta",
+    "alcim": null,
+    "megjegyzes": null,
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-06",
+    "kezdes": "11:00",
+    "cim": "Mikulásposta",
+    "alcim": null,
+    "megjegyzes": null,
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-06",
+    "kezdes": "13:00",
+    "cim": "Mikulásposta",
+    "alcim": null,
+    "megjegyzes": null,
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-06",
+    "kezdes": "19:00",
+    "cim": "Tanulmány a nőkről",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-12",
+    "kezdes": "19:00",
+    "cim": "Anna Karenina",
+    "alcim": null,
+    "megjegyzes": "Premier",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-13",
+    "kezdes": "15:00",
+    "cim": "Anna Karenina",
+    "alcim": null,
+    "megjegyzes": "Betlen",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-15",
+    "kezdes": "11:00",
+    "cim": "Fröccs",
+    "alcim": null,
+    "megjegyzes": null,
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-15",
+    "kezdes": "17:00",
+    "cim": "Fröccs",
+    "alcim": null,
+    "megjegyzes": "Gáti",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-16",
+    "kezdes": "10:45",
+    "cim": "Fröccs",
+    "alcim": null,
+    "megjegyzes": "Paál István",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-16",
+    "kezdes": "17:00",
+    "cim": "Fröccs",
+    "alcim": null,
+    "megjegyzes": "Radnóti",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-18",
+    "kezdes": "19:00",
+    "cim": "Anna Karenina",
+    "alcim": null,
+    "megjegyzes": "Gárdonyi",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-19",
+    "kezdes": "15:00",
+    "cim": "Anna Karenina",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-19",
+    "kezdes": "19:00",
+    "cim": "Anna Karenina",
+    "alcim": null,
+    "megjegyzes": "Csengery",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-25",
+    "kezdes": "15:00",
+    "cim": "A diótörő",
+    "alcim": "a Győri Balett és a Győri Nemzeti Színház koprodukciója",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-25",
+    "kezdes": "19:00",
+    "cim": "A diótörő",
+    "alcim": "a Győri Balett és a Győri Nemzeti Színház koprodukciója",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-26",
+    "kezdes": "15:00",
+    "cim": "A diótörő",
+    "alcim": "a Győri Balett és a Győri Nemzeti Színház koprodukciója",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-26",
+    "kezdes": "19:00",
+    "cim": "A diótörő",
+    "alcim": "a Győri Balett és a Győri Nemzeti Színház koprodukciója",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-27",
+    "kezdes": "11:00",
+    "cim": "A diótörő",
+    "alcim": "a Győri Balett és a Győri Nemzeti Színház koprodukciója",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-27",
+    "kezdes": "15:00",
+    "cim": "A diótörő",
+    "alcim": "a Győri Balett és a Győri Nemzeti Színház koprodukciója",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-28",
+    "kezdes": "11:00",
+    "cim": "A diótörő",
+    "alcim": "a Győri Balett és a Győri Nemzeti Színház koprodukciója",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-28",
+    "kezdes": "15:00",
+    "cim": "A diótörő",
+    "alcim": "a Győri Balett és a Győri Nemzeti Színház koprodukciója",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-29",
+    "kezdes": "11:00",
+    "cim": "A diótörő",
+    "alcim": "a Győri Balett és a Győri Nemzeti Színház koprodukciója",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-29",
+    "kezdes": "15:00",
+    "cim": "A diótörő",
+    "alcim": "a Győri Balett és a Győri Nemzeti Színház koprodukciója",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-30",
+    "kezdes": "17:00",
+    "cim": "A padlás",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2027-01-09",
+    "kezdes": "19:00",
+    "cim": "Újévi Operett- és Musicalgála",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2027-01-10",
+    "kezdes": "15:00",
+    "cim": "Újévi Operett- és Musicalgála",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2027-01-10",
+    "kezdes": "19:00",
+    "cim": "Újévi Operett- és Musicalgála",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   }
+  ],
+  "Padlásszínház": [
+   {
+    "datum": "2026-01-12",
+    "kezdes": "19:30",
+    "cim": "A nagy füzet",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-01-15",
+    "kezdes": "19:30",
+    "cim": "A bárány utolsó megkísértése",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-01-17",
+    "kezdes": "19:30",
+    "cim": "Szorongó vigyorgó",
+    "alcim": "Posonyi Takács László előadása",
+    "megjegyzes": null,
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-01-23",
+    "kezdes": "19:30",
+    "cim": "Ernie, Hem, Papa",
+    "alcim": "Sárközi József előadása",
+    "megjegyzes": null,
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-01-26",
+    "kezdes": "19:30",
+    "cim": "Irina",
+    "alcim": "a RÉV Színház előadása",
+    "megjegyzes": null,
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-01-29",
+    "kezdes": "19:30",
+    "cim": "Asszony a fronton",
+    "alcim": null,
+    "megjegyzes": null,
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-10-02",
+    "kezdes": "19:30",
+    "cim": "RÉV ➲ 20ÉV FESZTIVÁL: IRINA",
+    "alcim": null,
+    "megjegyzes": null,
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-10-11",
+    "kezdes": "19:30",
+    "cim": "152 lépés Auschwitz felé",
+    "alcim": "Karácsony Gergely előadása",
+    "megjegyzes": null,
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-10-16",
+    "kezdes": "19:30",
+    "cim": "Szorongó vigyorgó",
+    "alcim": "Posonyi Takács László előadása",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-10-20",
+    "kezdes": "19:30",
+    "cim": "A nagy füzet",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-10-28",
+    "kezdes": "19:30",
+    "cim": "Ernie, Hem, Papa",
+    "alcim": "Sárközi József előadása",
+    "megjegyzes": null,
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-04",
+    "kezdes": "19:30",
+    "cim": "Asszony a fronton",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-06",
+    "kezdes": "19:00",
+    "cim": "Ünnepélyes megnyitó:",
+    "alcim": "Pintér Bence, Bakos-Kiss Gábor, Lutter Imre",
+    "megjegyzes": null,
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-06",
+    "kezdes": "19:15",
+    "cim": "Béle, borzalom: Radnóti-",
+    "alcim": "verskoncert Jávori Ferenc Fegya és Lutter Imre előadásában",
+    "megjegyzes": null,
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-07",
+    "kezdes": "10:00",
+    "cim": "Ünnepélyes megnyitó",
+    "alcim": null,
+    "megjegyzes": null,
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-07",
+    "kezdes": "10:30",
+    "cim": "Radnóti Miklós vers- és prózamondó verseny, a győztesek versenye",
+    "alcim": null,
+    "megjegyzes": null,
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-08",
+    "kezdes": "10:00",
+    "cim": "Radnóti Miklós vers- és prózamondó verseny, a győztesek versenye",
+    "alcim": null,
+    "megjegyzes": null,
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-08",
+    "kezdes": "17:00",
+    "cim": "Ünnepélyes eredményhirdetés és a Radnóti-díjak átadása",
+    "alcim": null,
+    "megjegyzes": null,
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-13",
+    "kezdes": "19:30",
+    "cim": "Szorongó vigyorgó",
+    "alcim": "Posonyi Takács László előadása",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-15",
+    "kezdes": "19:30",
+    "cim": "152 lépés Auschwitz felé",
+    "alcim": "Karácsony Gergely előadása",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-20",
+    "kezdes": "19:30",
+    "cim": "Hamu vagy gyémánt?",
+    "alcim": "Molnár Ágnes zenés előadása Cserháti Zsuzsa dalaival",
+    "megjegyzes": "regisztrációs jegy",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-25",
+    "kezdes": "19:30",
+    "cim": "Belém égsz",
+    "alcim": "RÉV Színház előadása",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-27",
+    "kezdes": "19:30",
+    "cim": "Ernie, Hem, Papa",
+    "alcim": "Sárközi József előadása",
+    "megjegyzes": null,
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-11-29",
+    "kezdes": "19:30",
+    "cim": "Hegyen át, vízen át",
+    "alcim": "Szina Kinga előadása",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-01",
+    "kezdes": "19:30",
+    "cim": "A nagy füzet",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-09",
+    "kezdes": "19:30",
+    "cim": "Asszony a fronton",
+    "alcim": null,
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-10",
+    "kezdes": "19:30",
+    "cim": "Kovács János felnövekedésee és bukása",
+    "alcim": "RÉV Színház",
+    "megjegyzes": "bérletszünet",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-19",
+    "kezdes": "19:30",
+    "cim": "A bárány utolsó megkísértése",
+    "alcim": null,
+    "megjegyzes": "bemutató",
     "modositott": false,
     "ellenorizendo": false
    }
