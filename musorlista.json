@@ -1,5 +1,5 @@
 {
- "frissitve": "2026-11-12T14:08:12Z",
+ "frissitve": "2026-11-13T19:13:49Z",
  "forras": "https://gyoriszinhaz.hu/musor/",
  "honapok": {
   "2026-01": {
@@ -23,10 +23,12 @@
   },
   "2026-11": {
    "allapot": "vegleges",
-   "pdf": "https://gyoriszinhaz.hu/wp-content/uploads/2026/10/2026-november-1.pdf",
+   "pdf": "https://gyoriszinhaz.hu/wp-content/uploads/2026/11/2026-november-modositott-1030.pdf",
    "felirat": "Novemberi műsor - nyomtatás",
    "kiadva": "2026. okt. 9.",
-   "modositva": [],
+   "modositva": [
+    "2026. okt. 30."
+   ],
    "sajat_pdf": true
   },
   "2026-12": {
@@ -505,16 +507,7 @@
     "alcim": null,
     "megjegyzes": "Sulibérlet D",
     "modositott": false,
-    "ellenorizendo": false
-   },
-   {
-    "datum": "2026-11-25",
-    "kezdes": "12:30",
-    "cim": "Jancsi és Juliska",
-    "alcim": null,
-    "megjegyzes": "Sulibérlet N",
-    "modositott": false,
-    "ellenorizendo": false
+    "ellenorizendo": true
    },
    {
     "datum": "2026-11-26",
@@ -1107,7 +1100,7 @@
     "datum": "2026-11-22",
     "kezdes": "15:00",
     "cim": "Fröccs",
-    "alcim": null,
+    "alcim": "előadás után deikálás az előcsarnokban*",
     "megjegyzes": "Betlen",
     "modositott": false,
     "ellenorizendo": false
