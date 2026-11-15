@@ -273,6 +273,31 @@ main{margin-left:0;padding:0 14px 100px}.top{padding-top:calc(14px + env(safe-ar
 #mnu{order:1}
 .mi[hidden]{display:none}
 .bar4{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+/* beosztás: hetenként hét sor, naponta négy beírható rubrika és egy számolt (az aznapi órák) */
+#v-beo .card.t{padding:14px 12px}
+#v-beo .bh{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+#v-beo .wk{flex:1;text-align:center}#v-beo .wk b{display:block;font-size:15px}#v-beo .wk span{font-size:12px;color:var(--mu)}
+#v-beo .bn{flex:none;width:40px;height:40px;border-radius:50%;padding:0;font-size:18px}
+#v-beo .day{display:grid;grid-template-columns:44px 1fr;gap:8px;align-items:center;padding:9px 0;border-top:1px solid var(--bd);max-width:520px}
+#v-beo .day:first-child{border-top:0}
+#v-beo .dn{display:block;text-align:left;background:none;border:0;padding:0;margin:0;font:inherit;color:inherit;cursor:pointer;touch-action:manipulation}
+#v-beo .dn b{display:block;font-size:14px}#v-beo .dn span{font-size:12px;color:var(--mu)}
+#v-beo .dn em{display:block;font-style:normal;font-size:11px;font-weight:700;color:var(--prm)}
+#v-beo .day.ma .dn b{color:var(--teal)}
+#v-beo .day.ma{box-shadow:inset 3px 0 0 var(--teal);padding-left:8px;margin-left:-8px}
+#v-beo .rub{display:grid;grid-template-columns:1fr 6px 1fr 8px 1fr 6px 1fr 4px 40px;align-items:center;gap:2px}
+#v-beo .rub i{text-align:center;color:var(--mu);font-style:normal}
+#v-beo .rub input{text-align:center;padding:9px 0;font-size:16px;min-width:0}
+#v-beo .ora{grid-column:9;text-align:center;font-weight:700;font-size:15px;padding:9px 0;border-radius:8px;background:var(--tbg);color:var(--teal);min-height:40px}
+#v-beo .ora:empty{background:var(--sf)}
+#v-beo .day.msz .ora{background:var(--prmbg);color:var(--prm)}
+/* hibajelzés: fedő műszakoknál piros rubrikák és figyelmeztetés a sor alatt */
+#v-beo .hm{display:none;grid-column:1/-1;margin:0;font-size:12px;font-weight:600;color:var(--red)}
+#v-beo .day.hib .hm{display:block}
+#v-beo .day.hib .rub input{border-color:var(--red)}
+#v-beo .day.hib .ora{background:var(--red);color:#fff}
+#v-beo .tul{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+#v-beo .tul span{font-weight:600}#v-beo .tul b{font-size:22px}#v-beo .tul b.neg{color:var(--red)}
 /* szabad DMX címek: vonalanként 20 oszlopos rács (mint az MA2 DMX lapja), a foglalt lámpák összefüggő sávok */
 .fgr{display:grid;grid-template-columns:30px repeat(20,minmax(0,1fr));max-width:520px;margin:10px 0 8px;user-select:none;-webkit-user-select:none}
 .fgr b{font-size:10px;font-weight:600;color:var(--mu);display:flex;align-items:center;justify-content:flex-end;padding-right:5px}
@@ -314,6 +339,8 @@ body.lopen #mnu:active .mc{transform:rotate(180deg) scale(.9)}
 #lnch.on .lt{opacity:1;transform:none;transition:transform .36s cubic-bezier(.34,1.4,.64,1),opacity .18s;transition-delay:var(--do,0s)}
 /* három oszlop: a menüben mindig 9 oldal van (3×3), a Beállítások pedig egyedül, alul középen áll */
 .lt[data-go="v-set"]{margin:0 33.333%}
+/* ha a menüpontok száma nem osztható hárommal, négy oszlop (pl. 10 oldal = 4 + 4 + 2) */
+.lgrid.c4 .lt{width:25%}.lgrid.c4 .lt[data-go="v-set"]{margin:0 37.5%}
 .lt .ic{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;background:var(--pn);border:1px solid var(--bd);color:var(--teal);box-shadow:0 2px 8px rgba(0,0,0,.07);transition:transform .15s}
 .lt:active .ic{transform:scale(.9)}
 .lt[data-go="v-set"] .ic{background:var(--nbg);color:var(--navy);border-color:transparent}

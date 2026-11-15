@@ -20,7 +20,7 @@ function dialog(o){const p=dlgQ.then(()=>dialogShow(o));dlgQ=p.catch(()=>{});ret
 function dialogShow(o){return new Promise(res=>{
  const L=$("dlg"),I=$("di2"),Y=$("dyes"),N=$("dno");
  $("dm").textContent=o.msg;I.style.display=o.input?"block":"none";I.value=o.def==null?"":o.def;
- Y.textContent=o.ok||"OK";Y.className="btn "+(o.danger?"rd":"pr");
+ Y.textContent=o.ok||"OK";Y.className="btn "+(o.danger?"rd":"pr");N.textContent=o.no||"Mégse";
  L.classList.add("on");if(o.input)setTimeout(()=>{I.focus();I.select()},60);
  const done=v=>{L.classList.remove("on");Y.onclick=N.onclick=L.onclick=null;document.removeEventListener("keydown",kd);res(v)};
  const kd=e=>{if(e.key==="Escape")done(null);if(e.key==="Enter"&&o.input)done(I.value)};
@@ -54,7 +54,7 @@ const shrink=f=>new Promise((res,rej)=>{const r=new FileReader();r.onerror=rej;
 
 /* A makrók (S.macros) és a beosztás (S.plan) adatai nem törlődnek: a tárban maradnak, ha később visszahozzuk őket. */
 const D={venues:[{n:"Nagyszínpad",ip:"192.168.0.100"},{n:"Kisfaludy Színpad",ip:"192.168.0.120"}],
- dd:"down",gep:[],shows:[],notes:[],theatres:[],rigs:[],chOv:{},ot:[],tours:[],set:{wage:0},tax:{e:false,u:false}};
+ dd:"down",gep:[],shows:[],notes:[],theatres:[],rigs:[],chOv:{},ot:[],tours:[],set:{wage:0},tax:{e:false,u:false},beo:{w:{}}};
 let S;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!S||typeof S!=="object")S={};
 /* átállás a korábbi verziókról */
@@ -298,9 +298,9 @@ $("thm").addEventListener("click",e=>{const b=e.target.closest("[data-th]");if(!
 renderTheme();
 
 /* ---- navigáció ---- */
-const TT={"v-console":"Konzol","v-dmx":"DMX","v-musor":"Műsor","v-shows":"Előadások","v-misc":"Egyebek","v-notes":"Jegyzetek","v-patch":"Patch sheet","v-calc":"Patch számoló","v-free":"Szabad DMX címek","v-rig":"Színpad","v-gep":"Gépállás","v-set":"Beállítások","v-hours":"Bérkalkulátor","v-map":"Térkép","v-sys":"Rendszer"};
+const TT={"v-console":"Konzol","v-dmx":"DMX","v-musor":"Műsor","v-shows":"Előadások","v-misc":"Egyebek","v-notes":"Jegyzetek","v-patch":"Patch sheet","v-calc":"Patch számoló","v-free":"Szabad DMX címek","v-rig":"Színpad","v-gep":"Gépállás","v-set":"Beállítások","v-beo":"Beosztás","v-hours":"Bérkalkulátor","v-map":"Térkép","v-sys":"Rendszer"};
 /* az alsó menü négy gombja szabadon választható (az Egyebek mindig megmarad); ami nincs lent, az az Egyebek alatt érhető el */
-const SLOT_NEV={"v-console":"Konzol","v-dmx":"DMX","v-musor":"Műsor","v-shows":"Táj","v-notes":"Jegyzet","v-patch":"Patch","v-calc":"Számoló","v-free":"Szabad","v-rig":"Színpad","v-gep":"Gépállás","v-hours":"Bér","v-map":"Térkép","v-sys":"Rendszer"};
+const SLOT_NEV={"v-console":"Konzol","v-dmx":"DMX","v-musor":"Műsor","v-shows":"Táj","v-notes":"Jegyzet","v-patch":"Patch","v-calc":"Számoló","v-free":"Szabad","v-rig":"Színpad","v-gep":"Gépállás","v-beo":"Beosztás","v-hours":"Bér","v-map":"Térkép","v-sys":"Rendszer"};
 /* a Tirisztor a Rendszer fül része lett: aki azt tette az alsó menübe, annak a Rendszer kerül oda */
 if(S.set.slot==="v-tiri")S.set.slot="v-sys";
 /* régebben csak a negyedik gomb volt választható (S.set.slot); a régi mentésekből is ebből indulunk */
@@ -335,6 +335,8 @@ let lnBack=false;
 function lnBuild(){
  if(LG.childElementCount)return;
  const it=[...document.querySelectorAll("#v-misc .mi:not([hidden])")].map(m=>[m.dataset.go,m.querySelector("svg").outerHTML,m.querySelector("b").textContent]);
+ /* három oszlop, ha úgy kijön kereken (pl. 9 oldal = 3×3), különben négy; a Beállítások mindig külön, alul középen */
+ LG.classList.toggle("c4",it.length%3!==0);
  it.push(["v-set",$("gear").querySelector("svg").outerHTML,"Beállítások"]);
  LG.innerHTML=it.map(([g,s,n])=>`<button class="lt" data-go="${g}"><span class="ic">${s}</span>${esc(n)}</button>`).join("");
 }
@@ -381,6 +383,7 @@ function go(id,back){
  if(id==="v-musor")renderMusor();
  if(id==="v-rig")renderRig();
  if(id==="v-free")renderFree();
+ if(id==="v-beo")renderBeo();
  window.scrollTo(0,0);
  navSync();
 }
@@ -1368,15 +1371,15 @@ if(VIL)encHead("vilagitas.enc.json").then(h=>{if(h.v!==VIL.v){VIL=null;localStor
 /* ---- bérkalkulátor ---- */
 const fm=n=>Math.round(n).toLocaleString("hu-HU")+" Ft";
 function net(g){return S.tax.e?g*0.85:S.tax.u?g*(1-0.185):g*(1-0.15-0.185)}
-const otPay=x=>x.h*x.m*S.set.wage;
+/* a túlórát a Beosztás fül számolja, itt csak az eredménye látszik; a régebben kézzel rögzített túlórák (S.ot) a tárban maradnak, csak nem látszanak */
 const tGross=x=>(x.g||0)+(x.h||0)*(x.w||S.set.wage);
 function renderHours(){
  $("hw").value=S.set.wage||"";$("te").checked=S.tax.e;$("tu").checked=S.tax.u;
  $("tw").placeholder=S.set.wage?String(S.set.wage):"alap";
- const oh=S.ot.reduce((a,x)=>a+x.h,0),og=S.ot.reduce((a,x)=>a+otPay(x),0);
  const T=S.tours.slice().sort((a,b)=>a.d<b.d?1:-1),tg=T.reduce((a,x)=>a+tGross(x),0);
- $("hst").innerHTML=[[oh.toFixed(2).replace(/\.?0+$/,"")+" h","Túlóra összesen"],[fm(og),"Túlóra pluszjövedelem (bruttó)"],[fm(net(og)),"Túlóra pluszjövedelem (nettó)"],[T.length+" db","Táj összesen"],[fm(tg),"Táj bruttó"],[fm(net(tg)),"Táj nettó"]].map(x=>`<div class="st"><b>${x[0]}</b><span>${x[1]}</span></div>`).join("");
- $("ol").innerHTML=S.ot.map(x=>`<div class="it"><span><b>${x.h} h</b>${x.m>1?" · ünnepnap ×"+x.m:""} → ${fm(otPay(x))} bruttó, <b>${fm(net(otPay(x)))}</b> nettó</span><button class="x2" data-ox="${x.id}">✕</button></div>`).join("")||'<p class="meta">Még nincs túlóra rögzítve.</p>';
+ /* a túlóra a Beosztás fülön beírt hetekből jön; mínusznál nincs plusz bevétel */
+ const om=bzCalc().m,og=om>0?om/60*S.set.wage:0;
+ $("hst").innerHTML=[[bzH(om)+" h","Túlóra (a Beosztásból)"],[fm(og),"Túlóra pluszjövedelem (bruttó)"],[fm(net(og)),"Túlóra pluszjövedelem (nettó)"],[T.length+" db","Táj összesen"],[fm(tg),"Táj bruttó"],[fm(net(tg)),"Táj nettó"]].map(x=>`<div class="st"><b>${x[0]}</b><span>${x[1]}</span></div>`).join("");
  $("tl").innerHTML=T.map(x=>{const w=x.w||S.set.wage;return `<div class="it" style="cursor:pointer"><span data-te="${x.id}"><b>${esc(x.d)}</b> · ${esc(x.n)}<br><span class="meta" style="margin:0">napidíj ${fm(x.g||0)}${x.h?" + "+x.h+" h × "+fm(w)+"/h":""} = ${fm(tGross(x))} bruttó</span> → <b>${fm(net(tGross(x)))}</b> nettó</span><button class="x2" data-tx="${x.id}">✕</button></div>`}).join("")||'<p class="meta">Még nincs táj rögzítve.</p>';
  $("gn").textContent=S.tax.e?"EKHO: 15% levonás (egyszerűsített számítás).":S.tax.u?"25 év alatt: SZJA-mentes, 18,5% járulék (a mentesség havi átlagkereset-határig jár).":"Általános: 15% SZJA + 18,5% járulék. A számítás tájékoztató jellegű.";
 }
@@ -1384,14 +1387,10 @@ $("hw").onchange=()=>{S.set.wage=+$("hw").value||0;save();renderHours()};
 $("te").onchange=()=>{S.tax.e=$("te").checked;save();renderHours()};
 $("tu").onchange=()=>{S.tax.u=$("tu").checked;save();renderHours()};
 $("td").value=today();
-$("oa").onclick=()=>{const h=parseFloat($("oh").value);if(!h||h<=0){toast("Add meg az órák számát");return}
- S.ot.push({id:uid(),h,m:+$("om").value});save();$("oh").value="";renderHours()};
-$("or").onclick=async()=>{if(S.ot.length&&await ask("Nullázod a túlórákat?")){S.ot=[];save();renderHours()}};
 $("ta").onclick=()=>{if(!$("td").value){toast("Dátum kell");return}
  const g=parseFloat($("tg").value),h=parseFloat($("th").value),w=parseFloat($("tw").value);
  S.tours.push({id:uid(),d:$("td").value,n:$("tn").value.trim()||"Táj",g:isNaN(g)?0:g,h:isNaN(h)?0:h,w:isNaN(w)?0:w});save();
  ["tn","tg","th","tw"].forEach(i=>$(i).value="");renderHours()};
-$("ol").addEventListener("click",e=>{const x=e.target.closest("[data-ox]");if(x){S.ot=S.ot.filter(o=>String(o.id)!==x.dataset.ox);save();renderHours()}});
 $("tl").addEventListener("click",async e=>{
  const x=e.target.closest("[data-tx]"),t=e.target.closest("[data-te]");
  if(x){S.tours=S.tours.filter(o=>String(o.id)!==x.dataset.tx);save();renderHours();return}
@@ -1403,10 +1402,90 @@ $("tl").addEventListener("click",async e=>{
 });
 /* teljes nullázás: az órabér és az adózási beállítások megmaradnak */
 $("rz").onclick=async()=>{
- if(!await ask("Biztosan nullázod a bérkalkulátort?\n\nA túlórák és a tájak törlődnek, az órabér megmarad."))return;
- S.ot=[];S.tours=[];save();
- ["oh","tn","tg","th","tw"].forEach(i=>$(i).value="");$("om").value="1";$("td").value=today();
+ if(!await ask("Biztosan nullázod a bérkalkulátort?\n\nA tájak törlődnek, az órabér megmarad."))return;
+ S.tours=[];save();
+ ["tn","tg","th","tw"].forEach(i=>$(i).value="");$("td").value=today();
  renderHours();toast("Bérkalkulátor nullázva");
+};
+
+/* ---- beosztás: heti munkaidő kézzel beírva (naponta két műszak), ebből napi óraszám és túlóra-egyenleg ----
+   S.beo.w[a hét hétfője] = 7 nap, naponként [1. kezdés, 1. vég, 2. kezdés, 2. vég, "m" ha maszek]; S.beo.from = a nullázás hete */
+const BZ_NAP=["Hétfő","Kedd","Szerda","Csütörtök","Péntek","Szombat","Vasárnap"],BZ_R=["Hét","Kedd","Sze","Csüt","Pén","Szo","Vas"],BZ_ALAP=40*60;
+if(!S.beo.w||typeof S.beo.w!=="object")S.beo.w={};
+const bzIso=d=>d.toLocaleDateString("sv-SE");
+const bzMon=d=>{const x=new Date(d.getFullYear(),d.getMonth(),d.getDate());x.setDate(x.getDate()-((x.getDay()+6)%7));return x};
+const bzAdd=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+/* ISO hétszám: a hét csütörtökje dönti el, melyik évhez tartozik */
+const bzNo=m=>{const t=bzAdd(m,3),j=new Date(t.getFullYear(),0,4);return 1+Math.round((t-bzMon(j))/6048e5)};
+/* "9", "9.30", "9:30", "930" -> percek; hibás vagy üres -> null */
+const bzMin=v=>{v=String(v||"").trim();if(!v)return null;const m=/^(\d{1,2})(?:[.:,]?(\d{2}))?$/.exec(v);if(!m)return null;const h=+m[1],p=+(m[2]||0);return h>24||p>59?null:h*60+p};
+let bzWk=bzMon(new Date());
+const bzWeek=()=>S.beo.w[bzIso(bzWk)]||Array.from({length:7},()=>["","","",""]);
+/* műszakok egy napra: [kezdet, vég] percben; ha a vég korábbi, mint a kezdet, éjfél utánra nyúlik */
+const bzSh=r=>[[r[0],r[1]],[r[2],r[3]]].map(([a,b])=>[bzMin(a),bzMin(b)]).filter(([a,b])=>a!==null&&b!==null).map(([a,b])=>[a,b<=a?b+1440:b]);
+/* hiba, ha a két műszak fedi egymást (pl. kétszer 8–16); ha csak összeérnek (8–12 és 12–16), az rendben van */
+const bzFed=r=>{const s=bzSh(r);return s.length===2&&s[0][0]<s[1][1]&&s[1][0]<s[0][1]};
+/* az aznapi percek; fedésnél az átfedő időt csak egyszer számoljuk */
+const bzDay=r=>{const s=bzSh(r);return bzFed(r)?Math.max(s[0][1],s[1][1])-Math.min(s[0][0],s[1][0]):s.reduce((x,[a,b])=>x+b-a,0)};
+const bzH=m=>String(Math.round(m/6)/10).replace(".",",");
+/* a maszeknak jelölt nap órái nem számítanak bele a hétbe */
+const bzWMin=W=>W.reduce((s,r)=>s+(r[4]==="m"?0:bzDay(r)),0);
+const bzStore=W=>{if(W.some(r=>r.some(Boolean)))S.beo.w[bzIso(bzWk)]=W;else delete S.beo.w[bzIso(bzWk)];save()};
+/* túlóra-egyenleg percben: a mostani hét is beleszámít, amint van benne beírt (nem maszek) műszak;
+   a jövő hetei és a kitöltetlen hetek nem, a nullázás hetétől kezdve (a Bérkalkulátor is ezt mutatja) */
+function bzCalc(){
+ const most=bzIso(bzMon(new Date()));
+ const het=Object.keys(S.beo.w).filter(k=>k<=most&&(!S.beo.from||k>=S.beo.from)&&bzWMin(S.beo.w[k])>0);
+ return {het,m:het.reduce((s,k)=>s+bzWMin(S.beo.w[k])-BZ_ALAP,0)};
+}
+function bzTul(){
+ const w=S.set.wage,{het,m}=bzCalc();
+ $("bzt").textContent=bzH(m)+" óra";$("bzt").classList.toggle("neg",m<0);
+ $("bzf").textContent=m<=0?"":w?`Ez kb. ${fm(m/60*w)} bruttó, ${fm(net(m/60*w))} nettó plusz bevétel a nullázás óta (${fm(w)}/óra, a Bérkalkulátor szerint).`:"Az összeghez add meg az órabért a Bérkalkulátorban.";
+ $("bzg").textContent=`${het.length} kitöltött hét alapján, a mostanival együtt, heti 40 óra felett. A maszek napok nem számítanak bele.`+(S.beo.from?` A nullázás óta a ${S.beo.from.replace(/-/g,". ")}.-i héttől számol.`:"");
+}
+function renderBeo(){
+ const W=bzWeek(),end=bzAdd(bzWk,6),t=today();
+ $("bzw").textContent=`${bzWk.getFullYear()}. ${MS_HO[bzWk.getMonth()]} ${bzWk.getDate()}. – ${bzWk.getMonth()===end.getMonth()?"":MS_HO[end.getMonth()]+" "}${end.getDate()}.`;
+ $("bzs").textContent=bzNo(bzWk)+". hét";
+ $("bzd").innerHTML=BZ_NAP.map((n,i)=>{const d=bzAdd(bzWk,i),r=W[i],msz=r[4]==="m";
+  const inp=k=>`<input inputmode="decimal" autocomplete="off" data-d="${i}" data-k="${k}" value="${esc(r[k])}" aria-label="${n}, ${["1. kezdés","1. vége","2. kezdés","2. vége"][k]}">`;
+  return `<div class="day${bzIso(d)===t?" ma":""}${msz?" msz":""}${bzFed(r)?" hib":""}" data-day="${i}"><button class="dn" data-m="${i}" aria-pressed="${msz}" aria-label="${n}${msz?", maszek":""}: koppints a maszek jelöléshez"><b>${BZ_R[i]}</b><span>${d.getMonth()+1}.${String(d.getDate()).padStart(2,"0")}.</span>${msz?"<em>maszek</em>":""}</button><div class="rub">${inp(0)}<i>–</i>${inp(1)}<i></i>${inp(2)}<i>–</i>${inp(3)}<b class="ora" data-o="${i}" aria-label="${n}, ledolgozott óra">${bzDay(r)?bzH(bzDay(r)):""}</b></div><p class="hm" role="alert">A két műszak fedi egymást. Nézd át, az átfedő időt csak egyszer számolom.</p></div>`}).join("");
+ bzTul();
+}
+$("bzd").addEventListener("input",e=>{const i=e.target;if(!i.dataset.k)return;
+ const W=bzWeek(),r=W[+i.dataset.d];r[+i.dataset.k]=i.value.trim();bzStore(W);
+ $("bzd").querySelector(`.ora[data-o="${i.dataset.d}"]`).textContent=bzDay(r)?bzH(bzDay(r)):"";
+ $("bzd").querySelector(`.day[data-day="${i.dataset.d}"]`).classList.toggle("hib",bzFed(r));
+ bzTul();
+});
+/* a nap nevére koppintva maszeknak jelölhető a nap (és vissza): az órái látszanak, de a túlórába nem számítanak */
+$("bzd").addEventListener("click",e=>{const b=e.target.closest("[data-m]");if(!b)return;
+ const W=bzWeek(),r=W[+b.dataset.m];
+ if(r[4]==="m")r.length=4;else r[4]="m";
+ bzStore(W);renderBeo();
+});
+$("bzp").onclick=()=>{bzWk=bzAdd(bzWk,-7);renderBeo()};
+$("bzn").onclick=()=>{bzWk=bzAdd(bzWk,7);renderBeo()};
+$("bzm").onclick=()=>{bzWk=bzMon(new Date());renderBeo()};
+/* nullázás (pl. negyedéves kifizetés után): a korábbi hetek kikerülnek a számolásból, a beírt adatok megmaradnak.
+   Mivel a mostani hét folyamatosan beleszámít, külön megkérdezzük, hogy azt is kifizették-e: ha igen, a jövő héttel indul újra */
+$("bzr").onclick=async()=>{
+ if(!await ask("Biztosan nullázod a túlórát?\n\nA korábbi hetek kikerülnek a számolásból. A beírt adatok megmaradnak.","Nullázás"))return;
+ const m=bzMon(new Date()),cur=S.beo.w[bzIso(m)];
+ const is=!!cur&&bzWMin(cur)>0&&await dialog({msg:"A mostani hét túlórája is ki lett fizetve?\n\nHa igen, a számolás a jövő héttel indul újra. Ha nem, a mostani hét még beleszámít.",ok:"Igen, az is",no:"Nem, az még számít"})===true;
+ S.beo.from=bzIso(is?bzAdd(m,7):m);save();bzTul();toast("Túlóra nullázva");
+};
+/* a hét műszakai egy .ics fájlba; az azonosító (UID) állandó, így az újra betöltött hét a régi bejegyzést frissíti, nem duplázza */
+$("bzi").onclick=()=>{
+ const p=n=>String(n).padStart(2,"0"),st=(d,m)=>{const x=new Date(d.getFullYear(),d.getMonth(),d.getDate(),0,m);return `${x.getFullYear()}${p(x.getMonth()+1)}${p(x.getDate())}T${p(x.getHours())}${p(x.getMinutes())}00`};
+ const now=new Date().toISOString().replace(/[-:]/g,"").slice(0,15)+"Z",ev=[];
+ bzWeek().forEach((r,i)=>bzSh(r).forEach(([a,b],k)=>{const d=bzAdd(bzWk,i);
+  ev.push(["BEGIN:VEVENT",`UID:pt-beo-${bzIso(d)}-${k+1}@pocket-theatre`,`DTSTAMP:${now}`,`DTSTART:${st(d,a)}`,`DTEND:${st(d,b)}`,r[4]==="m"?"SUMMARY:Maszek":"SUMMARY:Munka","END:VEVENT"].join("\r\n"))}));
+ if(!ev.length){toast("Ezen a héten nincs beírt műszak");return}
+ const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Pocket Theatre//Beosztas//HU","CALSCALE:GREGORIAN"].concat(ev,"END:VCALENDAR").join("\r\n")+"\r\n"],{type:"text/calendar"}));
+ a.download=`beosztas-${bzIso(bzWk)}.ics`;document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(a.href),10000);
 };
 /* indulás a kezdőoldalon (az alsó menü első gombja); a fájl végén áll, mert az oldalak rajzolásához minden fenti rész kell */
 if(navCur()==="v-console"&&home()!=="v-console")go(home());
