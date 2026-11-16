@@ -1,6 +1,6 @@
 // Pocket Theatre – service worker
 // Új kiadásnál elég a VERSION-t átírni (pl. 'v0.7').
-const VERSION = 'v1.5';
+const VERSION = 'v1.6';
 const CACHE = 'pocket-theatre-' + VERSION;
 const RUNTIME = 'pocket-theatre-cdn';
 
@@ -107,6 +107,11 @@ async function networkFirst(req, url) {
     let res = await fetch(req.url, { cache: 'no-cache', credentials: 'same-origin' });
     res = await cleanRedirect(res);
     if (res.ok) cache.put(key, res.clone());
+    // ha a szerver hibát ad (5xx), inkább a tárolt példány megy ki, ha van
+    else if (res.status >= 500) {
+      const hit = (await cache.match(key)) || (await cache.match(req, { ignoreSearch: true }));
+      if (hit) return hit;
+    }
     return res;
   } catch (e) {
     const hit =
@@ -134,6 +139,8 @@ async function pageFirst(req, url) {
   const timer = setTimeout(() => ctl.abort(), PAGE_TIMEOUT);
   try {
     const net = await fetch(req.url, { cache: 'no-cache', credentials: 'same-origin', signal: ctl.signal });
+    // szerverhiba (5xx) esetén is a tárolt példány nyílik meg, mintha nem lenne net
+    if (net.status >= 500) throw new Error('szerverhiba');
     // a teljes letöltést megvárjuk, hogy az időkorlát arra is vonatkozzon (és Safarin se legyen átirányított válasz)
     const body = await net.blob();
     clearTimeout(timer);

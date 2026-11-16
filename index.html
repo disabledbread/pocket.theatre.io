@@ -15,8 +15,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Pocket Theatre">
 <meta property="og:title" content="Pocket Theatre">
-<!-- Az og:image-nél teljes URL kell, pl. https://FELHASZNALO.github.io/REPO/icon.png -->
-<meta property="og:image" content="icon.png">
+<!-- az og:image-nél teljes URL kell, különben a megosztott link mellett nem jelenik meg az ikon -->
+<meta property="og:image" content="https://disabledbread.github.io/pocket.theatre.io/icon.png">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -30,7 +30,7 @@
  <button class="bb"></button>
 </aside>
 <main>
-<div class="top"><h1 id="ttl">Konzol</h1><button class="btn sm" id="back" style="display:none" data-go="v-misc">← Vissza</button><button class="btn sm gear" id="scan" style="display:none" aria-label="Megosztott előadás beolvasása" title="Megosztott előadás beolvasása"><svg class="i" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 8v8" stroke-width="1.5"/><path d="M9.5 8v8" stroke-width="1"/><path d="M12 8v8" stroke-width="2"/><path d="M14.5 8v8" stroke-width="1"/><path d="M17 8v8" stroke-width="1.5"/></svg></button><button class="btn sm gear" id="gear" data-go="v-set" style="display:none" aria-label="Beállítások" title="Beállítások"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.830l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="btn pr sm" id="newShow" style="display:none">＋ Új előadás</button></div>
+<div class="top"><h1 id="ttl">Konzol</h1><span id="tma"></span><button class="btn sm" id="back" style="display:none" data-go="v-misc">← Vissza</button><button class="btn sm gear" id="scan" style="display:none" aria-label="Megosztott előadás beolvasása" title="Megosztott előadás beolvasása"><svg class="i" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 8v8" stroke-width="1.5"/><path d="M9.5 8v8" stroke-width="1"/><path d="M12 8v8" stroke-width="2"/><path d="M14.5 8v8" stroke-width="1"/><path d="M17 8v8" stroke-width="1.5"/></svg></button><button class="btn sm gear" id="gear" data-go="v-set" style="display:none" aria-label="Beállítások" title="Beállítások"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.830l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="btn pr sm" id="newShow" style="display:none">＋ Új előadás</button></div>
 
 <!-- KONZOL -->
 <section class="view on" id="v-console">
@@ -41,8 +41,8 @@
   <h2>MA2 / MA3 Web Remote</h2>
   <p class="sub">Koppints egy helyszínre: kitölti az IP-t, és megnyitja a web remote-ot (a routerhez kell csatlakoznod). Tesztelni a „demo” szóval lehet.</p>
   <div id="venues"></div>
-  <div class="row"><div><label>Név</label><input id="vn" placeholder="pl. Stúdió"></div><div><label>IP cím (porttal is lehet)</label><input id="vi" placeholder="192.168.0.130" inputmode="url" autocapitalize="off"></div><button class="btn a" id="vs">Mentés</button></div>
-  <div class="row"><div><label>Egyszeri csatlakozás IP-vel</label><input id="ip" placeholder="192.168.0.100" inputmode="url" autocapitalize="off"></div><button class="btn pr a" id="cn">Csatlakozás</button><button class="btn a" id="nt">Új lapon</button></div>
+  <div class="row"><div><label>Név</label><input id="vn" placeholder="pl. Stúdió"></div><div><label>IP cím (porttal is lehet)</label><input id="vi" placeholder="192.168.1.20" inputmode="url" autocapitalize="off"></div><button class="btn a" id="vs">Mentés</button></div>
+  <div class="row"><div><label>Egyszeri csatlakozás IP-vel</label><input id="ip" placeholder="192.168.1.10" inputmode="url" autocapitalize="off"></div><button class="btn pr a" id="cn">Csatlakozás</button><button class="btn a" id="nt">Új lapon</button></div>
   <p class="sub" id="cnote"></p>
   <div class="rm" id="rm" style="display:none">
    <div class="rmb"><span class="rmt" id="rmt"></span><button class="btn sm" id="rmf">Teljes képernyő</button><button class="btn cl" id="rmc"><svg class="i" viewBox="0 0 24 24"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg>Összecsukás</button></div>
@@ -118,7 +118,7 @@
  <div class="card" id="sysempty" style="display:none"><p class="meta" style="text-align:center;margin:0">Ennek a színpadnak a rendszeréről még nincs adat.</p></div>
  <div class="seg sysseg" id="sysseg"><button data-sys="vez" class="on">Vezérlés</button><button data-sys="tiri">Tirisztor</button></div>
  <div id="sys-vez">
-  <div class="card t" id="vlk"><div data-tlock="vil"></div><div id="vbody"><div class="vnav" id="vnav"></div></div></div>
+  <div class="card t"><div data-tlock="vil"></div><div id="vbody"><div class="vnav" id="vnav"></div></div></div>
   <div id="vpan"></div>
  </div>
  <div id="sys-tiri" style="display:none">
@@ -156,7 +156,7 @@
  <div class="card t">
   <h2>Google Drive</h2>
   <p class="sub" id="gds" style="white-space:pre-line"></p>
-  <button class="btn wide" id="gdc"></button>
+  <button class="btn wide" id="gdc">Csatlakozás a Google Drive-hoz</button>
   <div id="gdo" style="display:none"><div class="two"><button class="btn pr" id="gdn">Mentés most</button><button class="btn" id="gdr">Visszatöltés</button></div></div>
   <div id="gdl"></div>
   <button class="lnk" id="gdx">Leválasztás</button>
@@ -171,7 +171,7 @@
  <div class="card"><h2>Alsó menü</h2><p class="sub">A négy gomb bármelyik oldal lehet, az Egyebek mindig megmarad (telefonon középen: az 1–2. tőle balra, a 3–4. jobbra). Ami nincs lent, az az Egyebek alatt érhető el. Ha egy már lent lévőt választasz, a két gomb helyet cserél.</p><div class="bar4" id="bar"></div></div>
  <div class="card"><h2>Megjelenés</h2><p class="sub">Az automatikus a telefon világos vagy sötét beállítását követi.</p><div class="seg" id="thm"><button data-th="">Automatikus</button><button data-th="light">Világos</button><button data-th="dark">Sötét</button></div></div>
  <div class="card"><h2>Az app</h2><p class="sub" style="margin:0">Pocket Theatre. Az adatok ezen az eszközön, a böngészőben tárolódnak.</p><p class="sub" id="sto" style="margin:6px 0 0"></p></div>
- <p class="sub" style="text-align:center">Verzió: v1.5</p>
+ <p class="sub" style="text-align:center">Verzió: v1.6</p>
 </section>
 
 <section class="view" id="v-calc">
@@ -253,7 +253,7 @@
   <h2>Táj rögzítése</h2>
   <div class="row"><div><label>Dátum</label><input id="td" type="date"></div><div><label>Táj / helyszín</label><input id="tn" placeholder="pl. Hamlet, Győr"></div></div>
   <div class="row"><div><label>Napidíj, bruttó (Ft)</label><input id="tg" type="number" placeholder="0"></div><div><label>Dolgozott órák</label><input id="th" type="number" step="0.25" placeholder="0"></div><div><label>Órabér (Ft/h)</label><input id="tw" type="number" placeholder="alap"></div><button class="btn pr a" id="ta">Hozzáad</button></div>
-  <p class="sub">Táj bruttó = napidíj + órák × órabér. Ha az órabér üres, a beállításokban megadott érték él. Szerkesztéshez koppints a sorra.</p>
+  <p class="sub">Táj bruttó = napidíj + órák × órabér. Ha az órabér üres, a beállításokban megadott érték él. Ha egy tájat kifizettek, koppints rá, és kihúzza; szerkeszteni a ceruzával lehet.</p>
   <div id="tl"></div>
  </div>
  <button class="btn dg wide" id="rz">Nullázás</button>
