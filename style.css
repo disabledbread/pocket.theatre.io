@@ -348,3 +348,11 @@ body.lopen #mnu:active .mc{transform:rotate(180deg) scale(.9)}
 .lt .ic svg.i{width:26px;height:26px}
 #lnch .lt.go{opacity:0;transform:scale(1.35);transition:transform .3s ease-out,opacity .25s;transition-delay:0s}
 }
+/* meglepetés: teljes képernyős fekete réteg a pixeles fejjel; előbb szaggatottan ránagyít, aztán lépésekben rázkódik (mint egy 8 bites játék) */
+#egg{position:fixed;top:0;right:0;bottom:0;left:0;background:#000;display:none;align-items:center;justify-content:center;z-index:100;cursor:pointer}
+#egg.on{display:flex}
+#egg img{width:min(86vw,86vh);height:min(86vw,86vh);object-fit:contain;image-rendering:pixelated;image-rendering:crisp-edges}
+#egg.s1 img{animation:eggIn .5s steps(4,end) both}
+@keyframes eggIn{from{transform:scale(.4)}to{transform:scale(1)}}
+#egg.s2 img{animation:eggShake .36s steps(1,end) infinite}
+@keyframes eggShake{0%{transform:translateX(-14px)}25%{transform:translateX(14px)}50%{transform:translateX(-8px)}75%{transform:translateX(8px)}100%{transform:translateX(-14px)}}

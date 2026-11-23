@@ -1,6 +1,6 @@
 // Pocket Theatre – service worker
 // Új kiadásnál elég a VERSION-t átírni (pl. 'v0.7').
-const VERSION = 'v1.6';
+const VERSION = 'v1.6.5';
 const CACHE = 'pocket-theatre-' + VERSION;
 const RUNTIME = 'pocket-theatre-cdn';
 
@@ -125,7 +125,8 @@ async function networkFirst(req, url) {
 // Oldalbetöltés: először hálózat, de gyenge térerőn nem várunk a végtelenségig.
 // Ha PAGE_TIMEOUT alatt nem jön meg az oldal (vagy nincs net), a tárolt példány nyílik meg,
 // és a hozzá tartozó CSS és JS is a tárból jön, hogy a három fájl ugyanabból a kiadásból legyen.
-const PAGE_TIMEOUT = 3000;
+// 1,5 mp: az MA2 remote internet nélküli wifijén se kelljen sokáig várni (2026-11-22)
+const PAGE_TIMEOUT = 1500;
 let cachedUntil = 0;
 
 async function pageFirst(req, url) {

@@ -1327,8 +1327,11 @@ $("sys-vez").addEventListener("input",e=>{
 
 const rowCells=r=>r.c.flat();
 function tiriFind(n){for(const t of TI.tiris)for(const r of t.rows)if(rowCells(r).includes(n))return {t,r,kw:r.c.some(c=>Array.isArray(c)&&c.includes(n))?2:5};return null}
+/* a jelszót a Beállításokban kell megadni; a lezárt részeken csak egy felirat jelzi, hol oldható fel */
 function renderLocks(){
- document.querySelectorAll("[data-tlock]").forEach(el=>{el.innerHTML=!LOCK[el.dataset.tlock]()?"":`<p class="sub">${el.dataset.tlock==="patch"?"A beépített patch":"Ez a rész"} jelszóval védett, eszközönként egyszer kell megadni.</p><div class="row"><div><input type="password" data-tpw autocomplete="current-password" placeholder="Jelszó"></div><button class="btn pr a" data-tun>Megnyitás</button></div>`});
+ document.querySelectorAll("[data-tlock]").forEach(el=>{el.innerHTML=!LOCK[el.dataset.tlock]()?"":`<p class="sub" style="margin:0">${el.dataset.tlock==="patch"?"A beépített patch":"Ez a rész"} jelszóval védett. A Beállításokban oldható fel.</p>`});
+ const all=!LOCK[""]()&&!LOCK.map()&&!LOCK.patch()&&!LOCK.vil();
+ $("tst").textContent=all?"Minden védett rész fel van oldva ezen az eszközön.":"A Hibakereső, a Tirisztor, a Térkép, a beépített patch, a Rendszer és a Szabad DMX címek jelszóval védettek. Eszközönként egyszer kell megadni.";
 }
 function renderTiri(){
  renderLocks();
@@ -1358,8 +1361,31 @@ function seedVenues(){
  S.venSeed=true;r.forEach(v=>{if(v&&v.ip&&!S.venues.some(x=>x.ip===v.ip))S.venues.push({n:String(v.n||v.ip),ip:String(v.ip)})});
  save();renderVenues();
 }
+/* meglepetés: a titkos jelszóra a feloldás helyett kb. 3 mp-re feljön a főnök feje (előbb állóképként, aztán rázkódó animációként).
+   A kódban csak a jelszó lenyomata van, a képek pedig ugyanezzel a jelszóval titkosítva (meglepetes.enc.json), így nem nyilvánosak. */
+const EGG="9dd3f4967ddf8411b7ccd4b3c2f60ecd8b3fce30d942150cd2e7e61ad17aa224";
+const sha256=async t=>[...new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t)))].map(b=>b.toString(16).padStart(2,"0")).join("");
+let eggT=[];
+function eggStop(){eggT.forEach(clearTimeout);eggT=[];$("egg").className="";$("eggi").removeAttribute("src")}
+async function eggTry(pw,btn){
+ let h="";try{h=await sha256(pw)}catch(e){return false}
+ if(h!==EGG)return false;
+ btn.disabled=true;
+ try{
+  const d=JSON.parse((await encOpen("meglepetes.enc.json",pw)).txt);
+  const pre=new Image();pre.src=d.a;
+  eggStop();$("eggi").src=d.s;$("egg").className="on s1";
+  eggT.push(setTimeout(()=>{$("eggi").src=d.a;$("egg").className="on s2"},1000));
+  eggT.push(setTimeout(eggStop,3000));
+ }catch(e){toast(e instanceof TypeError||e.message==="nincs"?"Ehhez internet kell":"Nem sikerült megnyitni")}
+ btn.disabled=false;
+ return true;
+}
+$("egg").onclick=eggStop;
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("egg").classList.contains("on"))eggStop()});
 async function tiriUnlock(btn){
- const pw=btn.closest("[data-tlock]").querySelector("[data-tpw]").value;if(!pw)return;
+ const inp=btn.closest("[data-tbox]").querySelector("[data-tpw]"),pw=inp.value;if(!pw)return;
+ if(await eggTry(pw,btn)){inp.value="";return}
  btn.disabled=true;
  try{
   /* a világítási rendszer fájlja később került be, ezért ha még nincs fent, a többi akkor is megnyílik */
@@ -1369,6 +1395,7 @@ async function tiriUnlock(btn){
   MAP={v:m.v,html:m.txt};localStorage.setItem(MK,JSON.stringify(MAP));
   if(!S.nszSeed)seedPatch(JSON.parse(p.txt));
   renderTiri();renderHk();renderMap();renderVil();renderFree();
+  inp.value="";btn.disabled=false;toast("Feloldva");
  }
  catch(e){
   toast(e.name==="OperationError"?"Hibás jelszó":location.protocol==="file:"?"Fájlból megnyitva nem működik, a localhost címen próbáld":!(window.crypto&&crypto.subtle)?"Ezen a címen nem nyitható meg, csak https vagy localhost alatt":e instanceof TypeError&&!navigator.onLine?"Nincs internet, ellenőrizd a kapcsolatot":"Nem sikerült megnyitni: "+e.message);
@@ -1376,7 +1403,7 @@ async function tiriUnlock(btn){
  }
 }
 document.addEventListener("click",e=>{const b=e.target.closest("[data-tun]");if(b)tiriUnlock(b)});
-document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.dataset&&e.target.dataset.tpw!==undefined)tiriUnlock(e.target.closest("[data-tlock]").querySelector("[data-tun]"))});
+document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.dataset&&e.target.dataset.tpw!==undefined)tiriUnlock(e.target.closest("[data-tbox]").querySelector("[data-tun]"))});
 safe(renderTiri);
 /* ha új kiosztás vagy térkép jelent meg, a jelszót újra kérjük */
 if(TI)encHead("tiri.enc.json").then(h=>{if(h.v!==TI.v){TI=null;localStorage.removeItem(TK);renderTiri();renderHk()}}).catch(()=>{});

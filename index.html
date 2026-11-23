@@ -162,6 +162,11 @@
   <button class="lnk" id="gdx">Leválasztás</button>
   <a class="lnk" href="adatvedelem.html" target="_blank" rel="noopener" style="text-align:center">Adatkezelési tájékoztató</a>
  </div>
+ <div class="card t" data-tbox>
+  <h2>Védett részek</h2>
+  <p class="sub" id="tst"></p>
+  <div class="row"><div><input type="password" data-tpw autocomplete="current-password" placeholder="Jelszó"></div><button class="btn pr a" data-tun>Feloldás</button></div>
+ </div>
  <div class="card p">
   <h2>Mentés fájlba</h2>
   <p class="sub">Minden adat egy fájlban, a képekkel együtt. Visszatöltéskor a fájl tartalma kerül a mostani adatok helyére.</p>
@@ -171,7 +176,7 @@
  <div class="card"><h2>Alsó menü</h2><p class="sub">A négy gomb bármelyik oldal lehet, az Egyebek mindig megmarad (telefonon középen: az 1–2. tőle balra, a 3–4. jobbra). Ami nincs lent, az az Egyebek alatt érhető el. Ha egy már lent lévőt választasz, a két gomb helyet cserél.</p><div class="bar4" id="bar"></div></div>
  <div class="card"><h2>Megjelenés</h2><p class="sub">Az automatikus a telefon világos vagy sötét beállítását követi.</p><div class="seg" id="thm"><button data-th="">Automatikus</button><button data-th="light">Világos</button><button data-th="dark">Sötét</button></div></div>
  <div class="card"><h2>Az app</h2><p class="sub" style="margin:0">Pocket Theatre. Az adatok ezen az eszközön, a böngészőben tárolódnak.</p><p class="sub" id="sto" style="margin:6px 0 0"></p></div>
- <p class="sub" style="text-align:center">Verzió: v1.6</p>
+ <p class="sub" style="text-align:center">Verzió: v1.6.5</p>
 </section>
 
 <section class="view" id="v-calc">
@@ -265,6 +270,7 @@
 <div id="shr" class="ovl"><div class="dbox"><h2 id="shrt" style="margin:0 0 10px"></h2><div id="shrq" class="shrq"></div><p class="sub" style="margin:10px 0 12px">A másik telefonon: Pocket Theatre → Színpad → jobb felül a beolvasás ikon. Távolra küldd linkként.</p><div class="drow"><button class="btn" id="shrx">Bezárás</button><button class="btn pr" id="shrs">Küldés linkként</button></div></div></div>
 <div id="scn" class="ovl"><div class="dbox"><h2 style="margin:0 0 10px">Beolvasás</h2><video id="scnv" playsinline muted></video><p class="sub" id="scnm" style="margin:8px 0 12px"></p><div class="drow"><button class="btn" id="scnx">Mégse</button><button class="btn" id="scnp">Link beillesztése</button></div></div></div>
 <div id="lnch" aria-hidden="true"><div class="lgrid" id="lgrid"></div></div>
+<div id="egg" aria-hidden="true"><img id="eggi" alt=""></div>
 <div id="toast"></div>
 <script src="app.js"></script>
 <script>
