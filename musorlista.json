@@ -1,5 +1,5 @@
 {
- "frissitve": "2026-11-13T19:13:49Z",
+ "frissitve": "2026-11-23T17:41:53Z",
  "forras": "https://gyoriszinhaz.hu/musor/",
  "honapok": {
   "2026-01": {
@@ -1760,6 +1760,33 @@
    {
     "datum": "2026-10-29",
     "kezdes": "19:30",
+    "cim": "Hárman a padon",
+    "alcim": "Petőfi Kulturális Program",
+    "megjegyzes": null,
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-03",
+    "kezdes": "18:00",
+    "cim": "Asszony a fronton",
+    "alcim": "Petőfi Kulturális Program",
+    "megjegyzes": null,
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-08",
+    "kezdes": "18:00",
+    "cim": "Asszony a fronton",
+    "alcim": "Petőfi Kulturális Program",
+    "megjegyzes": "Rajka, Faluház",
+    "modositott": false,
+    "ellenorizendo": false
+   },
+   {
+    "datum": "2026-12-10",
+    "kezdes": "18:00",
     "cim": "Hárman a padon",
     "alcim": "Petőfi Kulturális Program",
     "megjegyzes": null,
