@@ -118,9 +118,21 @@ def feldolgoz(pdf):
     oszlopok = None
     aktualis, nap = HONAPOK[honap], None
     tetelek, kulon = [], []
+    tajresz = False
     for sor in tabla.rows:
         cellak = [pymupdf.Rect(c) if c else None for c in sor.cells]
         sor_szavak = [w[4] for w in szavak if pymupdf.Rect(sor.bbox).contains(pymupdf.Rect(w[:4]))]
+        if tajresz:
+            # A táblázat alján álló táj-rész sorai (nap | cím + alcím | időpont | helyszín)
+            t = taj_sor(szavak, pymupdf.Rect(sor.bbox), f'{ev}-{HONAPOK[honap]:02d}')
+            if t:
+                tetelek.append(t)
+            continue
+        if oszlopok is not None and nap is not None and not sor_szavak and cellak[0] and cellak[0].x1 > oszlopok[-1][1]:
+            # Szöveg nélküli, teljes szélességű sor a napok után: a "SZÉKHELYEN KÍVÜLI ELŐADÁSOK" fejléc,
+            # ami (pl. a decemberi PDF-ben) rajzként van a lapon, nem szövegként; utána a tájak jönnek
+            tajresz = True
+            continue
         if oszlopok is None:
             if 'NAGYSZÍNHÁZ' in sor_szavak:
                 # A fejléc után a színpadoszlopok x-tartománya
@@ -165,22 +177,28 @@ def tajelőadasok(lap, honap):
     eredmeny = []
     for tabla in lap.find_tables().tables:
         for sor in tabla.rows:
-            r = pymupdf.Rect(sor.bbox)
-            benne = [w for w in szavak if r.contains(pymupdf.Point((w[0] + w[2]) / 2, (w[1] + w[3]) / 2))]
-            idok = [w for w in benne if IDO.match(w[4])]
-            nap = [w for w in benne if re.fullmatch(r'\d{1,2}\.', w[4]) and w[0] < r.x0 + 30]
-            if len(idok) != 1 or not nap:
-                continue
-            ido = idok[0]
-            bal = sorok([w for w in benne if nap[0][2] + 30 < w[0] < ido[0] - 5])
-            m = IDO.match(ido[4])
-            eredmeny.append({'datum': f"{honap}-{int(nap[0][4][:-1]):02d}", 'szinpad': 'Székhelyen kívül',
-                             'kezdes': f'{int(m[1]):02d}:{m[2]}',
-                             'cim': ' '.join(s['szoveg'] for s in bal if not s['szoveg'].startswith('-')) or None,
-                             'alcim': ' '.join(s['szoveg'].lstrip('- ') for s in bal if s['szoveg'].startswith('-')) or None,
-                             'megjegyzes': ' '.join(w[4] for w in benne if w[0] > ido[2]) or None,
-                             'modositott': False, 'ellenorizendo': False})
+            t = taj_sor(szavak, pymupdf.Rect(sor.bbox), honap)
+            if t:
+                eredmeny.append(t)
     return eredmeny
+
+
+def taj_sor(szavak, r, honap):
+    # Egy táj-sor: nap | cím + alcím | időpont | helyszín (a helyszín néha rajz, akkor üres marad)
+    benne = [w for w in szavak if r.contains(pymupdf.Point((w[0] + w[2]) / 2, (w[1] + w[3]) / 2))]
+    idok = [w for w in benne if IDO.match(w[4])]
+    nap = [w for w in benne if re.fullmatch(r'\d{1,2}\.', w[4]) and w[0] < r.x0 + 30]
+    if len(idok) != 1 or not nap:
+        return None
+    ido = idok[0]
+    bal = sorok([w for w in benne if nap[0][2] + 30 < w[0] < ido[0] - 5])
+    m = IDO.match(ido[4])
+    return {'datum': f"{honap}-{int(nap[0][4][:-1]):02d}", 'szinpad': 'Székhelyen kívül',
+            'kezdes': f'{int(m[1]):02d}:{m[2]}',
+            'cim': ' '.join(s['szoveg'] for s in bal if not s['szoveg'].startswith('-')) or None,
+            'alcim': ' '.join(s['szoveg'].lstrip('- ') for s in bal if s['szoveg'].startswith('-')) or None,
+            'megjegyzes': ' '.join(w[4] for w in benne if w[0] > ido[2]) or None,
+            'modositott': False, 'ellenorizendo': False}
 
 
 def main():
