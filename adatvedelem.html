@@ -19,13 +19,13 @@ hr{border:0;border-top:1px solid var(--bd);margin:28px 0}
 <body>
 <main>
 <h1>Adatkezelési tájékoztató</h1>
-<p class="mu">Pocket Theatre · hatályos: 2026. november 5.</p>
+<p class="mu">Pocket Theatre · hatályos: 2026. november 26.</p>
 
 <p>A Pocket Theatre egy színházi világosítóknak készült webes alkalmazás. Ez a tájékoztató leírja, milyen adatokat kezel az app, hol tárolja őket, és mit csinál a Google Drive-hozzáféréssel.</p>
 
 <h2>Röviden</h2>
 <ul>
-<li>Az app nem kér regisztrációt, nincs saját szervere, és nem gyűjt statisztikát vagy hirdetési adatot.</li>
+<li>Az app nem kér regisztrációt, és nem gyűjt statisztikát vagy hirdetési adatot. Saját szervert csak a push értesítésekhez használ, és csak akkor, ha ezeket bekapcsolod.</li>
 <li>Minden, amit beírsz (jegyzetek, előadások, patch sheetek, gépállások, bérkalkulátor, képek), a saját készülékeden, a böngésző tárhelyén marad.</li>
 <li>A Google Drive-mentés nem kötelező. Ha bekapcsolod, a mentések a <strong>saját</strong> Drive-odra kerülnek, a fejlesztő nem fér hozzájuk.</li>
 </ul>
@@ -46,6 +46,14 @@ hr{border:0;border-top:1px solid var(--bd);margin:28px 0}
 <p>A Pocket Theatre a Google API-kból kapott adatok használatánál betartja a <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener">Google API Services User Data Policy</a> előírásait, beleértve a Limited Use követelményeket.</p>
 <p class="mu">Pocket Theatre's use and transfer of information received from Google APIs adheres to the Google API Services User Data Policy, including the Limited Use requirements.</p>
 <p><strong>Leválasztás:</strong> a Beállításokban a „Leválasztás” linkkel bármikor megszüntetheted a kapcsolatot. Ekkor az app visszavonja az engedélyt, és ha kéred, a mentéseket a Drive kukájába teszi. A hozzáférést a Google-fiókod biztonsági beállításainál is visszavonhatod.</p>
+
+<h2>Push értesítések</h2>
+<p>A Beállításokban fajtánként bekapcsolhatók az értesítések (jegyzet-emlékeztetők, tájak, beosztás), alapból mind ki van kapcsolva. Hogy az értesítés akkor is megjöjjön, amikor az app zárva van, bekapcsolás után az app elküldi egy push szervernek:</p>
+<ul>
+<li>a bekapcsolt fajták következő 60 napra eső értesítéseinek <strong>időpontját és szövegét</strong> (pl. „Holnap táj: …”, „Holnap munka: 8–14”);</li>
+<li>a készülék push-címét, amelyet a böngésző vagy a telefon push szolgáltatása (Google, Apple vagy Mozilla) ad, és egy véletlenszerű eszközazonosítót.</li>
+</ul>
+<p>A push szerver a <strong>Cloudflare</strong> rendszerén fut (Cloudflare Workers és D1 adatbázis). A kiküldött értesítés tartalma titkosítva megy át a push szolgáltatáson, azt csak a te készüléked tudja kibontani. Egy értesítés a kiküldése után törlődik a szerverről. Ha minden fajtát kikapcsolsz, az app törli a szerverről a készülékhez tartozó adatokat; ha az appot törlöd, a szerver a következő értesítésnél észleli, és szintén törli őket. Más adatot (jegyzetek többi része, képek, patch, bér) az app nem küld a szervernek.</p>
 
 <h2>Külső szolgáltatások</h2>
 <ul>

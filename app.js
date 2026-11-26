@@ -94,7 +94,11 @@ safe(()=>S.theatres.forEach(t=>t.stages.forEach(s=>s.files.forEach(f=>{f.n=Strin
 const DK="lt-drive";
 let DR={};try{DR=JSON.parse(localStorage.getItem(DK))||{}}catch(e){}
 let DJ=null;
-const save=()=>{try{const j=JSON.stringify(S);localStorage.setItem(KEY,j);if(DJ!==null&&j!==DJ){DJ=j;driveTouch()}}catch(e){toast("A tár megtelt")}};
+/* push értesítések beállításai: eszközönként külön (nem kerül a mentésbe), lásd lent a push résznél */
+const PK="lt-push";
+let PU={};try{PU=JSON.parse(localStorage.getItem(PK))||{}}catch(e){}
+let puHook=null;
+const save=()=>{try{const j=JSON.stringify(S);localStorage.setItem(KEY,j);if(DJ!==null&&j!==DJ){DJ=j;driveTouch()}}catch(e){toast("A tár megtelt")}if(puHook)puHook()};
 /* korábbi egyképes jegyzetek átemelése az új, többképes tárolóba */
 S.notes.forEach(n=>{
  if(n.imgs)return;
@@ -882,26 +886,33 @@ safe(renderNotes);
 
 /* ---- értesítések (jegyzet + táj), amíg az oldal nyitva van ---- */
 /* telefonon a new Notification hibát dob, ott csak a service workeren át lehet értesíteni */
-function notify(msg){
+/* ha az adott fajtára be van kapcsolva a push, a rendszerértesítést a push szerver küldi, itt csak a felirat marad */
+function notify(msg,k){
  toast(msg);
- if(!window.Notification||Notification.permission!=="granted")return;
+ if(!window.Notification||Notification.permission!=="granted"||(PU[k]&&PU.sub))return;
  const opt={body:msg,icon:"icon.png"},direct=()=>{try{new Notification("Pocket Theatre",opt)}catch(e){}};
  if(!navigator.serviceWorker){direct();return}
  navigator.serviceWorker.getRegistration().then(r=>r?r.showNotification("Pocket Theatre",opt):direct()).catch(direct);
 }
 function checkReminders(){
  let ch=false;const now=Date.now();
- S.notes.forEach(n=>{if(n.i&&!n.d&&!n.f&&n.r&&Date.parse(n.r)<=now){n.f=true;ch=true;notify("Emlékeztető: "+n.t.slice(0,60))}});
+ S.notes.forEach(n=>{if(n.i&&!n.d&&!n.f&&n.r&&Date.parse(n.r)<=now){n.f=true;ch=true;notify(noteMsg(n),"n")}});
  S.shows.forEach(s=>{
   if(!s.d)return;
-  const d0=new Date(s.d+"T00:00"),end=d0.getTime()+864e5;
-  const e1=new Date(d0);e1.setDate(e1.getDate()-1);e1.setHours(18,0,0,0);
-  const e2=new Date(d0);e2.setHours(7,0,0,0);
-  const dep=s.t?" Indulás: "+s.t+".":"";
-  if(!s.f1&&now>=e1.getTime()&&now<d0.getTime()){s.f1=true;ch=true;notify("Holnap táj: "+s.n+(s.v?" ("+s.v+")":"")+"."+dep)}
-  if(!s.f2&&now>=e2.getTime()&&now<end){s.f2=true;ch=true;notify("Ma táj: "+s.n+(s.v?" ("+s.v+")":"")+"."+dep)}
+  const [e1,e2,d0,end]=tajIdo(s);
+  if(!s.f1&&now>=e1&&now<d0){s.f1=true;ch=true;notify(tajMsg(s,false),"t")}
+  if(!s.f2&&now>=e2&&now<end){s.f2=true;ch=true;notify(tajMsg(s,true),"t")}
  });
  if(ch)save();
+}
+/* az értesítések szövege és ideje: a helyi figyelő és a push ugyanezt használja */
+const noteMsg=n=>"Emlékeztető: "+n.t.slice(0,60);
+const tajMsg=(s,ma)=>(ma?"Ma":"Holnap")+" táj: "+s.n+(s.v?" ("+s.v+")":"")+"."+(s.t?" Indulás: "+s.t+".":"");
+/* [előző nap 18:00, aznap 7:00, a nap eleje, a nap vége] */
+function tajIdo(s){
+ const d0=new Date(s.d+"T00:00"),e1=new Date(d0),e2=new Date(d0);
+ e1.setDate(e1.getDate()-1);e1.setHours(18,0,0,0);e2.setHours(7,0,0,0);
+ return [e1.getTime(),e2.getTime(),d0.getTime(),d0.getTime()+864e5];
 }
 setInterval(checkReminders,30000);setTimeout(checkReminders,1500);
 
@@ -1535,6 +1546,74 @@ $("bzi").onclick=()=>{
  a.download=`beosztas-${bzIso(bzWk)}.ics`;document.body.appendChild(a);a.click();a.remove();
  setTimeout(()=>URL.revokeObjectURL(a.href),10000);
 };
+/* ---- push értesítések: a jövőbeli értesítések (időpont + szöveg) a push szerverre mennek,
+   és az akkor is szól, ha az app zárva van. Alapból ki van kapcsolva, fajtánként a Beállításokban kapcsolható. ---- */
+const PUSH_URL="https://pocket-theatre-push.pocket-theatre.workers.dev",PUSH_KEY="BAT6oDpPP4pLZ7zJ0_1msEaM4iD0T637lT8NeLtiZH2OqBPczyGmBGq4T_Nf3zL-5wFR1Gb_3APFcMQzU0nP0Ls";
+const puSave=()=>{try{localStorage.setItem(PK,JSON.stringify(PU))}catch(e){}};
+const puAny=()=>!!(PU.n||PU.t||PU.b);
+const puOk=()=>"serviceWorker" in navigator&&"PushManager" in window&&!!window.Notification;
+const puRnd=()=>[...crypto.getRandomValues(new Uint8Array(24))].map(b=>b.toString(16).padStart(2,"0")).join("");
+const puKey=s=>Uint8Array.from(atob(s.replace(/-/g,"+").replace(/_/g,"/")),c=>c.charCodeAt(0));
+/* a következő 60 nap értesítései (legfeljebb 300) */
+function puItems(){
+ const now=Date.now(),max=now+60*864e5,o=[];
+ const add=(at,b,tag)=>{if(at>now+30e3&&at<max)o.push({at,b,tag})};
+ if(PU.n)S.notes.forEach(n=>{if(n.i&&!n.d&&n.r)add(Date.parse(n.r),noteMsg(n),"n"+n.id)});
+ if(PU.t)S.shows.forEach(s=>{if(!s.d)return;const [e1,e2]=tajIdo(s);add(e1,tajMsg(s,false),"t"+s.id);add(e2,tajMsg(s,true),"t"+s.id)});
+ /* beosztás: a műszakos nap előtti este 20:00-kor, pl. „Holnap munka: 8–14 · 16–22” */
+ if(PU.b)Object.keys(S.beo.w).forEach(k=>(S.beo.w[k]||[]).forEach((r,i)=>{
+  if(!Array.isArray(r))return;
+  const t=[[r[0],r[1]],[r[2],r[3]]].filter(([a,b])=>bzMin(a)!==null&&bzMin(b)!==null).map(([a,b])=>a+"–"+b).join(" · ");
+  if(!t)return;
+  const d=bzAdd(new Date(k+"T00:00"),i-1);d.setHours(20,0,0,0);
+  add(d.getTime(),"Holnap "+(r[4]==="m"?"maszek":"munka")+": "+t,"b"+k+i);
+ }));
+ return o.sort((a,b)=>a.at-b.at).slice(0,300);
+}
+/* feliratkozás (ha még nincs) és a lista elküldése, ha változott */
+async function puSync(force){
+ if(!puAny()||!PU.id||!puOk()||Notification.permission!=="granted")return;
+ const reg=await navigator.serviceWorker.ready;
+ const sub=(await reg.pushManager.getSubscription())||(await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:puKey(PUSH_KEY)}));
+ const items=puItems(),sj=sub.toJSON(),h=await sha256(JSON.stringify([sj,items]));
+ if(!force&&h===PU.h&&PU.sub===sub.endpoint)return;
+ const r=await fetch(PUSH_URL+"/sync",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:PU.id,sec:PU.sec,sub:sj,items})});
+ if(!r.ok)throw new Error("szerver "+r.status);
+ PU.h=h;PU.sub=sub.endpoint;puSave();
+}
+async function puOff(){
+ const reg=await navigator.serviceWorker.ready,sub=await reg.pushManager.getSubscription();
+ if(PU.id)await fetch(PUSH_URL+"/off",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:PU.id,sec:PU.sec})});
+ if(sub)await sub.unsubscribe();
+ delete PU.h;delete PU.sub;puSave();
+}
+let puT=0;
+const puLater=()=>{clearTimeout(puT);if(puAny())puT=setTimeout(()=>puSync().catch(()=>{}),2500)};
+function renderPush(){
+ const ok=puOk(),den=ok&&Notification.permission==="denied";
+ document.querySelectorAll("[data-pu]").forEach(c=>{c.checked=!!PU[c.dataset.pu];c.disabled=!ok});
+ $("pst").textContent=!ok?"Ezen az eszközön nem érhető el. iPhone-on csak a főképernyőre tett appban működik (iOS 16.4 vagy újabb).":
+  den?"Az értesítések le vannak tiltva ennek az appnak a telefon beállításaiban.":
+  puAny()&&PU.sub?"Bekapcsolva: akkor is jön értesítés, ha az app zárva van. Ehhez a bekapcsolt fajták időpontja és szövege a push szerverre kerül.":
+  "Alapból kikapcsolva. Bekapcsolás után akkor is jön értesítés, ha az app zárva van; ehhez a bekapcsolt fajták időpontja és szövege a push szerverre kerül.";
+}
+document.querySelectorAll("[data-pu]").forEach(c=>c.onchange=async()=>{
+ const k=c.dataset.pu,was=PU[k];
+ if(c.checked){
+  /* az engedélykérésnek közvetlenül a koppintásra kell jönnie (iPhone) */
+  const p=Notification.permission==="granted"?"granted":await Notification.requestPermission();
+  if(p!=="granted"){c.checked=false;renderPush();toast("Az értesítések nincsenek engedélyezve");return}
+  if(!PU.id){PU.id=puRnd();PU.sec=puRnd()}
+ }
+ PU[k]=c.checked;puSave();
+ try{if(puAny())await puSync(true);else await puOff();toast(c.checked?"Bekapcsolva":"Kikapcsolva")}
+ catch(e){PU[k]=was;puSave();toast("Nem sikerült elérni az értesítési szervert")}
+ renderPush();
+});
+safe(renderPush);
+puHook=puLater;
+if(puAny())setTimeout(()=>puSync().catch(()=>{}),3000);
+
 /* indulás a kezdőoldalon (az alsó menü első gombja); a fájl végén áll, mert az oldalak rajzolásához minden fenti rész kell */
 safe(()=>{if(navCur()==="v-console"&&home()!=="v-console")go(home());else renderMa()});
 })();

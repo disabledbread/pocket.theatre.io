@@ -1,6 +1,6 @@
 // Pocket Theatre – service worker
 // Új kiadásnál elég a VERSION-t átírni (pl. 'v0.7').
-const VERSION = 'v1.6.5';
+const VERSION = 'v1.7';
 const CACHE = 'pocket-theatre-' + VERSION;
 const RUNTIME = 'pocket-theatre-cdn';
 
@@ -97,6 +97,24 @@ self.addEventListener('fetch', event => {
   }
 
   // Minden más (pl. MA Web Remote IP-n) – nem nyúlunk hozzá
+});
+
+// Push értesítés a push szervertől (akkor is, ha az app zárva van)
+self.addEventListener('push', event => {
+  let d = {};
+  try { d = event.data ? event.data.json() : {}; } catch (e) {}
+  event.waitUntil(self.registration.showNotification(d.t || 'Pocket Theatre', {
+    body: d.b || '', tag: d.tag || undefined, icon: './icon-192.png', badge: './icon-192.png'
+  }));
+});
+
+// Az értesítésre koppintva az app nyílik meg (ha már nyitva van, előre jön)
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  event.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
+    for (const c of list) if ('focus' in c) return c.focus();
+    return self.clients.openWindow('./');
+  }));
 });
 
 // CSS, JS és a titkosított adatok: először hálózat, offline esetén a tárolt példány, így ezek mindig együtt frissülnek
