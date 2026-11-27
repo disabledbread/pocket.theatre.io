@@ -1481,9 +1481,10 @@ const bzShK=r=>[0,1].map(k=>[k,bzMin(r[2*k]),bzMin(r[2*k+1])]).filter(([,a,b])=>
 const bzSh=r=>bzShK(r).map(([,a,b])=>[a,b]);
 /* maszek-e a k. műszak (az egész napos jelölés mindkettőre vonatkozik) */
 const bzMk=(r,k)=>r[4]==="m"||r[4]==="m"+(k+1);
-/* a műszakok szövegesen, pl. „8–12 (maszek) · 14–22”; egész napos maszeknál a jelzés elöl áll */
-const bzTxt=r=>{const s=bzShK(r);if(!s.length)return "";const all=s.every(([k])=>bzMk(r,k));
- return (all?"maszek ":"")+s.map(([k])=>r[2*k]+"–"+r[2*k+1]+(!all&&bzMk(r,k)?" (maszek)":"")).join(" · ")};
+/* a műszakok szövegesen, pl. „8–12 (maszek) · 14–22”; az idő nélkül maszeknak jelölt műszak csak „maszek”
+   (pl. „maszek · 14–22”), az egész napos maszek jelzését a hívó teszi elé */
+const bzTxt=r=>[0,1].map(k=>{const a=bzMin(r[2*k]),b=bzMin(r[2*k+1]),m=r[4]==="m"+(k+1);
+ return a!==null&&b!==null?r[2*k]+"–"+r[2*k+1]+(m?" (maszek)":""):m?"maszek":""}).filter(Boolean).join(" · ");
 /* hiba, ha a két műszak fedi egymást (pl. kétszer 8–16); ha csak összeérnek (8–12 és 12–16), az rendben van */
 const bzFed=r=>{const s=bzSh(r);return s.length===2&&s[0][0]<s[1][1]&&s[1][0]<s[0][1]};
 /* az aznapi percek; fedésnél az átfedő időt csak egyszer számoljuk */
@@ -1496,8 +1497,8 @@ const bzStore=W=>{if(W.some(r=>r.some(Boolean)))S.beo.w[bzIso(bzWk)]=W;else dele
 /* a mai munkaidő a kezdőoldal címsorában, halványan (pl. „ma 8–14 · 16–22”); csak a kezdőoldalon látszik */
 function renderMa(){
  const d=new Date(),W=S.beo.w[bzIso(bzMon(d))],r=W&&W[(d.getDay()+6)%7];
- const t=r&&navCur()===home()?bzTxt(r):"";
- $("tma").textContent=t?"ma "+t:"";
+ const t=r&&navCur()===home()?bzTxt(r):"",all=r&&r[4]==="m";
+ $("tma").textContent=all&&navCur()===home()?("ma maszek "+t).trim():t?"ma "+t:"";
 }
 /* túlóra-egyenleg percben: minden hét beleszámít, amiben van beírt (nem maszek) műszak, az előre beírt jövő hetek is;
    a kitöltetlen hetek nem, a nullázás hetétől kezdve (a Bérkalkulátor is ezt mutatja) */
@@ -1516,7 +1517,7 @@ function renderBeo(){
  $("bzw").textContent=`${bzWk.getFullYear()}. ${MS_HO[bzWk.getMonth()]} ${bzWk.getDate()}. – ${bzWk.getMonth()===end.getMonth()?"":MS_HO[end.getMonth()]+" "}${end.getDate()}.`;
  $("bzs").textContent=bzNo(bzWk)+". hét";
  $("bzd").innerHTML=BZ_NAP.map((n,i)=>{const d=bzAdd(bzWk,i),r=W[i],msz=r[4]==="m",mz=r[4]==="m1"?1:r[4]==="m2"?2:0,ml=msz?"maszek":mz?mz+". maszek":"";
-  const inp=k=>`<input inputmode="decimal" autocomplete="off" data-d="${i}" data-k="${k}" value="${esc(r[k])}" aria-label="${n}, ${["1. kezdés","1. vége","2. kezdés","2. vége"][k]}">`;
+  const inp=k=>`<input inputmode="decimal" autocomplete="off" data-d="${i}" data-k="${k}" value="${esc(r[k])}"${msz||mz===(k>>1)+1?' placeholder="maszek"':""} aria-label="${n}, ${["1. kezdés","1. vége","2. kezdés","2. vége"][k]}">`;
   return `<div class="day${bzIso(d)===t?" ma":""}${msz?" msz":""}${mz?" mz"+mz:""}${bzFed(r)?" hib":""}" data-day="${i}"><button class="dn" data-m="${i}" aria-pressed="${!!ml}" aria-label="${n}${ml?", "+ml:""}: koppints a maszek jelöléshez"><b>${BZ_R[i]}</b><span>${d.getMonth()+1}.${String(d.getDate()).padStart(2,"0")}.</span>${ml?`<em>${ml}</em>`:""}</button><div class="rub">${inp(0)}<i>–</i>${inp(1)}<i></i>${inp(2)}<i>–</i>${inp(3)}<b class="ora" data-o="${i}" aria-label="${n}, ledolgozott óra">${bzDay(r)?bzH(bzDay(r)):""}</b></div><p class="hm" role="alert">A két műszak fedi egymást. Nézd át, az átfedő időt csak egyszer számolom.</p></div>`}).join("");
  bzTul();
 }
@@ -1526,10 +1527,10 @@ $("bzd").addEventListener("input",e=>{const i=e.target;if(!i.dataset.k)return;
  $("bzd").querySelector(`.day[data-day="${i.dataset.d}"]`).classList.toggle("hib",bzFed(r));
  bzTul();
 });
-/* a nap nevére koppintva körbe lehet léptetni a maszek jelölést: egész nap → csak az 1. műszak → csak a 2. → nincs
-   (ha csak egy műszak van beírva: egész nap → nincs); a maszek órák látszanak, de a túlórába nem számítanak */
+/* a nap nevére koppintva körbe lehet léptetni a maszek jelölést: egész nap → csak az 1. műszak → csak a 2. → nincs;
+   időt nem kell hozzá beírni (pl. délelőtt maszek, ismeretlen időben); a maszek órák a túlórába nem számítanak */
 $("bzd").addEventListener("click",e=>{const b=e.target.closest("[data-m]");if(!b)return;
- const W=bzWeek(),r=W[+b.dataset.m],L=bzShK(r).length===2?["","m","m1","m2"]:["","m"];
+ const W=bzWeek(),r=W[+b.dataset.m],L=["","m","m1","m2"];
  const nx=L[(L.indexOf(r[4]||"")+1)%L.length];
  if(nx)r[4]=nx;else r.length=4;
  bzStore(W);renderBeo();
@@ -1574,11 +1575,12 @@ function puItems(){
     a reggeli csak akkor, ha az első műszak 7 után kezdődik */
  if(PU.b)Object.keys(S.beo.w).forEach(k=>(S.beo.w[k]||[]).forEach((r,i)=>{
   if(!Array.isArray(r))return;
-  let t=bzTxt(r);if(!t)return;
-  t=t.startsWith("maszek ")?"maszek: "+t.slice(7):"munka: "+t;
+  const p=bzTxt(r),all=r[4]==="m";if(!p&&!all)return;
+  /* „Holnap munka: 8–14”, „Holnap maszek: 8–14”, vegyes napon „Holnap: 8–12 (maszek) · 14–22” vagy „Holnap: maszek · 14–22” */
+  const t=all?"maszek"+(p?": "+p:""):/maszek/.test(p)?": "+p:"munka: "+p;
   const d0=bzAdd(new Date(k+"T00:00"),i),e=bzAdd(d0,-1),m=new Date(d0);e.setHours(20,0,0,0);m.setHours(7,0,0,0);
-  add(e.getTime(),"Holnap "+t,"b"+k+i);
-  if(Math.min(...bzSh(r).map(([a])=>a))>7*60)add(m.getTime(),"Ma "+t,"b"+k+i);
+  add(e.getTime(),"Holnap"+(t[0]===":"?"":" ")+t,"b"+k+i);
+  if(Math.min(...bzSh(r).map(([a])=>a))>7*60)add(m.getTime(),"Ma"+(t[0]===":"?"":" ")+t,"b"+k+i);
  }));
  return o.sort((a,b)=>a.at-b.at).slice(0,300);
 }
