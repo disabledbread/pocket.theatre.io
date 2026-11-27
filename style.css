@@ -292,6 +292,7 @@ main{margin-left:0;padding:0 14px 100px}.top{padding-top:calc(14px + env(safe-ar
 #v-beo .ora{grid-column:9;text-align:center;font-weight:700;font-size:15px;padding:9px 0;border-radius:8px;background:var(--tbg);color:var(--teal);min-height:40px}
 #v-beo .ora:empty{background:var(--sf)}
 #v-beo .day.msz .ora{background:var(--prmbg);color:var(--prm)}
+#v-beo .day.msz .rub input,#v-beo .day.mz1 .rub input[data-k="0"],#v-beo .day.mz1 .rub input[data-k="1"],#v-beo .day.mz2 .rub input[data-k="2"],#v-beo .day.mz2 .rub input[data-k="3"]{border-color:var(--prm);color:var(--prm)}
 /* hibajelzés: fedő műszakoknál piros rubrikák és figyelmeztetés a sor alatt */
 #v-beo .hm{display:none;grid-column:1/-1;margin:0;font-size:12px;font-weight:600;color:var(--red)}
 #v-beo .day.hib .hm{display:block}

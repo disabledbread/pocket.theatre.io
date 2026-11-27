@@ -1464,7 +1464,7 @@ $("rz").onclick=async()=>{
 };
 
 /* ---- beosztás: heti munkaidő kézzel beírva (naponta két műszak), ebből napi óraszám és túlóra-egyenleg ----
-   S.beo.w[a hét hétfője] = 7 nap, naponként [1. kezdés, 1. vég, 2. kezdés, 2. vég, "m" ha maszek]; S.beo.from = a nullázás hete */
+   S.beo.w[a hét hétfője] = 7 nap, naponként [1. kezdés, 1. vég, 2. kezdés, 2. vég, maszek]; a maszek: "m" az egész nap, "m1" csak az 1., "m2" csak a 2. műszak; S.beo.from = a nullázás hete */
 const BZ_NAP=["Hétfő","Kedd","Szerda","Csütörtök","Péntek","Szombat","Vasárnap"],BZ_R=["Hét","Kedd","Sze","Csüt","Pén","Szo","Vas"],BZ_ALAP=40*60;
 const bzIso=d=>d.toLocaleDateString("sv-SE");
 const bzMon=d=>{const x=new Date(d.getFullYear(),d.getMonth(),d.getDate());x.setDate(x.getDate()-((x.getDay()+6)%7));return x};
@@ -1476,20 +1476,28 @@ const bzMin=v=>{v=String(v||"").trim();if(!v)return null;const m=/^(\d{1,2})(?:[
 let bzWk=bzMon(new Date());
 const bzWeek=()=>S.beo.w[bzIso(bzWk)]||Array.from({length:7},()=>["","","",""]);
 /* műszakok egy napra: [kezdet, vég] percben; ha a vég korábbi, mint a kezdet, éjfél utánra nyúlik */
-const bzSh=r=>[[r[0],r[1]],[r[2],r[3]]].map(([a,b])=>[bzMin(a),bzMin(b)]).filter(([a,b])=>a!==null&&b!==null).map(([a,b])=>[a,b<=a?b+1440:b]);
+/* a beírt műszakok [sorszám (0 vagy 1), kezdés perc, vég perc] alakban; az éjfélen átnyúló vég a következő napra kerül */
+const bzShK=r=>[0,1].map(k=>[k,bzMin(r[2*k]),bzMin(r[2*k+1])]).filter(([,a,b])=>a!==null&&b!==null).map(([k,a,b])=>[k,a,b<=a?b+1440:b]);
+const bzSh=r=>bzShK(r).map(([,a,b])=>[a,b]);
+/* maszek-e a k. műszak (az egész napos jelölés mindkettőre vonatkozik) */
+const bzMk=(r,k)=>r[4]==="m"||r[4]==="m"+(k+1);
+/* a műszakok szövegesen, pl. „8–12 (maszek) · 14–22”; egész napos maszeknál a jelzés elöl áll */
+const bzTxt=r=>{const s=bzShK(r);if(!s.length)return "";const all=s.every(([k])=>bzMk(r,k));
+ return (all?"maszek ":"")+s.map(([k])=>r[2*k]+"–"+r[2*k+1]+(!all&&bzMk(r,k)?" (maszek)":"")).join(" · ")};
 /* hiba, ha a két műszak fedi egymást (pl. kétszer 8–16); ha csak összeérnek (8–12 és 12–16), az rendben van */
 const bzFed=r=>{const s=bzSh(r);return s.length===2&&s[0][0]<s[1][1]&&s[1][0]<s[0][1]};
 /* az aznapi percek; fedésnél az átfedő időt csak egyszer számoljuk */
 const bzDay=r=>{const s=bzSh(r);return bzFed(r)?Math.max(s[0][1],s[1][1])-Math.min(s[0][0],s[1][0]):s.reduce((x,[a,b])=>x+b-a,0)};
 const bzH=m=>String(Math.round(m/6)/10).replace(".",",");
-/* a maszeknak jelölt nap órái nem számítanak bele a hétbe */
-const bzWMin=W=>W.reduce((s,r)=>s+(r[4]==="m"?0:bzDay(r)),0);
+/* a maszeknak jelölt műszakok órái nem számítanak bele a hétbe */
+const bzWork=r=>{const s=bzShK(r),m=s.filter(([k])=>bzMk(r,k));return !m.length?bzDay(r):m.length===s.length?0:s.filter(([k])=>!bzMk(r,k)).reduce((x,[,a,b])=>x+b-a,0)};
+const bzWMin=W=>W.reduce((s,r)=>s+bzWork(r),0);
 const bzStore=W=>{if(W.some(r=>r.some(Boolean)))S.beo.w[bzIso(bzWk)]=W;else delete S.beo.w[bzIso(bzWk)];save();renderMa()};
 /* a mai munkaidő a kezdőoldal címsorában, halványan (pl. „ma 8–14 · 16–22”); csak a kezdőoldalon látszik */
 function renderMa(){
  const d=new Date(),W=S.beo.w[bzIso(bzMon(d))],r=W&&W[(d.getDay()+6)%7];
- const t=r&&navCur()===home()?[[r[0],r[1]],[r[2],r[3]]].filter(([a,b])=>bzMin(a)!==null&&bzMin(b)!==null).map(([a,b])=>a+"–"+b).join(" · "):"";
- $("tma").textContent=t?(r[4]==="m"?"ma maszek ":"ma ")+t:"";
+ const t=r&&navCur()===home()?bzTxt(r):"";
+ $("tma").textContent=t?"ma "+t:"";
 }
 /* túlóra-egyenleg percben: minden hét beleszámít, amiben van beírt (nem maszek) műszak, az előre beírt jövő hetek is;
    a kitöltetlen hetek nem, a nullázás hetétől kezdve (a Bérkalkulátor is ezt mutatja) */
@@ -1501,15 +1509,15 @@ function bzTul(){
  const w=S.set.wage,{het,m}=bzCalc();
  $("bzt").textContent=bzH(m)+" óra";$("bzt").classList.toggle("neg",m<0);
  $("bzf").textContent=m<=0?"":w?`Ez kb. ${fm(m/60*w)} bruttó, ${fm(net(m/60*w))} nettó plusz bevétel a nullázás óta (${fm(w)}/óra, a Bérkalkulátor szerint).`:"Az összeghez add meg az órabért a Bérkalkulátorban.";
- $("bzg").textContent=`${het.length} kitöltött hét alapján (az előre beírtakkal együtt), heti 40 óra felett. A maszek napok nem számítanak bele.`+(S.beo.from?` A nullázás óta a ${S.beo.from.replace(/-/g,". ")}.-i héttől számol.`:"");
+ $("bzg").textContent=`${het.length} kitöltött hét alapján (az előre beírtakkal együtt), heti 40 óra felett. A maszek műszakok nem számítanak bele.`+(S.beo.from?` A nullázás óta a ${S.beo.from.replace(/-/g,". ")}.-i héttől számol.`:"");
 }
 function renderBeo(){
  const W=bzWeek(),end=bzAdd(bzWk,6),t=today();
  $("bzw").textContent=`${bzWk.getFullYear()}. ${MS_HO[bzWk.getMonth()]} ${bzWk.getDate()}. – ${bzWk.getMonth()===end.getMonth()?"":MS_HO[end.getMonth()]+" "}${end.getDate()}.`;
  $("bzs").textContent=bzNo(bzWk)+". hét";
- $("bzd").innerHTML=BZ_NAP.map((n,i)=>{const d=bzAdd(bzWk,i),r=W[i],msz=r[4]==="m";
+ $("bzd").innerHTML=BZ_NAP.map((n,i)=>{const d=bzAdd(bzWk,i),r=W[i],msz=r[4]==="m",mz=r[4]==="m1"?1:r[4]==="m2"?2:0,ml=msz?"maszek":mz?mz+". maszek":"";
   const inp=k=>`<input inputmode="decimal" autocomplete="off" data-d="${i}" data-k="${k}" value="${esc(r[k])}" aria-label="${n}, ${["1. kezdés","1. vége","2. kezdés","2. vége"][k]}">`;
-  return `<div class="day${bzIso(d)===t?" ma":""}${msz?" msz":""}${bzFed(r)?" hib":""}" data-day="${i}"><button class="dn" data-m="${i}" aria-pressed="${msz}" aria-label="${n}${msz?", maszek":""}: koppints a maszek jelöléshez"><b>${BZ_R[i]}</b><span>${d.getMonth()+1}.${String(d.getDate()).padStart(2,"0")}.</span>${msz?"<em>maszek</em>":""}</button><div class="rub">${inp(0)}<i>–</i>${inp(1)}<i></i>${inp(2)}<i>–</i>${inp(3)}<b class="ora" data-o="${i}" aria-label="${n}, ledolgozott óra">${bzDay(r)?bzH(bzDay(r)):""}</b></div><p class="hm" role="alert">A két műszak fedi egymást. Nézd át, az átfedő időt csak egyszer számolom.</p></div>`}).join("");
+  return `<div class="day${bzIso(d)===t?" ma":""}${msz?" msz":""}${mz?" mz"+mz:""}${bzFed(r)?" hib":""}" data-day="${i}"><button class="dn" data-m="${i}" aria-pressed="${!!ml}" aria-label="${n}${ml?", "+ml:""}: koppints a maszek jelöléshez"><b>${BZ_R[i]}</b><span>${d.getMonth()+1}.${String(d.getDate()).padStart(2,"0")}.</span>${ml?`<em>${ml}</em>`:""}</button><div class="rub">${inp(0)}<i>–</i>${inp(1)}<i></i>${inp(2)}<i>–</i>${inp(3)}<b class="ora" data-o="${i}" aria-label="${n}, ledolgozott óra">${bzDay(r)?bzH(bzDay(r)):""}</b></div><p class="hm" role="alert">A két műszak fedi egymást. Nézd át, az átfedő időt csak egyszer számolom.</p></div>`}).join("");
  bzTul();
 }
 $("bzd").addEventListener("input",e=>{const i=e.target;if(!i.dataset.k)return;
@@ -1518,10 +1526,12 @@ $("bzd").addEventListener("input",e=>{const i=e.target;if(!i.dataset.k)return;
  $("bzd").querySelector(`.day[data-day="${i.dataset.d}"]`).classList.toggle("hib",bzFed(r));
  bzTul();
 });
-/* a nap nevére koppintva maszeknak jelölhető a nap (és vissza): az órái látszanak, de a túlórába nem számítanak */
+/* a nap nevére koppintva körbe lehet léptetni a maszek jelölést: egész nap → csak az 1. műszak → csak a 2. → nincs
+   (ha csak egy műszak van beírva: egész nap → nincs); a maszek órák látszanak, de a túlórába nem számítanak */
 $("bzd").addEventListener("click",e=>{const b=e.target.closest("[data-m]");if(!b)return;
- const W=bzWeek(),r=W[+b.dataset.m];
- if(r[4]==="m")r.length=4;else r[4]="m";
+ const W=bzWeek(),r=W[+b.dataset.m],L=bzShK(r).length===2?["","m","m1","m2"]:["","m"];
+ const nx=L[(L.indexOf(r[4]||"")+1)%L.length];
+ if(nx)r[4]=nx;else r.length=4;
  bzStore(W);renderBeo();
 });
 $("bzp").onclick=()=>{bzWk=bzAdd(bzWk,-7);renderBeo()};
@@ -1539,8 +1549,8 @@ $("bzr").onclick=async()=>{
 $("bzi").onclick=()=>{
  const p=n=>String(n).padStart(2,"0"),st=(d,m)=>{const x=new Date(d.getFullYear(),d.getMonth(),d.getDate(),0,m);return `${x.getFullYear()}${p(x.getMonth()+1)}${p(x.getDate())}T${p(x.getHours())}${p(x.getMinutes())}00`};
  const now=new Date().toISOString().replace(/[-:]/g,"").slice(0,15)+"Z",ev=[];
- bzWeek().forEach((r,i)=>bzSh(r).forEach(([a,b],k)=>{const d=bzAdd(bzWk,i);
-  ev.push(["BEGIN:VEVENT",`UID:pt-beo-${bzIso(d)}-${k+1}@pocket-theatre`,`DTSTAMP:${now}`,`DTSTART:${st(d,a)}`,`DTEND:${st(d,b)}`,r[4]==="m"?"SUMMARY:Maszek":"SUMMARY:Munka","END:VEVENT"].join("\r\n"))}));
+ bzWeek().forEach((r,i)=>bzShK(r).forEach(([k,a,b])=>{const d=bzAdd(bzWk,i);
+  ev.push(["BEGIN:VEVENT",`UID:pt-beo-${bzIso(d)}-${k+1}@pocket-theatre`,`DTSTAMP:${now}`,`DTSTART:${st(d,a)}`,`DTEND:${st(d,b)}`,bzMk(r,k)?"SUMMARY:Maszek":"SUMMARY:Munka","END:VEVENT"].join("\r\n"))}));
  if(!ev.length){toast("Ezen a héten nincs beírt műszak");return}
  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Pocket Theatre//Beosztas//HU","CALSCALE:GREGORIAN"].concat(ev,"END:VCALENDAR").join("\r\n")+"\r\n"],{type:"text/calendar"}));
  a.download=`beosztas-${bzIso(bzWk)}.ics`;document.body.appendChild(a);a.click();a.remove();
@@ -1560,13 +1570,15 @@ function puItems(){
  const add=(at,b,tag)=>{if(at>now+30e3&&at<max)o.push({at,b,tag})};
  if(PU.n)S.notes.forEach(n=>{if(n.i&&!n.d&&n.r)add(Date.parse(n.r),noteMsg(n),"n"+n.id)});
  if(PU.t)S.shows.forEach(s=>{if(!s.d)return;const [e1,e2]=tajIdo(s);add(e1,tajMsg(s,false),"t"+s.id);add(e2,tajMsg(s,true),"t"+s.id)});
- /* beosztás: a műszakos nap előtti este 20:00-kor, pl. „Holnap munka: 8–14 · 16–22” */
+ /* beosztás: a műszakos nap előtti este 20:00-kor („Holnap munka: 8–14 · 16–22”) és aznap 7:00-kor („Ma munka: …”);
+    a reggeli csak akkor, ha az első műszak 7 után kezdődik */
  if(PU.b)Object.keys(S.beo.w).forEach(k=>(S.beo.w[k]||[]).forEach((r,i)=>{
   if(!Array.isArray(r))return;
-  const t=[[r[0],r[1]],[r[2],r[3]]].filter(([a,b])=>bzMin(a)!==null&&bzMin(b)!==null).map(([a,b])=>a+"–"+b).join(" · ");
-  if(!t)return;
-  const d=bzAdd(new Date(k+"T00:00"),i-1);d.setHours(20,0,0,0);
-  add(d.getTime(),"Holnap "+(r[4]==="m"?"maszek":"munka")+": "+t,"b"+k+i);
+  let t=bzTxt(r);if(!t)return;
+  t=t.startsWith("maszek ")?"maszek: "+t.slice(7):"munka: "+t;
+  const d0=bzAdd(new Date(k+"T00:00"),i),e=bzAdd(d0,-1),m=new Date(d0);e.setHours(20,0,0,0);m.setHours(7,0,0,0);
+  add(e.getTime(),"Holnap "+t,"b"+k+i);
+  if(Math.min(...bzSh(r).map(([a])=>a))>7*60)add(m.getTime(),"Ma "+t,"b"+k+i);
  }));
  return o.sort((a,b)=>a.at-b.at).slice(0,300);
 }
