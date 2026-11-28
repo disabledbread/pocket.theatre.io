@@ -1570,18 +1570,25 @@ function puItems(){
  const now=Date.now(),max=now+60*864e5,o=[];
  const add=(at,b,tag)=>{if(at>now+30e3&&at<max)o.push({at,b,tag})};
  if(PU.n)S.notes.forEach(n=>{if(n.i&&!n.d&&n.r)add(Date.parse(n.r),noteMsg(n),"n"+n.id)});
- if(PU.t)S.shows.forEach(s=>{if(!s.d)return;const [e1,e2]=tajIdo(s);add(e1,tajMsg(s,false),"t"+s.id);add(e2,tajMsg(s,true),"t"+s.id)});
- /* beosztás: a műszakos nap előtti este 20:00-kor („Holnap munka: 8–14 · 16–22”) és aznap 7:00-kor („Ma munka: …”);
-    a reggeli csak akkor, ha az első műszak 7 után kezdődik */
+ /* tájak: előző nap 18:00, aznap 7:00, és ha van indulási idő, 1 órával indulás előtt */
+ if(PU.t)S.shows.forEach(s=>{if(!s.d)return;const [e1,e2]=tajIdo(s);add(e1,tajMsg(s,false),"t"+s.id);add(e2,tajMsg(s,true),"t"+s.id);
+  const im=bzMin(s.t);if(im!==null){const d=new Date(s.d+"T00:00");d.setHours(0,im-60,0,0);add(d.getTime(),"1 óra múlva indulás: "+s.n+(s.v?" ("+s.v+")":"")+".","t"+s.id+"i")}});
+ /* beosztás: a műszakos nap előtti este 20:00-kor („Holnap munka: 8–14 · 16–22”), és műszakonként 1,5 órával a kezdés előtt */
  if(PU.b)Object.keys(S.beo.w).forEach(k=>(S.beo.w[k]||[]).forEach((r,i)=>{
   if(!Array.isArray(r))return;
   const p=bzTxt(r),all=r[4]==="m";if(!p&&!all)return;
   /* „Holnap munka: 8–14”, „Holnap maszek: 8–14”, vegyes napon „Holnap: 8–12 (maszek) · 14–22” vagy „Holnap: maszek · 14–22” */
   const t=all?"maszek"+(p?": "+p:""):/maszek/.test(p)?": "+p:"munka: "+p;
-  const d0=bzAdd(new Date(k+"T00:00"),i),e=bzAdd(d0,-1),m=new Date(d0);e.setHours(20,0,0,0);m.setHours(7,0,0,0);
+  const d0=bzAdd(new Date(k+"T00:00"),i),e=bzAdd(d0,-1);e.setHours(20,0,0,0);
   add(e.getTime(),"Holnap"+(t[0]===":"?"":" ")+t,"b"+k+i);
-  if(Math.min(...bzSh(r).map(([a])=>a))>7*60)add(m.getTime(),"Ma"+(t[0]===":"?"":" ")+t,"b"+k+i);
+  /* műszakonként 1,5 órával a kezdés előtt */
+  bzShK(r).forEach(([kk,a])=>{const d=new Date(d0);d.setHours(0,a-90,0,0);
+   add(d.getTime(),"1,5 óra múlva "+(bzMk(r,kk)?"maszek":"kezdés")+": "+r[2*kk]+"–"+r[2*kk+1],"b"+k+i+"k"+kk)});
  }));
+ /* negyedéves túlóra: 3 hónappal az utolsó nullázás (vagy az első beírt hét) után 9:00-kor, utána havonta, amíg nincs nullázva */
+ if(PU.b){const ks=Object.keys(S.beo.w).sort(),base=S.beo.from||ks[0];
+  if(base){const d=new Date(base+"T09:00");d.setMonth(d.getMonth()+3);while(d.getTime()<now)d.setMonth(d.getMonth()+1);
+   const {m}=bzCalc();add(d.getTime(),`Túlóra-egyenleg: ${m>0?"+":""}${bzH(m)} óra. Ha kifizették, nullázd a Beosztásban.`,"bq")}}
  return o.sort((a,b)=>a.at-b.at).slice(0,300);
 }
 /* feliratkozás (ha még nincs) és a lista elküldése, ha változott */
